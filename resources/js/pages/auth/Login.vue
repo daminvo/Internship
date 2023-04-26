@@ -39,8 +39,12 @@
           <label class="login-radio--label" for="login-student" @click="chooseStudent">Student</label>
         </div>
         <div>
-          <input id="login-lecturer" v-model="form.role" class="login-radio" type="radio" value="Lecturer">
-          <label class="login-radio--label" for="login-lecturer" @click="chooseLecturer">Lecturer</label>
+          <input id="login-head" v-model="form.role" class="login-radio" type="radio" value="Head">
+          <label class="login-radio--label" for="login-head" @click="chooseHead">Head of the departement</label>
+        </div>
+        <div>
+          <input id="login-manager" v-model="form.role" class="login-radio" type="radio" value="Manager">
+          <label class="login-radio--label" for="login-manager" @click="chooseManager">Internship manager</label>
         </div>
       </div>
 
@@ -118,7 +122,8 @@ export default {
 
   data: () => ({
     studentRole: false,
-    lecturerRole: false,
+    headRole: false,
+    managerRole: false,
     hidePassword: true,
     passwordType: 'password',
 
@@ -166,19 +171,19 @@ export default {
 
   methods: {
     async login () {
-      const isLecturer = this.form.email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?!.*(student)).*.ac.id.*$/)
+      // const isLecturer = this.form.email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?!.*(student)).*.ac.id.*$/)
 
-      if (this.form.role === 'Lecturer' && !isLecturer) {
-        this.snackbar.open('You are likely not using a lecturer identity.')
-        this.chooseStudent()
-        this.form.role = 'Student'
-        return
-      } else if (this.form.role === 'Student' && isLecturer) {
-        this.snackbar.open('You are likely using a lecturer identity. ')
-        this.chooseLecturer()
-        this.form.role = 'Lecturer'
-        return
-      }
+      // if (this.form.role === 'Lecturer') {
+      //   this.snackbar.open('You are likely not using a lecturer identity.')
+      //   this.chooseStudent()
+      //   this.form.role = 'Student'
+      //   return
+      // } else if (this.form.role === 'Student') {
+      //   this.snackbar.open('You are likely using a lecturer identity. ')
+      //   this.chooseHead()
+      //   this.form.role = 'Lecturer'
+      //   return
+      // }
 
       this.form.post('/api/login')
         .then(({ data }) => {
@@ -195,13 +200,22 @@ export default {
 
     chooseStudent () {
       this.studentRole = true
-      this.lecturerRole = false
+      this.headRole = false
+      this.managerRole = false
     },
 
-    chooseLecturer () {
-      this.lecturerRole = true
+    chooseHead () {
+      this.headRole = true
+      this.studentRole = false
+      this.managerRole = false
+    },
+
+    chooseManager () {
+      this.managerRole = true
+      this.headRole = false
       this.studentRole = false
     },
+
     togglePassword () {
       this.hidePassword = !this.hidePassword
       this.passwordType = this.hidePassword ? 'password' : 'text'

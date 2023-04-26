@@ -17,30 +17,17 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('role');
             $table->string('tagname')->unique()->nullable();
-            $table->string('identity_number')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->nullable();
-            $table->string('photo_url')->nullable();
-            $table->string('expertise')->nullable();
-            $table->string('university')->nullable();
-            $table->string('faculty')->nullable();
-            $table->string('major')->nullable();
-            $table->string('location')->nullable();
-            $table->text('biography')->nullable();
-            $table->boolean('is_open_hired')->default(false);
-
-            $table->string('behance')->nullable();
-            $table->string('github')->nullable();
+            $table->string('password');
+            $table->string('photo')->nullable();
+            $table->string('address');
+            $table->integer('phone_number');
             $table->string('linkedin')->nullable();
-            $table->string('dribbble')->nullable();
-            $table->string('website')->nullable();
 
-            $table->string('cv_url')->nullable();
+            $table->string('cv')->nullable();
             $table->rememberToken();
-            $table->timestamps();
         });
     }
 

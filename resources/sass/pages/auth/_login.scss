@@ -85,7 +85,7 @@
 
 .login-role--container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 
   @include respon(xl) {
     gap: 2rem;
