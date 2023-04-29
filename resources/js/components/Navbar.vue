@@ -207,18 +207,10 @@ export default {
       else return null
     },
 
-    points () {
-      if (this.user && this.user.leaderboards) {
-        return this.user.leaderboards.filter(e => e.expertise === this.user.expertise)[0].points + ' Points'
-      }
-
-      return 0
-    },
-
     leftMenu () {
       return [
-        { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' },
-        { route: { name: 'leaderboard' }, text: 'Leaderboard', icon: 'gridicons:stats-up-alt' }
+        { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' }
+        // { route: { name: 'leaderboard' }, text: 'Leaderboard', icon: 'gridicons:stats-up-alt' }
       ]
     },
 
@@ -233,7 +225,6 @@ export default {
         }
 
         return [
-          { route: { name: 'party.leader' }, text: 'Party', icon: 'carbon:3rd-party-connected' },
           { route: { name: 'inbox' }, text: 'Inbox', icon: 'ion:mail-unread-sharp' },
           { route: { name: 'projectbox' }, text: 'Project Box', icon: 'simple-icons:polymerproject' }
         ]

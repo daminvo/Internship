@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page--container" :class="{ 'lecturer-bg': lecturerRole }">
+  <div class="login-page--container" :class="{ 'lecturer-bg': headRole }">
     <div v-if="!$matchMedia.xl" class="login-page--logo">
       <router-link :to="{ name: 'index' }">
         <img src="/images/logo.svg" alt="">
@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <div v-if="!$matchMedia.xl" class="role--choose-effect" :class="{ 'role--student': studentRole, 'role--lecturer': lecturerRole }" />
+      <div v-if="!$matchMedia.xl" class="role--choose-effect" :class="{ 'role--student': studentRole, 'role--lecturer': headRole }" />
       <div v-else class="separator mt-1_5 mb-2">
         Sign In
       </div>
@@ -84,7 +84,7 @@
 
         <div class="">
           <!-- Submit Button -->
-          <v-button :loading="form.busy" class="login-submit--button" :class="{ 'is-lecturer': lecturerRole }">
+          <v-button :loading="form.busy" class="login-submit--button" :class="{ 'is-lecturer': headRole }">
             Sign In
           </v-button>
         </div>
@@ -171,22 +171,23 @@ export default {
 
   methods: {
     async login () {
-      // const isLecturer = this.form.email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?!.*(student)).*.ac.id.*$/)
+      const isLecturer = this.form.email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(?!.*(student)).*.ac.id.*$/)
 
-      // if (this.form.role === 'Lecturer') {
-      //   this.snackbar.open('You are likely not using a lecturer identity.')
-      //   this.chooseStudent()
-      //   this.form.role = 'Student'
-      //   return
-      // } else if (this.form.role === 'Student') {
-      //   this.snackbar.open('You are likely using a lecturer identity. ')
-      //   this.chooseHead()
-      //   this.form.role = 'Lecturer'
-      //   return
-      // }
+      if (this.form.role === 'Lecturer' && !isLecturer) {
+        this.snackbar.open('You are likely not using a lecturer identity.')
+        this.chooseStudent()
+        this.form.role = 'Student'
+        return
+      } else if (this.form.role === 'Student' && isLecturer) {
+        this.snackbar.open('You are likely using a lecturer identity. ')
+        this.chooseHead()
+        this.form.role = 'Lecturer'
+        return
+      }
 
       this.form.post('/api/login')
         .then(({ data }) => {
+          console.log(data)
           this.$store.dispatch('auth/saveToken', {
             token: data.token,
             remember: this.remember
@@ -194,7 +195,7 @@ export default {
           this.$router.back()
         })
         .catch(e => {
-          // console.log(e.response.data.message)
+          console.log(e.response.data.message)
         })
     },
 

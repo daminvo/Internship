@@ -26,6 +26,7 @@ export const mutations = {
   [types.SAVE_TOKEN] (state, { token, remember }) {
     state.token = token
     Cookies.set('token', token, { expires: remember ? 365 : null })
+    console.log(state.token)
   },
 
   [types.FETCH_USER_SUCCESS] (state, { user, projects, wishlists }) {
@@ -37,6 +38,7 @@ export const mutations = {
   },
 
   [types.FETCH_USER_FAILURE] (state) {
+    console.log('error heeeeeeeree')
     state.token = null
     Cookies.remove('token')
   },
@@ -90,13 +92,15 @@ export const actions = {
   async fetchUser ({ commit }) {
     try {
       const { data } = await axios.get('/api/user')
+      console.log(data.user)
 
       commit(types.FETCH_USER_SUCCESS, {
-        user: data.user,
-        projects: data.projects,
-        wishlists: data.wishlists
+        user: data.user
+        // projects: data.projects,
+        // wishlists: data.wishlists
       })
     } catch (e) {
+      console.log(e)
       commit(types.FETCH_USER_FAILURE)
     }
   },

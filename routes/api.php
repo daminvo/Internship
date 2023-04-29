@@ -91,5 +91,4 @@ Route::group([], function () {
     Route::get('project/{project:project_url}', 'Project\ProjectController@show');
     Route::get('project/{project:project_url}/similar', 'Project\ProjectController@similarProjects');
 
-    Route::get('leaderboards', 'LeaderboardController@index');
 });

@@ -22,7 +22,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'id',
     ];
 
-    protected $withCount = ['finished_project'];
+    // protected $withCount = ['finished_project'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -132,50 +132,50 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return auth()->id() === $project->user_id;
     }
 
-    public function project_boxes()
-    {
-        return $this->hasMany('App\ProjectBox');
-    }
+    // public function project_boxes()
+    // {
+    //     return $this->hasMany('App\ProjectBox');
+    // }
 
     public function projects()
     {
-        return $this->hasMany('App\Project');
+        return $this->hasMany('App\Internships');
     }
 
-    public function student()
-    {
-        return $this->hasOne('App\Student');
-    }
+    // public function student()
+    // {
+    //     return $this->hasOne('App\Student');
+    // }
 
-    public function lecturer()
-    {
-        return $this->hasOne('App\Lecturer');
-    }
+    // public function lecturer()
+    // {
+    //     return $this->hasOne('App\Lecturer');
+    // }
 
-    public function inboxes()
-    {
-        return $this->hasMany('App\Inbox');
-    }
+    // public function inboxes()
+    // {
+    //     return $this->hasMany('App\Inbox');
+    // }
 
-    public function skills()
-    {
-        return $this->hasMany('App\UserSkill', 'user_id');
-    }
+    // public function skills()
+    // {
+    //     return $this->hasMany('App\UserSkill', 'user_id');
+    // }
 
-    public function experiences()
-    {
-        return $this->hasMany('App\Experience', 'user_id');
-    }
+    // public function experiences()
+    // {
+    //     return $this->hasMany('App\Experience', 'user_id');
+    // }
 
-    public function finished_project()
-    {
-        return $this->hasMany('App\ProjectBox')->where('status', 'Finished');
-    }
+    // public function finished_project()
+    // {
+    //     return $this->hasMany('App\ProjectBox')->where('status', 'Finished');
+    // }
 
-    public function leaderboards()
-    {
-        return $this->hasMany('App\Leaderboard');
-    }
+    // public function leaderboards()
+    // {
+    //     return $this->hasMany('App\Leaderboard');
+    // }
 
     public function new_notifications()
     {

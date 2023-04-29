@@ -11,7 +11,7 @@ class ProfileController extends Controller
 {
     public function getUser($tagname)
     {
-        $user = User::with(['skills', 'experiences', 'leaderboards'])->where('tagname', $tagname)->firstOrFail();
+        $user = User::where('tagname', $tagname)->firstOrFail();
 
         if ($user->role === 'Student') {
             $projects = ProjectBox::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where([

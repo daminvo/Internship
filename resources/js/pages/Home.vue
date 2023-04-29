@@ -84,36 +84,17 @@
         </div>
       </div>
     </div>
-    <div class="slide slide-3__container">
-      <h2 class="slide-3__heading">
-        Leaderboard
-      </h2>
-      <p class="slide-3__paragraph">
-        These are the highest achievers. Set them as examples, or beat their records. The choice is yours!
-      </p>
-      <div v-if="!$matchMedia.xl">
-        <TopBoardList :arrow="false" :data="topLeaderboards" />
-      </div>
-      <div v-else>
-        <TopBoardList :differ="false" :arrow="false" :show-all="true" :data="topLeaderboards" />
-      </div>
-      <router-link :to="{ name: 'leaderboard' }" class="btn btn--blue btn--large slide-3__button mt-1" tag="button">
-        See All Leaderboard
-      </router-link>
-    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
-import TopBoardList from '~/components/TopBoardList'
 
 export default {
   name: 'HomePage',
 
   middleware: ['newcomer'],
-  components: { TopBoardList },
 
   metaInfo () {
     return {
@@ -126,7 +107,6 @@ export default {
 
   data: () => ({
     projectByStatusCount: '',
-    topLeaderboards: {},
     debouncedScroll: ''
   }),
 
@@ -184,7 +164,6 @@ export default {
       await axios.get(`/api/home`)
         .then(({ data }) => {
           this.projectByStatusCount = data.project_count
-          this.topLeaderboards = data.top_boards
         })
     }
 

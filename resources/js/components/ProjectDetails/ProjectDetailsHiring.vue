@@ -19,7 +19,7 @@
           </h1>
         </div>
         <div class="project-details--action-button">
-          <router-link class="btn btn--blue btn--large" :to="{ name: applyRoute, params: { title: project.title , type: project.applicant_type } }" tag="button" :disabled="!isEligibleToApply">
+          <router-link class="btn btn--blue btn--large" :to="{ name: applyRoute, params: { title: project.title , type: project.applicant_type } }" tag="button">
             Apply Project
           </router-link>
           <button v-debounce:300ms="toggleWishlist" :debounce-events="'click'" class="btn btn--white btn--large" :disabled="user && user.role === 'Lecturer'">
@@ -41,7 +41,7 @@
 
       <div v-if="!$matchMedia.xl">
         <div v-if="project.status === 'Hiring'" class="project-details--action-button">
-          <router-link class="btn btn--blue btn--large" :to="{ name: applyRoute, params: { title: project.title , type: project.applicant_type } }" tag="button" :disabled="!isEligibleToApply" @click="nyoba">
+          <router-link class="btn btn--blue btn--large" :to="{ name: applyRoute, params: { title: project.title , type: project.applicant_type } }" tag="button" @click="nyoba">
             Apply Project
           </router-link>
           <button v-debounce:400ms="toggleWishlist" class="btn btn--white btn--large" :disabled="user && user.role === 'Lecturer'" :debounce-events="'click'">
@@ -352,24 +352,6 @@ export default {
 
     totalApplicants () {
       return this.project.individual_applicants_count
-    },
-
-    projectReview () {
-      return { 'icon': 'whh:website',
-        'link': this.project.project_review.project_result ? this.project.project_review.project_result : '',
-        'linkFiltered': this.project.project_review.project_result ? this.filterLink(this.project.project_review.project_result) : '' }
-    },
-
-    isEligibleToApply () {
-      return (this.project.is_open_hiring && !this.user) | (this.user && this.user.role !== 'Lecturer' && this.theStudentHighestPoints >= this.minimumPoints && this.project.is_open_hiring)
-    },
-
-    theStudentHighestPoints () {
-      if (this.user && this.user.leaderboards) {
-        return Math.max(this.user.leaderboards.map(e => e.points))
-      }
-
-      return 0
     }
   },
 

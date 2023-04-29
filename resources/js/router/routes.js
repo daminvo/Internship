@@ -23,19 +23,8 @@ export default [
     ]
   },
 
-  { path: '/leaderboard', name: 'leaderboard', meta: { title: 'Leaderboard' }, component: page('Leaderboard.vue') },
   { path: '/inbox', name: 'inbox', meta: { title: 'Inbox' }, component: page('Inbox.vue') },
   { path: '/projectbox', name: 'projectbox', meta: { title: 'Project Box' }, component: page('ProjectBox.vue') },
-
-  {
-    path: '/party',
-    component: page('party'),
-    children: [
-      { path: '', redirect: { name: 'party.leader' } },
-      { path: 'leader', name: 'party.leader', meta: { title: 'Party' }, component: page('party/PartyAsLeader.vue') },
-      { path: 'member', name: 'party.member', meta: { title: 'Party' }, component: page('party/PartyAsMember.vue') },
-    ]
-  },
 
   {
     path: '/newcomer',

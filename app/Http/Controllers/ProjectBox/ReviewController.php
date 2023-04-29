@@ -69,12 +69,6 @@ class ReviewController extends Controller
             ];
 
             $points = ($request->post('overall_score') / 5) * ($request->post('participants')[$i]['score'] / 5) * $projectPoints;
-            DB::table('leaderboards')
-                ->where([
-                    'user_id' => $request->post('participants')[$i]['member_id'],
-                    'expertise' => $request->post('participants')[$i]['expertise'],
-                ])
-                ->update(['points' => DB::raw("points + $points")]);
         }
 
         ProjectTeamMember::where('project_team_id', $projectTeam->id)->delete();
