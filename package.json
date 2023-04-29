@@ -58,4 +58,5 @@
     "webpack-bundle-analyzer": "^3.3.2",
     "workbox-webpack-plugin": "^5.1.4"
   }
+
 }

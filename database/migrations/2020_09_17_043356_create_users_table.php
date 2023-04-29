@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('address');
             $table->integer('phone_number');
             $table->string('linkedin')->nullable();
+            $table->string('gender');
+            $table->string('role');
 
             $table->string('cv')->nullable();
             $table->rememberToken();

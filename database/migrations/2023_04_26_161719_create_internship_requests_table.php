@@ -15,10 +15,12 @@ class CreateInternshipRequestsTable extends Migration
     {
         Schema::create('internship_requests', function (Blueprint $table) {
             $table->id();
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->boolean('head_validation')->nullable()->default(false);
-            $table->boolean('manager_validation')->nullable()->default(false);
+            $table->unsignedBigInteger('manager_id');
+            $table->unsignedBigInteger('company_id');
+            $table->string('addresse');
+            $table->string('duration');
+            $table->foreign('manager_id')->references('id')->on('internship_managers')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 
