@@ -18,6 +18,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      *
      * @var array
      */
+    public $timestamps = false;
     protected $guarded = [
         'id',
     ];
