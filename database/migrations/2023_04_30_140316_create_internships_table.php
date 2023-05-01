@@ -24,8 +24,6 @@ class CreateInternshipsTable extends migration
             $table->date('start_date');
             $table->date('end_date');
             $table->date('demand_date');
-            $table->unsignedBigInteger('header_id')->index();
-            $table->foreign('header_id')->references('id')->on('department_header');
             $table->unsignedBigInteger('manager_id')->index();
             $table->foreign('manager_id')->references('id')->on('internship_managers');
             $table->unsignedBigInteger('student_id')->index();

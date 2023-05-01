@@ -29,7 +29,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('user/saveprofile/2', 'Auth\UserController@saveProfile2');
 
     Route::post('project/{project:project_url}/apply/individual', 'Project\ApplyController@applyAsIndividual');
-    Route::post('project/{project:project_url}/apply/team', 'Project\ApplyController@applyAsTeam');
 
     Route::post('project/{project:project_url}/wishlist', 'Project\ProjectStudentController@addToWishlist');
 
@@ -93,3 +92,5 @@ Route::group([], function () {
 
     Route::get('leaderboards', 'LeaderboardController@index');
 });
+
+Route::post('newRequest', 'StudentController@createRequest');
