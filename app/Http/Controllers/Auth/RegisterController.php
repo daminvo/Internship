@@ -41,17 +41,18 @@ class RegisterController extends Controller
             $user = User::create($user);
 
 
-            // $student['user_id'] = $user->getKey();
-            // $student['student_card'] = $request->card;
-            // $student['student_card'] = $request->social;
-            // $student['birth_date'] = $request->birthDate;
-            // $student['birth_place'] = $request->birthPlace;
-            // $student['university'] = $request->birthPlace;
-            // $student['faculty'] = $request->birthPlace;
-            // $student['department'] = $request->birthPlace;
-            // $student['speciality'] = $request->birthPlace;
-            // $student['speciality'] = $request->birthPlace;
+            $student['user_id'] = $user->getKey();
+            $student['student_card'] = $request->card;
+            $student['student_social'] = $request->social;
+            $student['birth_date'] = $request->birthDate;
+            $student['birth_place'] = $request->birthPlace;
+            $student['university'] = $request->birthPlace;
+            $student['faculty'] = $request->birthPlace;
+            $student['department'] = $request->birthPlace;
+            $student['speciality'] = $request->birthPlace;
+            $student['speciality'] = $request->birthPlace;
 
+            Student::create($student)
             return response()->json($user);
         }
         elseif ($request->role === 'Head') {

@@ -254,7 +254,7 @@
                 </h6>
                 <div class="select select--big select--border">
                   <select name="" id="" v-model="form.faculty">
-                    <option v-for="faculty in faculties" :key="faculty.id" :value="faculty.id">
+                    <option v-for="faculty in filteredFaculties" :key="faculty.id" :value="faculty.id">
                       {{ faculty.name }}
                     </option>
                     <option value="sdf">sdfs</option>
@@ -271,7 +271,7 @@
                 </h6>
                 <div class="select select--big select--border">
                   <select name="" id="" v-model="form.department">
-                    <option v-for="department in departments" :key="department.id" :value="department.id">
+                    <option v-for="department in filteredDepartments" :key="department.id" :value="department.id">
                       {{ department.name }}
                     </option>
                     <option value="sdf">sdfs</option>
@@ -356,11 +356,6 @@
   </div>
 </template>
 
-// phone,  gender address
-// st: grade, stcard, specialité, ,
-//dp: univ, specia, depart
-// company,
-
 <script>
 import Form from 'vform'
 import { mapGetters } from 'vuex'
@@ -381,10 +376,6 @@ export default {
     passwordType: 'password',
     totalSteps: 3,
     step: 1,
-    // universities: [],
-    // faculties: [],
-    // departments: [],
-    // companies: [],
 
     form: new Form({
       role: 'Student',
@@ -397,9 +388,9 @@ export default {
       phoneNumber: '',
       gender: '',
       address: '',
-      university: '',
-      faculty: '',
-      department: '',
+      university: 1,
+      faculty: 1,
+      department: 1,
       Speciality: '',
       card: '',
       social: '',
@@ -409,6 +400,15 @@ export default {
   }),
 
   computed: {
+    filteredFaculties () {
+      console.log(this.faculties);
+      return this.faculties.filter((option) => option['university_id'] === this.form.university);
+    },
+
+    filteredDepartments () {
+      return this.departments.filter(option => option['faculty_id'] === this.faculty);
+    },
+
     role () {
       if (this.form.role === 'Student') {
         return {
@@ -439,11 +439,45 @@ export default {
 
     ...mapGetters({
       snackbar: 'notification/snackbar',
-      universities: 'selectOptions/getUniversities',
-      faculties: 'selectOptions/getFaculties',
-      departments: 'selectOptions/getDepartments',
-      companies: 'selectOptions/getCompanies',
-    })
+      // universities: 'selectOptions/getUniversities',
+      // faculties: 'selectOptions/getFaculties',
+      // departments: 'selectOptions/getDepartments',
+      // companies: 'selectOptions/getCompanies',
+    }),
+
+    universities () {
+      return this.$store.getters['selectOptions/getUniversities']
+    },
+
+    faculties () {
+      return this.$store.getters['selectOptions/getFaculties']
+    },
+
+    departments () {
+      return this.$store.getters['selectOptions/getDepartments']
+    },
+
+    companies () {
+      return this.$store.getters['selectOptions/getCompanies']
+    },
+
+  },
+
+  watch: {
+    university() {
+      this.selectedFaculty = null;
+      this.selectedDepartment = null;
+    },
+    faculty() {
+      this.selectedDepartment = null;
+    },
+  },
+
+  created() {
+    this.$store.dispatch('selectOptions/fetchUniversities')
+    this.$store.dispatch('selectOptions/fetchFaculties')
+    this.$store.dispatch('selectOptions/fetchDepartments')
+    this.$store.dispatch('selectOptions/fetchCompanies')
   },
 
   methods: {
@@ -451,8 +485,6 @@ export default {
       console.log('sdfsdflsdlfsdlfsdl');
     },
     register () {
-      // Register the user.
-      // const { data } = await this.form.post('/api/register')
 
       axios
         .post('/api/register', this.form)
@@ -462,9 +494,6 @@ export default {
           console.log('Status:', error.response.status)
           console.log('Data:', error.response.data)
         })
-
-      // console.log(data);
-
         // this.$router.push({ name: 'login' })
     },
     chooseStudent () {

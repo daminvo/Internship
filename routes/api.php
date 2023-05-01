@@ -60,13 +60,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('project/{project:project_url}/shortlist', 'ProjectBox\ShortlistController@index');
     Route::post('project/{project:project_url}/shortlist', 'ProjectBox\ShortlistController@proceedShortlist');
 
-    Route::get('party', 'PartyController@index');
-    Route::post('party/kick', 'PartyController@kickPartyMember');
-    Route::post('user/{user:tagname}/invite/team', 'PartyController@inviteToParty');
-
     Route::post('user/{user:tagname}/message', 'MessageController@index');
     Route::post('user/{user:tagname}/message/send', 'MessageController@sendMessage');
-
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
@@ -92,4 +87,12 @@ Route::group([], function () {
 
 });
 
-Route::post('newRequest', 'StudentController@createRequest');
+Route::get('newRequest', 'StudentController@createRequest');
+
+Route::get('universities', 'UniversityController@index');
+
+Route::get('faculties', 'FacultyController@index');
+
+Route::get('departments', 'DepartmentController@index');
+
+Route::get('companies', 'CompanyController@index');

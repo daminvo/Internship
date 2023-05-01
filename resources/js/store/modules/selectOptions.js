@@ -37,15 +37,16 @@ export const mutations = {
 export const actions = {
   async fetchUniversities ({ commit }) {
     try {
-      const { data } = await axios.get('')
+      const { data } = await axios.get('/api/universities')
+      console.log(data);
 
       commit(types.FETCH_UNIVERSITIES, data)
-    } catch (e) { }
+    } catch (e) {}
   },
 
   async fetchFaculties ({ commit }) {
     try {
-      const { data } = await axios.get('')
+      const { data } = await axios.get('/api/faculties')
 
       commit(types.FETCH_FACULTIES, data)
     } catch (e) { }
@@ -53,7 +54,7 @@ export const actions = {
 
   async fetchDepartments ({ commit }) {
     try {
-      const { data } = await axios.get('')
+      const { data } = await axios.get('/api/departments')
 
       commit(types.FETCH_DEPARTMENTS, data)
     } catch (e) { }
@@ -61,7 +62,7 @@ export const actions = {
 
   async fetchCompanies ({ commit }) {
     try {
-      const { data } = await axios.get('')
+      const { data } = await axios.get('/api/companies')
 
       commit(types.FETCH_COMPANIES, data)
     } catch (e) { }
