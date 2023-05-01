@@ -16,6 +16,7 @@ class CreateFacultiesTable extends Migration
         Schema::create('faculties', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedBigInteger('university_id');
             $table->foreign('university_id')->references('id')->on('universities')->onDelete('cascade');
         });
     }

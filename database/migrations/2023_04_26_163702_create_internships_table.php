@@ -15,11 +15,11 @@ class CreateInternshipsTable extends Migration
     {
         Schema::create('internships', function (Blueprint $table) {
             $table->id();
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->unsignedBigInteger('manager_id');
+            $table->unsignedBigInteger('company_id');
+            $table->string('duration');
             $table->foreign('manager_id')->references('id')->on('internship_managers')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->float('note')->nullable();
-            $table->integer('abs_nbr');
         });
     }
 

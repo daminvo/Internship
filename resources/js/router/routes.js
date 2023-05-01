@@ -8,9 +8,6 @@ export default [
   { path: '/register', name: 'register', meta: { title: 'Register' }, component: page('auth/Register.vue') },
   { path: '/password/reset', name: 'password.request', component: page('auth/password/ForgotPassword.vue') },
   { path: '/password/reset/:token', name: 'password.reset', component: page('auth/password/ResetPassword.vue') },
-  { path: '/email/verify/:id', name: 'verification.verify', component: page('auth/verification/VerifyAccount.vue') },
-  { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/ResendVerification.vue') },
-  { path: '/email/check', name: 'verification.check', component: page('auth/verification/CheckEmail.vue') },
 
   {
     path: '/profile',
@@ -80,15 +77,7 @@ export default [
     ]
   },
 
-  {
-    path: '/project/:id/apply',
-    component: page('project/apply'),
-    children: [
-      { path: '', redirect: { name: 'project.apply.individual' } },
-      { path: '/project/:id/apply/individual', name: 'project.apply.individual', meta: { title: 'Apply Project' }, component: page('project/apply/ApplyIndividual.vue') },
-      { path: '/project/:id/apply/team', name: 'project.apply.team', meta: { title: 'Apply Project' }, component: page('project/apply/ApplyTeam.vue') }
-    ]
-  },
+  { path: '/request', component: page('request'), name: 'project.apply' },
 
   { path: '/:url/404', name: '404', meta: { title: 'Error' }, component: page('errors/404.vue') },
 

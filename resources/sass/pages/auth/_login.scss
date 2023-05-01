@@ -104,7 +104,10 @@ input:checked + .login-radio--label {
 }
 
 .login-radio--label {
-  display: inline-block;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   padding: 1rem 2rem;
   font-size: 1.4rem;
@@ -181,7 +184,7 @@ input:checked + .login-radio--label {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 42rem;
+    width: 52.3rem;
     padding: 0;
   }
 }

@@ -17,6 +17,9 @@ class CreateStudentsTable extends Migration
             $table->id();
             $table->string('grade');
             $table->integer('student_card');
+            $table->boolean('state');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('department_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
         });

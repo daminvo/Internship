@@ -13,6 +13,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use Notifiable;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are not mass assignable.
      *
@@ -32,17 +34,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     protected $hidden = [
         'password', 'remember_token',
 
-        'email_verified_at', 'created_at', 'updated_at', 'email', 'photo_url',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'is_open_hired' => 'boolean',
+        // 'email_verified_at', 'created_at', 'updated_at', 'email', 'photo_url',
     ];
 
     /**
@@ -50,8 +42,8 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      *
      * @var array
      */
-    protected $appends = [
-        'avatar', 'joined_since', 'full_name', 'cv'
+    protected $fillable = [
+        'role', 'first_name', 'last_name', 'email', 'phone_number', 'gender', 'address', 'password'
     ];
 
     // protected $withCount = ['finishedProject'];

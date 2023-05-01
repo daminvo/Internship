@@ -15,7 +15,9 @@ class CreateInternshipManagersTable extends Migration
     {
         Schema::create('internship_managers', function (Blueprint $table) {
             $table->id();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }

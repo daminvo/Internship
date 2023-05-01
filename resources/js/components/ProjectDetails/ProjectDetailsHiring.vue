@@ -318,8 +318,7 @@ export default {
     },
 
     applyRoute () {
-      if (this.project.applicant_type === 'Team') return 'project.apply.team'
-      return 'project.apply.individual'
+      return 'project.apply'
     },
 
     expertiseIn () {

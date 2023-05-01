@@ -40,7 +40,7 @@
         </div>
         <div>
           <input id="login-head" v-model="form.role" class="login-radio" type="radio" value="Head">
-          <label class="login-radio--label" for="login-head" @click="chooseHead">Head of the departement</label>
+          <label class="login-radio--label" for="login-head" @click="chooseHead">Head of departement</label>
         </div>
         <div>
           <input id="login-manager" v-model="form.role" class="login-radio" type="radio" value="Manager">

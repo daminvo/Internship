@@ -46,16 +46,6 @@
         </div>
       </div>
 
-      <!-- Why you ? -->
-      <div class="form-group__container">
-        <h4 class="form-group__input-name form__input-name">
-          Why are you interested in joining this project?
-        </h4>
-        <div class="">
-          <textarea v-model="form.apply.apply_reason" class="form-group__input-textarea" placeholder="Max. 300 words" rows="5" />
-        </div>
-      </div>
-
       <div class="">
         <!-- Submit Button -->
         <v-button :loading="form.busy" class="btn btn--blue btn--large apply__btn-submit">

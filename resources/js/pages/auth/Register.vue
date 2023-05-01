@@ -1,5 +1,5 @@
 <template>
-  <div class="register-page--container" :class="{ 'lecturer-bg': lecturerRole }">
+  <div class="register-page--container" :class="{ 'lecturer-bg': managerRole }">
     <div v-if="!$matchMedia.xl" class="login-page--logo">
       <router-link :to="{ name: 'index' }">
         <img src="/images/logo.svg" alt="">
@@ -27,116 +27,344 @@
         <img class="desktop-nav__logo" src="/images/logo-blue.svg" alt="">
       </router-link>
 
-      <h1 class="login--h1">
-        You are?
-      </h1>
-      <div class="login-role--container">
+      <section v-if="step == 1">
+        <h1 class="login--h1">
+          You are?
+        </h1>
+        <div class="login-role--container">
         <div>
-          <input id="login-student" v-model="form.role" class="login-radio" type="radio" value="Student" name="role">
+          <input id="login-student" v-model="form.role" class="login-radio" type="radio" value="Student">
           <label class="login-radio--label" for="login-student" @click="chooseStudent">Student</label>
         </div>
         <div>
-          <input id="login-lecturer" v-model="form.role" class="login-radio" type="radio" value="Lecturer" name="role">
-          <label class="login-radio--label" for="login-lecturer" @click="chooseLecturer">Lecturer</label>
+          <input id="login-head" v-model="form.role" class="login-radio" type="radio" value="Head">
+          <label class="login-radio--label" for="login-head" @click="chooseHead">Head of departement</label>
+        </div>
+        <div>
+          <input id="login-manager" v-model="form.role" class="login-radio" type="radio" value="Manager">
+          <label class="login-radio--label" for="login-manager" @click="chooseManager">Internship manager</label>
         </div>
       </div>
 
-      <div v-if="!$matchMedia.xl" class="role--choose-effect" :class="{ 'role--student': studentRole, 'role--lecturer': lecturerRole }" />
-      <div v-else class="separator mt-1_5 mb-2">
-        Sign Up
-      </div>
-
-      <form @submit.prevent="register" @keydown="form.onKeydown($event)">
-        <div class="form__input--group">
-          <div class="form-group__container">
-            <h4 class="form-group__input-name">
-              First Name
-            </h4>
-            <div class="">
-              <input v-model="form.first_name" :class="{ 'is-invalid': form.errors.has('first_name') }" class="form-group__input-text" type="text" name="first_name" placeholder="e.g., John" required>
-              <has-error :form="form" field="first_name" />
-            </div>
-          </div>
-
-          <div class="form-group__container">
-            <h4 class="form-group__input-name">
-              Last Name
-            </h4>
-            <div class="">
-              <input v-model="form.last_name" :class="{ 'is-invalid': form.errors.has('last_name') }" class="form-group__input-text" type="text" name="last_name" placeholder="e.g., Doe" required>
-              <has-error :form="form" field="last_name" />
-            </div>
-          </div>
+        <div v-if="!$matchMedia.xl" class="role--choose-effect" :class="{ 'role--student': studentRole, 'role--lecturer': managerRole }" />
+        <div v-else class="separator mt-1_5 mb-2">
+          Sign Up
         </div>
+      </section>
 
-        <div class="form-group__container">
-          <h4 class="form-group__input-name">
-            Email
-          </h4>
-          <div class="">
-            <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-group__input-text" type="email" name="email" placeholder="e.g., johndoe@example.ac.id" autocomplete="username" required>
-            <p v-if="form.role === 'Student'" class="form-group__input-info">
-              You can use letters, numbers & periods
-            </p>
-            <p v-else class="form-group__input-info form-input__info--email">
-              <span>You can use letters, numbers & periods.</span>
-              <span>Academic email address only.</span>
-            </p>
-            <has-error :form="form" field="email" />
-          </div>
-        </div>
-
-        <!-- Password -->
-        <div class="form-group__container">
-          <h4 class="form-group__input-name">
-            Password
-          </h4>
-          <div class="">
-            <div class="login-input--container">
-              <div class="right-tag__group">
-                <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="right-tag__input right-tag__input--form" :type="passwordType" name="password" placeholder="e.g., th!51sjh0nD03N0tj@n3D03" autocomplete="current-password" required>
-                <div v-show="hidePassword" class="pointer right-tag" @click="togglePassword">
-                  <span class="iconify password__hide-icon" data-icon="carbon:view-off-filled" width="20" height="20" />
-                </div>
-                <div v-show="!hidePassword" class="pointer right-tag" @click="togglePassword">
-                  <span class="iconify password__hide-icon " data-icon="carbon:view-filled" width="20" height="20" />
+        <form @keydown="form.onKeydown($event)">
+          <section v-if="step == 1">
+            <div class="form__input--group">
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  First Name
+                </h6>
+                <div class="">
+                  <input v-model="form.firstName" :class="{ 'is-invalid': form.errors.has('first_name') }" class="form-group__input-text" type="text" name="first_name" placeholder="e.g., John" required>
+                  <has-error :form="form" field="first_name" />
                 </div>
               </div>
-              <has-error :form="form" field="password" />
-            </div>
-            <p class="form-group__input-info">
-              Min. 8 characters with mix of letters, numbers & symbols
-            </p>
-            <has-error :form="form" field="password" />
-          </div>
-        </div>
 
-        <div class="">
-          <!-- Submit Button -->
-          <v-button :loading="form.busy" class="login-submit--button" :class="{ 'is-lecturer': lecturerRole }">
-            Sign Up
-          </v-button>
-        </div>
-      </form>
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  Last Name
+                </h6>
+                <div class="">
+                  <input v-model="form.lastName" :class="{ 'is-invalid': form.errors.has('last_name') }" class="form-group__input-text" type="text" name="last_name" placeholder="e.g., Doe" required>
+                  <has-error :form="form" field="last_name" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group__container">
+              <h6 class="form-group__input-name">
+                Email
+              </h6>
+              <div class="">
+                <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-group__input-text" type="email" name="email" placeholder="example@mail.com" autocomplete="username" required>
+                <has-error :form="form" field="email" />
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group__container">
+              <h6 class="form-group__input-name">
+                Password
+              </h6>
+              <div class="">
+                <div class="login-input--container">
+                  <div class="right-tag__group">
+                    <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" class="right-tag__input right-tag__input--form" :type="passwordType" name="password" placeholder="At least 8 characters" autocomplete="current-password" required>
+                    <div v-show="hidePassword" class="pointer right-tag" @click="togglePassword">
+                      <span class="iconify password__hide-icon" data-icon="carbon:view-off-filled" width="20" height="20" />
+                    </div>
+                    <div v-show="!hidePassword" class="pointer right-tag" @click="togglePassword">
+                      <span class="iconify password__hide-icon " data-icon="carbon:view-filled" width="20" height="20" />
+                    </div>
+                  </div>
+                  <has-error :form="form" field="password" />
+                </div>
+                <has-error :form="form" field="password" />
+              </div>
+            </div>
+
+          </section>
+
+
+          <section v-if="step == 2">
+            <div class="form__input--group" v-if="studentRole">
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  Birth date
+                </h6>
+                <div class="">
+                  <input v-model="form.birthDate" :class="{ 'is-invalid': form.errors.has('birthDate') }" class="form-group__input-text" type="date" name="birthDate" placeholder="birthDate">
+                  <has-error :form="form" field="birthDate" />
+                </div>
+              </div>
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                    Birth place
+                </h6>
+                <div class="">
+                  <input v-model="form.birthPlace" :class="{ 'is-invalid': form.errors.has('birthPlace') }" class="form-group__input-text" type="text" name="birthPlace" placeholder="birthPlace">
+                  <has-error :form="form" field="birthPlace" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form__input--group">
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  gender
+                </h6>
+                <div class="select select--small select--border" required>
+                  <select name="" id="" v-model="form.gender">
+                    <option value="male">Male</option>
+                    <option value="male">female</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group__container phone-number">
+                <h6 class="form-group__input-name">
+                  Phone number
+                </h6>
+                <div class="">
+                  <input v-model="form.phoneNumber" :class="{ 'is-invalid': form.errors.has('phone_number') }" class="form-group__input-text" type="number" name="phone_number" placeholder="02 11664916" required>
+                  <has-error :form="form" field="phone_number" />
+                </div>
+              </div>
+            </div>
+
+            <h6 class="form-group__input-name" v-if="managerRole">
+              Company
+            </h6>
+            <div class="form__input--group" v-if="managerRole">
+              <div class="select select--small select--border form-group__container">
+                <select name="" id="" v-model="form.company">
+                  <option v-for="company in companies" :key="company.id" :value="company.id">
+                    {{ company.name }}
+                  </option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group__container" v-if="form.company == 'other'">
+                <input v-model="form.newCompany" :class="{ 'is-invalid': form.errors.has('newCompany') }" class="form-group__input-text" type="text" name="newCompany" placeholder="Name">
+                <has-error :form="form" field="newCompany" />
+              </div>
+            </div>
+
+            <div class="form-group__container">
+              <h6 class="form-group__input-name">
+                  Address
+              </h6>
+              <div class="">
+                <input v-model="form.address" :class="{ 'is-invalid': form.errors.has('address') }" class="form-group__input-text" type="text" name="address" placeholder="Address" required>
+                <has-error :form="form" field="address" />
+              </div>
+            </div>
+
+            <div v-if="headRole" class="form__input--group">
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  University
+                </h6>
+                <div class="select select--big select--border">
+                  <select name="" v-model="form.university">
+                    <option v-for="university in universities" :key="university.id" :value="university.id">
+                      {{ university.name }}
+                    </option>
+                    <option value="other">Other</option>
+                    <option value="sdf">sdfs</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  Faculty
+                </h6>
+                <div class="select select--big select--border">
+                  <select name="" id="" v-model="form.faculty">
+                    <option v-for="faculty in faculties" :key="faculty.id" :value="faculty.id">
+                      {{ faculty.name }}
+                    </option>
+                    <option value="sdf">sdfs</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="headRole" class="form-group__container">
+              <h6 class="form-group__input-name">
+                Department
+              </h6>
+              <div class="select select--big select--border">
+                <select name="" id="" v-model="form.department">
+                  <option v-for="department in departments" :key="department.id" :value="department.id">
+                    {{ department.name }}
+                  </option>
+                  <option value="sdf">sdfs</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section v-if="step == 3">
+            <div class="form__input--group">
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  University
+                </h6>
+                <div class="select select--big select--border">
+                  <select name="" v-model="form.university">
+                    <option v-for="university in universities" :key="university.id" :value="university.id">
+                      {{ university.name }}
+                    </option>
+                    <option value="sdf">sdfs</option>
+                    <option value="other">Other</option>
+                    <option value="sdf">sdfs</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  Faculty
+                </h6>
+                <div class="select select--big select--border">
+                  <select name="" id="" v-model="form.faculty">
+                    <option v-for="faculty in faculties" :key="faculty.id" :value="faculty.id">
+                      {{ faculty.name }}
+                    </option>
+                    <option value="sdf">sdfs</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="form__input--group">
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  Department
+                </h6>
+                <div class="select select--big select--border">
+                  <select name="" id="" v-model="form.department">
+                    <option v-for="department in departments" :key="department.id" :value="department.id">
+                      {{ department.name }}
+                    </option>
+                    <option value="sdf">sdfs</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  Speciality
+                </h6>
+                <div class="">
+                  <input v-model="form.Speciality" :class="{ 'is-invalid': form.errors.has('Speciality') }" class="form-group__input-text" type="text" name="Speciality" placeholder="Speciality" required>
+                  <has-error :form="form" field="Speciality" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form__input--group">
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  Student card
+                </h6>
+                <div class="">
+                  <input v-model="form.card" :class="{ 'is-invalid': form.errors.has('card') }" class="form-group__input-text" type="text" name="card" placeholder="card" required>
+                  <has-error :form="form" field="card" />
+                </div>
+              </div>
+
+              <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  Social Number
+                </h6>
+                <div class="">
+                  <input v-model="form.social" :class="{ 'is-invalid': form.errors.has('social') }" class="form-group__input-text" type="number" name="social" placeholder="social" required>
+                  <has-error :form="form" field="social" />
+                </div>
+              </div>
+            </div>
+
+
+          </section>
+
+          <div class="">
+            <div class="form__input--group">
+              <button
+              class="btn"
+                v-if="step != 1"
+                @click.prevent="pervStep"
+              >
+                back
+              </button>
+
+              <button
+              v-if="step < totalSteps"
+              class="login-submit--button"
+              @click.prevent="nextStep">
+                next
+              </button>
+
+              <!-- Submit Button -->
+              <button v-if="step == totalSteps" @click.prevent="register" :loading="form.busy" class="login-submit--button">
+                Sign Up
+              </button>
+            </div>
+
+          </div>
+        </form>
 
       <div class="register-extra">
-        <p>
+        <h5>
           Already had an account?
           <router-link :to="{ name: 'login' }" class="login-link">
             <b>Sign In</b>
           </router-link>
-        </p>
-      </div>
-      <div v-if="$matchMedia.xl" class="desktop-login__footer">
-        PHive, All Rights Reserved. &copy; 2021 . | Created by FILKOM
+        </h5>
+        <div v-if="$matchMedia.xl" class="desktop-login__footer">
+          PHive, All Rights Reserved. &copy; 2021 .
+        </div>
       </div>
     </div>
   </div>
 </template>
 
+// phone,  gender address
+// st: grade, stcard, specialité, ,
+//dp: univ, specia, depart
+// company,
+
 <script>
 import Form from 'vform'
 import { mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'RegisterPage',
@@ -146,19 +374,38 @@ export default {
   metaInfo () { return { title: 'Sign Up' } },
 
   data: () => ({
-    studentRole: false,
-    lecturerRole: false,
+    studentRole: true,
+    headRole: false,
+    managerRole: false,
     hidePassword: true,
     passwordType: 'password',
+    totalSteps: 3,
+    step: 1,
+    // universities: [],
+    // faculties: [],
+    // departments: [],
+    // companies: [],
 
     form: new Form({
       role: 'Student',
-      first_name: '',
-      last_name: '',
+      firstName: '',
+      lastName: '',
       email: '',
-      password: ''
+      password: '',
+      birthDate: '',
+      birthPlace: '',
+      phoneNumber: '',
+      gender: '',
+      address: '',
+      university: '',
+      faculty: '',
+      department: '',
+      Speciality: '',
+      card: '',
+      social: '',
+      company: '',
+      newCompany: ''
     }),
-    mustVerifyEmail: false
   }),
 
   computed: {
@@ -186,53 +433,85 @@ export default {
         class: {
           midImage: 'row-reverse'
         },
-        text: 'Project for Everyone'
+        text: 'Internships for Everyone'
       }
     },
 
     ...mapGetters({
-      snackbar: 'notification/snackbar'
+      snackbar: 'notification/snackbar',
+      universities: 'selectOptions/getUniversities',
+      faculties: 'selectOptions/getFaculties',
+      departments: 'selectOptions/getDepartments',
+      companies: 'selectOptions/getCompanies',
     })
   },
 
   methods: {
-    async register () {
+    enter() {
+      console.log('sdfsdflsdlfsdlfsdl');
+    },
+    register () {
       // Register the user.
-      const { data } = await this.form.post('/api/register')
+      // const { data } = await this.form.post('/api/register')
 
-      // Must verify email first.
-      if (data.status) {
-        this.mustVerifyEmail = true
-        this.snackbar.open(data.status)
-        this.$router.push({ name: 'verification.check', params: { email: this.form.email } })
-      } else {
-        // Log in the user.
-        const { data: { token } } = await this.form.post('/api/login')
+      axios
+        .post('/api/register', this.form)
+        .then(data => console.log(data))
+        .catch(error => {
+          console.log('Error:', error.response)
+          console.log('Status:', error.response.status)
+          console.log('Data:', error.response.data)
+        })
 
-        // Save the token.
-        this.$store.dispatch('auth/saveToken', { token })
+      // console.log(data);
 
-        // Update the user.
-        await this.$store.dispatch('auth/updateUser', { user: data })
-
-        // Redirect home.
-        this.$router.push({ name: 'index' })
-      }
+        // this.$router.push({ name: 'login' })
     },
     chooseStudent () {
+      this.totalSteps = 3
       this.studentRole = true
-      this.lecturerRole = false
-      this.form.role = 'Student'
+      this.headRole = false
+      this.managerRole = false
     },
-    chooseLecturer () {
-      this.lecturerRole = true
+
+    chooseHead () {
+      this.totalSteps = 2
+      this.headRole = true
       this.studentRole = false
-      this.form.role = 'Lecturer'
+      this.managerRole = false
+    },
+
+    chooseManager () {
+      this.totalSteps = 2
+      this.managerRole = true
+      this.headRole = false
+      this.studentRole = false
     },
     togglePassword () {
       this.hidePassword = !this.hidePassword
       this.passwordType = this.hidePassword ? 'password' : 'text'
+    },
+
+    pervStep(){
+      this.step--;
+      console.log(this.step);
+    },
+
+    nextStep(){
+      this.step++
+      console.log(this.step);
     }
   }
 }
 </script>
+
+
+<style scoped>
+.btn{
+  width: 100% !important;
+}
+
+.phone-number{
+  max-width: 250px !important;
+}
+</style>
