@@ -17,9 +17,9 @@ class CreateInternsTable extends migration
         Schema::create('interns', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('internship_id')->index();
-            $table->foreign('internship_id')->references('id')->on('internships');
+            $table->foreign('internship_id')->references('id')->on('internships')->onDelete('cascade');
             $table->unsignedBigInteger('student_id')->index();
-            $table->foreign('student_id')->references('id')->on('students');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();

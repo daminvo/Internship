@@ -17,8 +17,8 @@ class CreateDepartmentsTable extends migration
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('faculte_id')->index();
-            $table->foreign('faculte_id')->references('id')->on('faculties');
+            $table->unsignedBigInteger('faculty_id')->index();
+            $table->foreign('faculty_id')->references('id')->on('faculties')->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();

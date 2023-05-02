@@ -9,6 +9,6 @@ class Company extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name', 'adresse'
+        'name', 'address'
     ];
 }

@@ -16,8 +16,8 @@ class CreateCompaniesTable extends migration
 
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('name');
-            $table->string('adressse');
+            $table->string('name');
+            $table->string('address');
         });
 
         Schema::enableForeignKeyConstraints();

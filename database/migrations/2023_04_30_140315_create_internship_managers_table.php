@@ -18,9 +18,9 @@ class CreateInternshipManagersTable extends migration
             $table->id();
             $table->boolean('validation')->default(false);
             $table->unsignedBigInteger('company_id')->index();
-            $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->index();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();

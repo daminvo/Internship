@@ -21,7 +21,7 @@ class CreateScoresTable extends migration
             $table->string('observation')->nullable();
             $table->date('date');
             $table->unsignedBigInteger('intern_id')->index();
-            $table->foreign('intern_id')->references('id')->on('interns');
+            $table->foreign('intern_id')->references('id')->on('interns')->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();

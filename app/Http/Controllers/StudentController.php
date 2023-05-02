@@ -5,19 +5,21 @@ namespace App\Http\Controllers;
 use App\Student;
 use Illuminate\Http\Request;
 use App\internship;
-use App\internship_manager;
+use App\internshipManager;
+use App\company;
+use App\User;
 
 class StudentController extends Controller
 {
 
     public function createRequest(Request $request){
         //$student_request=student::where ($request->student_id,"id")->;
-        if($request->companayId != ""   ){
+        if($request->companayId == ""   ){
             $companies['name'] = $request->name;
             $companies['addresse'] = $request->addresse;
-            $companies = companies::create($companies);
+            $companies = company::create($companies);
 
-            if($request->managerId != ""){
+            if($request->managerId == ""){
                 $users['first_name'] = $request->firstName;
                 $users['family_name'] = $request->familyName;
                 $users['email'] = $request->email;
@@ -25,11 +27,12 @@ class StudentController extends Controller
                 $users['phone'] = $request->phone;
                 $users['addresse'] = $request->addresse;
                 $users['gender'] = $request->gender;
-                $users = users::create($users);
+                $users['role'] = "manager";
+                $users = User::create($users);
 
                 $manager['company_id'] = $companies->getKey();
                 $manager['user_id'] = $users->getKey();
-                $manager = internship_manager::create($manager);
+                $manager = internshipManager::create($manager);
             }
             internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'description' => $request->description,'state'=>$request->state,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
             return response()->json([
@@ -38,7 +41,7 @@ class StudentController extends Controller
         }else {
             internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'description' => $request->description,'state'=>$request->state,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$request->managerId,'title'=>$request->title]);
         return response()->json([
-       'msg' => 'information inserted successfuly',
+       'msg' => 'information is inserted successfuly',
            ]);
         }
 
