@@ -19,7 +19,7 @@ class CreateInternshipOffersTable extends migration
             $table->bigInteger('nmbr_postions');
             $table->boolean('public')->default(true);
             $table->unsignedBigInteger('internship_id')->index();
-            $table->foreign('internship_id')->references('id')->on('internships');
+            $table->foreign('internship_id')->references('id')->on('internships')->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();

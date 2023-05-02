@@ -19,15 +19,15 @@ class CreateStudentsTable extends migration
             $table->string('grade');
             $table->bigInteger('student_card');
             $table->boolean('state');
-            $table->string('cv');
-            $table->string('spiciality');
+            $table->string('cv')->nullable();
+            $table->string('speciality');
             $table->bigInteger('security_number')->nullable();
             $table->date('birthday');
             $table->string('birth_place');
             $table->unsignedBigInteger('departement_id')->index();
-            $table->foreign('departement_id')->references('id')->on('departments');
+            $table->foreign('departement_id')->references('id')->on('departments')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->index();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();

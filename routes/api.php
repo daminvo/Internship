@@ -87,7 +87,7 @@ Route::group([], function () {
 
 });
 
-Route::get('newRequest', 'StudentController@createRequest');
+Route::post('newRequest', 'StudentController@createRequest');
 
 Route::get('universities', 'UniversityController@index');
 

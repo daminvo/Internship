@@ -18,7 +18,7 @@ class CreateFacultiesTable extends migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('university_id')->index();
-            $table->foreign('university_id')->references('id')->on('universities');
+            $table->foreign('university_id')->references('id')->on('universities')->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();

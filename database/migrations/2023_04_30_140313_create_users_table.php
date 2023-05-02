@@ -21,10 +21,10 @@ class CreateUsersTable extends migration
             $table->string('email');
             $table->string('password');
             $table->bigInteger('phone');
-            $table->string('adresse');
+            $table->string('address');
             $table->string('gender');
             $table->string('role');
-            $table->string('photo');
+            $table->string('photo')->nullable();
         });
 
         Schema::enableForeignKeyConstraints();

@@ -24,7 +24,7 @@ class CreateRatingsTable extends migration
             $table->bigInteger('total_note');
             $table->string('appreciation');
             $table->unsignedBigInteger('intern_id')->index();
-            $table->foreign('intern_id')->references('id')->on('interns');
+            $table->foreign('intern_id')->references('id')->on('interns')->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();

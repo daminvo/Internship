@@ -20,7 +20,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      *
      * @var array
      */
-    public $timestamps = false;
+
     protected $guarded = [
         'id',
     ];
@@ -44,7 +44,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'role', 'first_name', 'last_name', 'email', 'phone_number', 'gender', 'address', 'password'
+        'role', 'first_name', 'family_name', 'email', 'phone', 'gender', 'addresse', 'password'
     ];
 
     // protected $withCount = ['finishedProject'];
