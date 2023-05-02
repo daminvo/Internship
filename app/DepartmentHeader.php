@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class InternshipManager extends Model
+class DepartmentHeader extends Model
 {
     public $timestamps = false;
 
     protected $fillable = [
-        'user_id', 'company_id'
+        'user_id', 'department_id', 'validation'
     ];
 }

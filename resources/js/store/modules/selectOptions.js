@@ -38,7 +38,6 @@ export const actions = {
   async fetchUniversities ({ commit }) {
     try {
       const { data } = await axios.get('/api/universities')
-      console.log(data);
 
       commit(types.FETCH_UNIVERSITIES, data)
     } catch (e) {}

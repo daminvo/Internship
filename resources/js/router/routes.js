@@ -61,19 +61,19 @@ export default [
 
   { path: '/explore', name: 'explore', meta: { title: 'Explore' }, component: page('Explore.vue') },
 
-  { path: '/project/post', name: 'project.post', meta: { title: 'Post Project' }, component: page('project/ProjectPost.vue') },
-  { path: '/project/:id/edit-post', name: 'project.editpost', meta: { title: 'Edit Project' }, component: page('project/ProjectEdit.vue') },
-  { path: '/project/:id', name: 'project.details', meta: { title: 'Project' }, component: page('project/ProjectDetails.vue') },
-  { path: '/project/:id/review', name: 'project.review', meta: { title: 'Review Project' }, component: page('project/ProjectReview.vue') },
-  { path: '/project/:id/dashboard', name: 'project.dashboard', meta: { title: 'Project' }, component: page('project/dashboard') },
+  { path: '/offer/post', name: 'offer.post', meta: { title: 'Post Offer' }, component: page('internship/OfferPost.vue') },
+  { path: '/project/:id/edit-post', name: 'project.editpost', meta: { title: 'Edit Project' }, component: page('internship/ProjectEdit.vue') },
+  { path: '/project/:id', name: 'project.details', meta: { title: 'Project' }, component: page('internship/ProjectDetails.vue') },
+  { path: '/project/:id/review', name: 'project.review', meta: { title: 'Review Project' }, component: page('internship/ProjectReview.vue') },
+  { path: '/project/:id/dashboard', name: 'project.dashboard', meta: { title: 'Project' }, component: page('internship/dashboard') },
 
   {
     path: '/project/:id/shorlisted',
     component: page('project/shortlist'),
     children: [
       { path: '', redirect: { name: 'shortlist.individual' } },
-      { path: '/project/:id/shorlisted/individual', name: 'shortlist.individual', meta: { title: 'Apply Project' }, component: page('project/shortlist/ShortlistIndividual.vue') },
-      { path: '/project/:id/shorlisted/team', name: 'shortlist.team', meta: { title: 'Apply Project' }, component: page('project/shortlist/ShortlistTeam.vue') }
+      { path: '/project/:id/shorlisted/individual', name: 'shortlist.individual', meta: { title: 'Apply Project' }, component: page('internship/shortlist/ShortlistIndividual.vue') },
+      { path: '/project/:id/shorlisted/team', name: 'shortlist.team', meta: { title: 'Apply Project' }, component: page('internship/shortlist/ShortlistTeam.vue') }
     ]
   },
 
