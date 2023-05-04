@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Experience;
 use App\Http\Controllers\Controller;
-// use App\Project;
-// use App\ProjectBox;
-// use App\Team;
 use App\User;
 // use App\UserSkill;
 // use App\Wishlist;
@@ -25,10 +22,12 @@ class UserController extends Controller
     {
         $user = $request->user();
 
-        if ($user->role === 'Student') {
+        if ($user->role === 'student') {
             // $projects = ProjectBox::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->where('status', 'Finished')->latest()->get();
             // $wishlists = Wishlist::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->where('status', true)->latest()->get();
-            $user = User::findOrFail($user->id);
+            $user = User::findOrFail($user->id)->with('student')->first();
+            // ->student()->first();
+            // ->with(['getFullNameAttribute']);
 
             return response()->json(
                 [
@@ -37,15 +36,19 @@ class UserController extends Controller
                     // 'wishlists' => $wishlists,
                 ]
             );
-        } else {
-            $projects = Project::with('user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->latest()->get();
-            $user = User::with(['skills', 'experiences'])->withCount(['new_notifications'])->findOrFail($user->id);
+        } elseif ($user->role === 'manager') {
+            // $projects = Project::with('user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->latest()->get();
+            // $user = User::with(['skills', 'experiences'])->withCount(['new_notifications'])->findOrFail($user->id);
 
             return response()->json(
                 [
                     'user' => $user,
-                    'projects' => $projects,
-                    'wishlists' => null
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                    'user' => $user,
                 ]
             );
         }

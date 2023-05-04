@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
+Route::get('user', 'Auth\UserController@current');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::post('logout', 'Auth\LoginController@logout');
 
-    Route::get('user', 'Auth\UserController@current');
 
     Route::post('user/avatar', 'Auth\UserController@uploadAvatar');
     Route::delete('user/avatar', 'Auth\UserController@deleteAvatar');
@@ -97,6 +97,7 @@ Route::get('departments', 'DepartmentController@index');
 
 Route::get('companies', 'CompanyController@index');
 
+
 Route::Post('showRequests', 'InternController@showRequest');
 
 Route::Post('showCurrentInternships', 'InternController@showCurrentInternships');
@@ -109,7 +110,5 @@ Route::Get('getAllOffres', 'StudentController@getAllOffres');
 
 Route::Post('getOffre', 'StudentController@getOffre');
 
-
-
-
+Route::get('managers', 'InternshipManagerController@index');
 

@@ -33,15 +33,15 @@
         </h1>
         <div class="login-role--container">
         <div>
-          <input id="login-student" v-model="form.role" class="login-radio" type="radio" value="Student">
+          <input id="login-student" v-model="form.role" class="login-radio" type="radio" value="student">
           <label class="login-radio--label" for="login-student" @click="chooseStudent">Student</label>
         </div>
         <div>
-          <input id="login-head" v-model="form.role" class="login-radio" type="radio" value="Head">
+          <input id="login-head" v-model="form.role" class="login-radio" type="radio" value="header">
           <label class="login-radio--label" for="login-head" @click="chooseHead">Head of departement</label>
         </div>
         <div>
-          <input id="login-manager" v-model="form.role" class="login-radio" type="radio" value="Manager">
+          <input id="login-manager" v-model="form.role" class="login-radio" type="radio" value="manager">
           <label class="login-radio--label" for="login-manager" @click="chooseManager">Internship manager</label>
         </div>
       </div>
@@ -67,7 +67,7 @@
 
               <div class="form-group__container">
                 <h6 class="form-group__input-name">
-                  Last Name
+                  Family Name
                 </h6>
                 <div class="">
                   <input v-model="form.lastName" :class="{ 'is-invalid': form.errors.has('last_name') }" class="form-group__input-text" type="text" name="last_name" placeholder="e.g., Doe" required>
@@ -141,7 +141,7 @@
                 <div class="select select--small select--border" required>
                   <select name="" id="" v-model="form.gender">
                     <option value="male">Male</option>
-                    <option value="male">female</option>
+                    <option value="female">female</option>
                   </select>
                 </div>
               </div>
@@ -162,6 +162,7 @@
             <div class="form__input--group" v-if="managerRole">
               <div class="select select--small select--border form-group__container">
                 <select name="" id="" v-model="form.company">
+                  <option value="0" selected>-- Select Company --</option>
                   <option v-for="company in companies" :key="company.id" :value="company.id">
                     {{ company.name }}
                   </option>
@@ -191,11 +192,10 @@
                 </h6>
                 <div class="select select--big select--border">
                   <select name="" v-model="form.university">
+                    <option value="0" selected>-- Select University --</option>
                     <option v-for="university in universities" :key="university.id" :value="university.id">
                       {{ university.name }}
                     </option>
-                    <option value="other">Other</option>
-                    <option value="sdf">sdfs</option>
                   </select>
                 </div>
               </div>
@@ -206,10 +206,10 @@
                 </h6>
                 <div class="select select--big select--border">
                   <select name="" id="" v-model="form.faculty">
+                    <option value="0" selected>-- Select Faculty --</option>
                     <option v-for="faculty in faculties" :key="faculty.id" :value="faculty.id">
                       {{ faculty.name }}
                     </option>
-                    <option value="sdf">sdfs</option>
                   </select>
                 </div>
               </div>
@@ -221,10 +221,10 @@
               </h6>
               <div class="select select--big select--border">
                 <select name="" id="" v-model="form.department">
+                  <option value="0" selected>-- Select Department --</option>
                   <option v-for="department in departments" :key="department.id" :value="department.id">
                     {{ department.name }}
                   </option>
-                  <option value="sdf">sdfs</option>
                 </select>
               </div>
             </div>
@@ -238,12 +238,10 @@
                 </h6>
                 <div class="select select--big select--border">
                   <select name="" v-model="form.university">
+                    <option value="0" selected>-- Select University --</option>
                     <option v-for="university in universities" :key="university.id" :value="university.id">
                       {{ university.name }}
                     </option>
-                    <option value="sdf">sdfs</option>
-                    <option value="other">Other</option>
-                    <option value="sdf">sdfs</option>
                   </select>
                 </div>
               </div>
@@ -254,10 +252,10 @@
                 </h6>
                 <div class="select select--big select--border">
                   <select name="" id="" v-model="form.faculty">
+                    <option value="0" selected>-- Select Faculty --</option>
                     <option v-for="faculty in filteredFaculties" :key="faculty.id" :value="faculty.id">
                       {{ faculty.name }}
                     </option>
-                    <option value="sdf">sdfs</option>
                   </select>
                 </div>
               </div>
@@ -271,10 +269,10 @@
                 </h6>
                 <div class="select select--big select--border">
                   <select name="" id="" v-model="form.department">
+                    <option value="0" selected>-- Select Department --</option>
                     <option v-for="department in filteredDepartments" :key="department.id" :value="department.id">
                       {{ department.name }}
                     </option>
-                    <option value="sdf">sdfs</option>
                   </select>
                 </div>
               </div>
@@ -284,9 +282,25 @@
                   Speciality
                 </h6>
                 <div class="">
-                  <input v-model="form.Speciality" :class="{ 'is-invalid': form.errors.has('Speciality') }" class="form-group__input-text" type="text" name="Speciality" placeholder="Speciality" required>
+                  <input v-model="form.speciality" :class="{ 'is-invalid': form.errors.has('Speciality') }" class="form-group__input-text" type="text" name="Speciality" placeholder="Speciality" required>
                   <has-error :form="form" field="Speciality" />
                 </div>
+              </div>
+            </div>
+
+            <div class="form-group__container">
+              <h6 class="form-group__input-name">
+                Grade
+              </h6>
+              <div class="select select--small select--border">
+                <select name="" id="" v-model="form.grade">
+                  <option value="0" selected>-- Select grade --</option>
+                  <option value="L1" selected>Licence 1</option>
+                  <option value="L2" selected>Licence 2</option>
+                  <option value="L3" selected>Licence 3</option>
+                  <option value="M1" selected>Master 1</option>
+                  <option value="M2" selected>Master 2</option>
+                </select>
               </div>
             </div>
 
@@ -378,7 +392,7 @@ export default {
     step: 1,
 
     form: new Form({
-      role: 'Student',
+      role: 'student',
       firstName: '',
       lastName: '',
       email: '',
@@ -388,25 +402,26 @@ export default {
       phoneNumber: '',
       gender: '',
       address: '',
-      university: 1,
-      faculty: 1,
-      department: 1,
-      Speciality: '',
+      university: 0,
+      faculty: 0,
+      department: 0,
+      grade: 0,
+      speciality: '',
       card: '',
       social: '',
-      company: '',
+      company: 0,
       newCompany: ''
     }),
   }),
 
   computed: {
     filteredFaculties () {
-      console.log(this.faculties);
       return this.faculties.filter((option) => option['university_id'] === this.form.university);
     },
 
     filteredDepartments () {
-      return this.departments.filter(option => option['faculty_id'] === this.faculty);
+      console.log(this.form.faculty);
+      return this.departments.filter(option => option['faculty_id'] === this.form.faculty);
     },
 
     role () {
@@ -439,10 +454,6 @@ export default {
 
     ...mapGetters({
       snackbar: 'notification/snackbar',
-      // universities: 'selectOptions/getUniversities',
-      // faculties: 'selectOptions/getFaculties',
-      // departments: 'selectOptions/getDepartments',
-      // companies: 'selectOptions/getCompanies',
     }),
 
     universities () {
@@ -464,12 +475,12 @@ export default {
   },
 
   watch: {
-    university() {
-      this.selectedFaculty = null;
-      this.selectedDepartment = null;
+    'form.university'() {
+      this.form.faculty = 0;
+      this.form.department = 0;
     },
-    faculty() {
-      this.selectedDepartment = null;
+    'form.faculty'() {
+      this.form.department = 0;
     },
   },
 
@@ -481,14 +492,16 @@ export default {
   },
 
   methods: {
-    enter() {
-      console.log('sdfsdflsdlfsdlfsdl');
-    },
     register () {
 
       axios
         .post('/api/register', this.form)
-        .then(data => console.log(data))
+        .then( response => {
+            console.log(response)
+          if (response.status === 200) {
+            this.$router.push({ name: 'login' })
+          }
+        })
         .catch(error => {
           console.log('Error:', error.response)
           console.log('Status:', error.response.status)
@@ -522,13 +535,17 @@ export default {
     },
 
     pervStep(){
-      this.step--;
-      console.log(this.step);
+      this.step--
+      this.university = 0
+      this.faculty = 0
+      this.department = 0
     },
 
     nextStep(){
       this.step++
-      console.log(this.step);
+      this.university = 0
+      this.faculty = 0
+      this.department = 0
     }
   }
 }

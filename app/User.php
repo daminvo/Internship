@@ -4,12 +4,11 @@ namespace App;
 
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject, MustVerifyEmail
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
@@ -20,7 +19,6 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
      *
      * @var array
      */
-
     protected $guarded = [
         'id',
     ];
@@ -80,7 +78,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 
     public function getFullNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name . ' ' . $this->family_name;
     }
 
     /**
@@ -135,10 +133,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return $this->hasMany('App\Internships');
     }
 
-    // public function student()
-    // {
-    //     return $this->hasOne('App\Student');
-    // }
+    public function student()
+    {
+        return $this->hasOne('App\Student');
+    }
 
     // public function lecturer()
     // {

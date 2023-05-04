@@ -94,8 +94,6 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'HomePage',
 
-  middleware: ['newcomer'],
-
   metaInfo () {
     return {
       title: 'Home',
@@ -121,20 +119,20 @@ export default {
     this.appendNavBg()
     this.getHomeData()
 
-    this.$nextTick(function () {
-      document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = 'unset'
-      let app = document.querySelector('html')
-      window.onscroll = () => {
-        clearTimeout(this.debouncedScroll)
-        this.debouncedScroll = setTimeout(() => {
-          if (app.scrollTop > 0) {
-            document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = '0 0.2rem 0.4rem 0 rgba(0, 0, 0, 0.1)'
-          } else {
-            document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = 'unset'
-          }
-        }, 50)
-      }
-    })
+    // this.$nextTick(function () {
+    //   document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = 'unset'
+    //   let app = document.querySelector('html')
+    //   window.onscroll = () => {
+    //     clearTimeout(this.debouncedScroll)
+    //     this.debouncedScroll = setTimeout(() => {
+    //       if (app.scrollTop > 0) {
+    //         document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = '0 0.2rem 0.4rem 0 rgba(0, 0, 0, 0.1)'
+    //       } else {
+    //         document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = 'unset'
+    //       }
+    //     }, 50)
+    //   }
+    // })
     // this.addProximity()
   },
 
