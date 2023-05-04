@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Users;
+use App\User;
 
 class Student extends Model
 {
@@ -15,9 +15,9 @@ class Student extends Model
     ];
 
     //public function offre(): HasOne
-    public function student(): BelongsTo
+    public function user()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo('App\user', 'student_id');
     }
 
 }

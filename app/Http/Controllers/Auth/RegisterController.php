@@ -10,7 +10,7 @@ use App\DepartmentHeader;
 use App\InternshipManager;
 use App\Company;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 // use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -32,13 +32,15 @@ class RegisterController extends Controller
 
     protected function register (Request $request)
     {
+        validator($request->all());
+
         $user['role'] = $request->role;
         $user['first_name'] = $request->firstName;
         $user['family_name'] = $request->lastName;
         $user['email'] = $request->email;
         $user['password'] = bcrypt($request->password);
         $user['phone'] = $request->phoneNumber;
-        $user['adresse'] = $request->address;
+        $user['address'] = $request->address;
         $user['gender'] = $request->gender;
 
         $user = User::create($user);
@@ -53,7 +55,7 @@ class RegisterController extends Controller
             $student['department_id'] = $request->department;
             $student['speciality'] = $request->speciality;
             $student['grade'] = $request->grade;
-            $student['state'] = false;
+            $student['state'] = true;
 
             $student = Student::create($student);
             if ($student) {
@@ -77,7 +79,7 @@ class RegisterController extends Controller
 
             if ($request->company === 'other') {
                 $company['name'] = $request->newCompany;
-                $company['adresse'] = $request->address;
+                $company['address'] = $request->address;
                 $company = Company::create($company);
 
                 $manager['company_id'] = $company->getKey();
@@ -90,8 +92,6 @@ class RegisterController extends Controller
         }
     }
 
-    // adressse , faculte, speciality, departement_id
-    //name (bigInt)
 
 
 
@@ -123,33 +123,48 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    // protected function validator(array $data)
-    // {
-    //     if ($data['role'] === 'student') {
-    //         return Validator::make($data, [
-    //             'firstName' => 'required|max:255',
-    //             'lastName' => 'required|max:255',
-    //             'email' => 'required|email|max:255|unique:users',
-    //             'password' => 'required|min:6',
-    //         ]);
-    //     }
-    //     elseif ($data['role'] === 'head') {
-    //         return Validator::make($data, [
-    //             'firstName' => 'required|max:255',
-    //             'lastName' => 'max:255',
-    //             'email' => 'required|email|max:255|unique:users',
-    //             'password' => 'required|min:6',
-    //         ]);
-    //     }
-    //     else {
-    //         return Validator::make($data, [
-    //             'firstName' => 'required|max:255',
-    //             'lastName' => 'max:255',
-    //             'email' => 'required|email|max:255|unique:users',
-    //             'password' => 'required|min:6',
-    //         ]);
-    //     }
-    // }
+    protected function validator(array $data)
+    {
+        if ($data['role'] === 'student') {
+            return Validator::make($data, [
+                'firstName' => 'required|max:255',
+                'familyName' => 'required|max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6',
+                'phone' => 'required|max:255',
+                'address' => 'required|max:255',
+                'gender' => 'required|max:255',
+                'student_card' => 'required|max:255',
+                'security_number' => 'required|max:255',
+                'birthday' => 'required',
+                'birth_place' => 'required|max:255',
+                'speciality' => 'required|max:255',
+                'grade' => 'required|max:255',
+            ]);
+        }
+        elseif ($data['role'] === 'header') {
+            return Validator::make($data, [
+                'firstName' => 'required|max:255',
+                'familyName' => 'max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6',
+                'phone' => 'required|max:255',
+                'address' => 'required|max:255',
+                'gender' => 'required|max:255',
+            ]);
+        }
+        else {
+            return Validator::make($data, [
+                'firstName' => 'required|max:255',
+                'familyName' => 'max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6',
+                'phone' => 'required|max:255',
+                'address' => 'required|max:255',
+                'gender' => 'required|max:255',
+            ]);
+        }
+    }
 
     /**
      * Create a new user instance after a valid registration.
@@ -168,3 +183,7 @@ class RegisterController extends Controller
         ]);
     }
 }
+
+
+// remember_token varcahar 100
+// department_id

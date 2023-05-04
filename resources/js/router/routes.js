@@ -9,6 +9,9 @@ export default [
   { path: '/password/reset', name: 'password.request', component: page('auth/password/ForgotPassword.vue') },
   { path: '/password/reset/:token', name: 'password.reset', component: page('auth/password/ResetPassword.vue') },
 
+  { path: '/request',  name: 'internship.request', component: page('request') },
+
+
   {
     path: '/profile',
     component: page('profile'),
@@ -21,7 +24,7 @@ export default [
   },
 
   { path: '/inbox', name: 'inbox', meta: { title: 'Inbox' }, component: page('Inbox.vue') },
-  { path: '/projectbox', name: 'projectbox', meta: { title: 'Project Box' }, component: page('ProjectBox.vue') },
+  { path: '/internshipBox', name: 'internshipBox', meta: { title: 'Internship Box' }, component: page('InternshipBox.vue') },
 
   {
     path: '/newcomer',
@@ -76,8 +79,6 @@ export default [
       { path: '/project/:id/shorlisted/team', name: 'shortlist.team', meta: { title: 'Apply Project' }, component: page('internship/shortlist/ShortlistTeam.vue') }
     ]
   },
-
-  { path: '/request', component: page('request'), name: 'project.apply' },
 
   { path: '/:url/404', name: '404', meta: { title: 'Error' }, component: page('errors/404.vue') },
 

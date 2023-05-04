@@ -14,7 +14,8 @@ class InternshipManagerController extends Controller
      */
     public function index()
     {
-        //
+        $managers = InternshipManager::with(['user'])->get();
+        return response()->json($managers, 200);
     }
 
     /**

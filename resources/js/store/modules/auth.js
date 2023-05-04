@@ -26,19 +26,17 @@ export const mutations = {
   [types.SAVE_TOKEN] (state, { token, remember }) {
     state.token = token
     Cookies.set('token', token, { expires: remember ? 365 : null })
-    console.log(state.token)
   },
 
   [types.FETCH_USER_SUCCESS] (state, { user, projects, wishlists }) {
     state.user = user
-    state.data = {
-      projects: projects,
-      wishlists: wishlists
-    }
+    // state.data = {
+    //   projects: projects,
+    //   wishlists: wishlists
+    // }
   },
 
   [types.FETCH_USER_FAILURE] (state) {
-    console.log('error heeeeeeeree')
     state.token = null
     Cookies.remove('token')
   },
@@ -103,14 +101,6 @@ export const actions = {
       console.log(e)
       commit(types.FETCH_USER_FAILURE)
     }
-  },
-
-  async fetchUserParty ({ commit }) {
-    try {
-      const { data } = await axios.get('/api/party')
-
-      commit(types.FETCH_USER_PARTY, data)
-    } catch (e) {}
   },
 
   async updateAvatar ({ commit }, payload) {

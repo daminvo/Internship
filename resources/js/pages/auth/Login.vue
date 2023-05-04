@@ -178,7 +178,7 @@ export default {
         this.chooseStudent()
         this.form.role = 'Student'
         return
-      } else if (this.form.role === 'Student' && isLecturer) {
+      } else if (this.form.role === 'student' && isLecturer) {
         this.snackbar.open('You are likely using a lecturer identity. ')
         this.chooseHead()
         this.form.role = 'Lecturer'
@@ -192,10 +192,12 @@ export default {
             token: data.token,
             remember: this.remember
           })
-          this.$router.back()
+          // this.$router.back()
         })
-        .catch(e => {
-          console.log(e.response.data.message)
+        .catch(error => {
+          console.log('Error:', error.response)
+          console.log('Status:', error.response.status)
+          console.log('Data:', error.response.data)
         })
     },
 

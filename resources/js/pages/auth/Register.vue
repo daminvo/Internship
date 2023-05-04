@@ -67,7 +67,7 @@
 
               <div class="form-group__container">
                 <h6 class="form-group__input-name">
-                  Last Name
+                  Family Name
                 </h6>
                 <div class="">
                   <input v-model="form.lastName" :class="{ 'is-invalid': form.errors.has('last_name') }" class="form-group__input-text" type="text" name="last_name" placeholder="e.g., Doe" required>
@@ -162,6 +162,7 @@
             <div class="form__input--group" v-if="managerRole">
               <div class="select select--small select--border form-group__container">
                 <select name="" id="" v-model="form.company">
+                  <option value="0" selected>-- Select Company --</option>
                   <option v-for="company in companies" :key="company.id" :value="company.id">
                     {{ company.name }}
                   </option>
@@ -408,7 +409,7 @@ export default {
       speciality: '',
       card: '',
       social: '',
-      company: '',
+      company: 0,
       newCompany: ''
     }),
   }),
@@ -453,10 +454,6 @@ export default {
 
     ...mapGetters({
       snackbar: 'notification/snackbar',
-      // universities: 'selectOptions/getUniversities',
-      // faculties: 'selectOptions/getFaculties',
-      // departments: 'selectOptions/getDepartments',
-      // companies: 'selectOptions/getCompanies',
     }),
 
     universities () {
@@ -499,7 +496,12 @@ export default {
 
       axios
         .post('/api/register', this.form)
-        .then(data => console.log(data))
+        .then( response => {
+            console.log(response)
+          if (response.status === 200) {
+            this.$router.push({ name: 'login' })
+          }
+        })
         .catch(error => {
           console.log('Error:', error.response)
           console.log('Status:', error.response.status)

@@ -3,7 +3,7 @@
     <div>
       <TopImage :type="2" />
       <h2 class="newcomer__h2">
-        Hello, {{ user.full_name }}
+        Hello,
       </h2>
 
       <div class="stepper-wrap">
@@ -41,6 +41,10 @@ export default {
   name: 'NewcomerIndex',
   layout: 'wide',
   middleware: 'auth',
+
+  mounted() {
+    this.$store.getters['auth/user']
+  },
 
   computed: {
     ...mapGetters({
