@@ -12,9 +12,18 @@ use App\ProjectTeamMember;
 use App\TeamApplicant;
 use App\User;
 use Illuminate\Http\Request;
-
+use App\InternshipOffre;
 class ApplyController extends Controller
 {
+
+
+
+
+
+
+
+
+
     public function applyAsIndividual(Request $request, Project $project)
     {
         $applicant = $request->get('apply');
@@ -70,50 +79,5 @@ class ApplyController extends Controller
                 'message' => 'Project hiring is closed',
             ], 400);
         }
-    }
-
-    public function applyAsTeam(Request $request, Project $project)
-    {
-        $user_id = $request->user()->id;
-
-        $to = User::findOrFail($project->user_id);
-
-        $teamApplicant = TeamApplicant::firstOrCreate(
-            [
-                'project_id' => $project->id,
-                'from_id' => $user_id,
-                'to_id' => $to->id,
-            ],
-            [
-                'self_describe' => $request->post('self_describe'),
-                'apply_reason' => $request->post('apply_reason'),
-            ]
-        );
-
-        $team = $request->post('team');
-        $applicantTeamMembers = [];
-
-        for ($i = 0; $i < count($team); $i++) {
-            $applicantTeamMembers[] = [
-                'team_applicant_id' => $teamApplicant->id,
-                'member_id' => $team[$i]['member_id'],
-                'expertise' => $team[$i]['expertise'],
-            ];
-        }
-
-        ApplicantTeamMember::where('team_applicant_id', $teamApplicant->id)->delete();
-        ApplicantTeamMember::insert($applicantTeamMembers);
-
-        ProjectBox::firstOrCreate(
-            [
-                'user_id' => $user_id,
-                'project_id' => $project->id,
-                'status' => 'Waiting',
-            ]
-        );
-
-        return response()->json([
-            'message' => "Team Application submitted",
-        ]);
     }
 }

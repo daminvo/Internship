@@ -96,3 +96,20 @@ Route::get('faculties', 'FacultyController@index');
 Route::get('departments', 'DepartmentController@index');
 
 Route::get('companies', 'CompanyController@index');
+
+Route::Post('showRequests', 'InternController@showRequest');
+
+Route::Post('showCurrentInternships', 'InternController@showCurrentInternships');
+
+Route::Post('showFinchedInternships', 'InternController@showFinchedInternships');
+
+Route::Post('applyOffer', 'StudentController@applyOffer');
+
+Route::Get('getAllOffres', 'StudentController@getAllOffres');
+
+Route::Post('getOffre', 'StudentController@getOffre');
+
+
+
+
+

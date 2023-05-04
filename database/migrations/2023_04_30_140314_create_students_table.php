@@ -18,7 +18,7 @@ class CreateStudentsTable extends migration
             $table->id();
             $table->string('grade');
             $table->bigInteger('student_card');
-            $table->boolean('state');
+            $table->boolean('available')->default(true);
             $table->string('cv')->nullable();
             $table->string('speciality');
             $table->bigInteger('security_number')->nullable();

@@ -8,6 +8,9 @@ use App\internship;
 use App\internshipManager;
 use App\company;
 use App\User;
+use App\intern;
+use Illuminate\Support\Facades\DB;
+
 
 class StudentController extends Controller
 {
@@ -16,16 +19,15 @@ class StudentController extends Controller
         //$student_request=student::where ($request->student_id,"id")->;
         if($request->companayId == ""   ){
             $companies['name'] = $request->name;
-            $companies['addresse'] = $request->addresse;
+            $companies['address'] = $request->address;
             $companies = company::create($companies);
 
             if($request->managerId == ""){
                 $users['first_name'] = $request->firstName;
                 $users['family_name'] = $request->familyName;
                 $users['email'] = $request->email;
-                $users['password'] = $request->password;
                 $users['phone'] = $request->phone;
-                $users['addresse'] = $request->addresse;
+                $users['address'] = $request->address;
                 $users['gender'] = $request->gender;
                 $users['role'] = "manager";
                 $users = User::create($users);
@@ -38,16 +40,34 @@ class StudentController extends Controller
             return response()->json([
                 'msg' => 'information inserted successfuly',
                     ]);
+
         }else {
             internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'description' => $request->description,'state'=>$request->state,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$request->managerId,'title'=>$request->title]);
-        return response()->json([
-       'msg' => 'information is inserted successfuly',
-           ]);
+                return response()->json([
+            'msg' => 'information is inserted successfuly',
+                ]);
         }
 
     }
 
+    public function applyOffer(Request $request) {
+        intern::insert(['student_id'=>$request->studentId,'internship_id'=>$request->internshipId]);
+        return response()->json([
+            'msg' => 'information is inserted successfuly',
+                ]);
+    }
 
+
+    public function getAllOffres(){
+        return DB::table('internships')
+        -> get();
+    }
+
+    public function getOffre(Request $request){
+        return DB::table('internships')
+        -> where('id','=',$request->internshipId)
+        -> get();
+    }
 
 
 
