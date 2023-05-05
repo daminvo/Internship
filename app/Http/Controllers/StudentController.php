@@ -14,18 +14,16 @@ class StudentController extends Controller
 
     public function createRequest(Request $request){
         //$student_request=student::where ($request->student_id,"id")->;
-        if($request->companayId == ""   ){
+        if($request->companyId === "other"  ){
             $companies['name'] = $request->name;
-            $companies['addresse'] = $request->addresse;
+            $companies['address'] = $request->address;
             $companies = company::create($companies);
 
-            if($request->managerId == ""){
                 $users['first_name'] = $request->firstName;
                 $users['family_name'] = $request->familyName;
                 $users['email'] = $request->email;
-                $users['password'] = $request->password;
                 $users['phone'] = $request->phone;
-                $users['addresse'] = $request->addresse;
+                $users['address'] = $request->address;
                 $users['gender'] = $request->gender;
                 $users['role'] = "manager";
                 $users = User::create($users);
@@ -33,13 +31,34 @@ class StudentController extends Controller
                 $manager['company_id'] = $companies->getKey();
                 $manager['user_id'] = $users->getKey();
                 $manager = internshipManager::create($manager);
-            }
-            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'description' => $request->description,'state'=>$request->state,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
+
+            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
             return response()->json([
                 'msg' => 'information inserted successfuly',
-                    ]);
-        }else {
-            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'description' => $request->description,'state'=>$request->state,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$request->managerId,'title'=>$request->title]);
+            ]);
+        } elseif ($request->managerId === "" || $request->managerId === "other") {
+
+            $company = company::find($request->companyId);
+
+            $users['first_name'] = $request->firstName;
+            $users['family_name'] = $request->familyName;
+            $users['email'] = $request->email;
+            $users['phone'] = $request->phone;
+            $users['address'] = $company->address;
+            $users['gender'] = $request->gender;
+            $users['role'] = "manager";
+            $users = User::create($users);
+
+            $manager['company_id'] = $company->id;
+            $manager['user_id'] = $users->getKey();
+            $manager = internshipManager::create($manager);
+
+            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
+            return response()->json([
+                'msg' => 'information inserted successfuly',
+            ]);
+        } else {
+            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$request->managerId,'title'=>$request->title]);
         return response()->json([
        'msg' => 'information is inserted successfuly',
            ]);

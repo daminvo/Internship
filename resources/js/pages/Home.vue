@@ -10,7 +10,7 @@
             Expand <br>
             Your Career <br>
             by Doing <br>
-            Project.
+            Interships
           </h2>
           <div v-if="$matchMedia.xl" class="slide-1__ornament">
             <img class="slide-1__triangle fadeIn duration--2" src="/images/triangle.svg" alt="">
