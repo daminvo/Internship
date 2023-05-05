@@ -8,6 +8,9 @@ use App\internship;
 use App\internshipManager;
 use App\company;
 use App\User;
+use App\intern;
+use Illuminate\Support\Facades\DB;
+
 
 class StudentController extends Controller
 {
@@ -66,7 +69,24 @@ class StudentController extends Controller
 
     }
 
+    public function applyOffer(Request $request) {
+        intern::insert(['student_id'=>$request->studentId,'internship_id'=>$request->internshipId]);
+        return response()->json([
+            'msg' => 'information is inserted successfuly',
+                ]);
+    }
 
+
+    public function getAllOffres(){
+        return DB::table('internships')
+        -> get();
+    }
+
+    public function getOffre(Request $request){
+        return DB::table('internships')
+        -> where('id','=',$request->internshipId)
+        -> get();
+    }
 
 
 

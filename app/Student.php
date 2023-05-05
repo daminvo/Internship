@@ -15,9 +15,26 @@ class Student extends Model
     ];
 
     //public function offre(): HasOne
+
+
+
+    public function intern()
+    {
+        return $this->hasOne("App\intern");
+    }
     public function user()
     {
         return $this->belongsTo('App\user', 'student_id');
+
     }
+
+    public function internships()
+    {
+        return $this->belongsToMany('App\internship', 'Interns', 'student_id', 'internship_id');
+
+    }
+
+
+
 
 }

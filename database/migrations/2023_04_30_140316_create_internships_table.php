@@ -26,8 +26,6 @@ class CreateInternshipsTable extends migration
             $table->date('demand_date');
             $table->unsignedBigInteger('manager_id')->index();
             $table->foreign('manager_id')->references('id')->on('internship_managers')->onDelete('cascade');
-            $table->unsignedBigInteger('student_id')->index();
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
 
         Schema::enableForeignKeyConstraints();
