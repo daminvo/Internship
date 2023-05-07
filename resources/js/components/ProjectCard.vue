@@ -1,40 +1,31 @@
 <template>
   <div class="project__card--container">
     <div class="project__card--top-container pointer">
-      <router-link :to="{ name: 'project.details', params: { id: project.project_url } }">
-        <img :src="project.thumbnail_url" height="150">
+      <!-- <router-link :to="{ name: 'project.details', params: { id: project.project_url } }"> -->
+        <!-- <img :src="offer.thumbnail_url" height="150"> -->
         <!-- loading="lazy" -->
-      </router-link>
+      <!-- </router-link> -->
     </div>
 
     <div class="project__card--body-container">
-      <div class="project__card--body-salary">
-        {{ rewards }}
-      </div>
 
       <div class="project__card--info-container">
         <h2 class="project__card--name">
-          {{ project.title }}
+          {{ offer.internship.title }}
         </h2>
         <div class="project__card--info--consistency">
           <div class="project__card--post-info">
             <div class="ellipsies">
-              Expertise in : {{ expertiseIn }}
+              Posted by : {{ offer.internship.manager.user.first_name }} {{ offer.internship.manager.user.family_name }}
             </div>
             <div class="ellipsies">
-              Posted by : {{ project.user.full_name }}
-            </div>
-            <div class="ellipsies">
-              Applicant : {{ project.applicant_type }}
+              <!-- Applicant : {{ project.applicant_type }} -->
             </div>
           </div>
           <div>
             <div class="project__card--bounty-info">
-              <div class="info-item--container">
-                <span class="bounty--span">LVL</span>
-                <span>{{ project.level_applicant ? project.level_applicant : 'Not Specified' }}</span>
-              </div>
-              <div v-if="project.salary" class="info-item--container">
+
+              <div v-if="offer.salary" class="info-item--container">
                 <span>
                   <span
                     class="iconify info-item--icon"
@@ -46,7 +37,7 @@
                 </span>
                 <span>Salary</span>
               </div>
-              <div v-if="project.certificate" class="info-item--container">
+              <div v-if="offer.certificate" class="info-item--container">
                 <span>
                   <span
                     class="iconify info-item--icon"
@@ -61,15 +52,15 @@
             </div>
             <div class="project-card__extra-info--container">
               <div class="project-card__extra-info">
-                <div>&bull; Posted {{ getHumanDate(project.created_at) }}</div>
-                <div>&bull; Max. {{ project.max_person }} Person</div>
+                <div>&bull; Posted {{ getHumanDate(offer.internship.demand_date) }}</div>
+                <div>&bull; Max. {{ offer.nmbr_postions }} Person</div>
               </div>
-              <button v-if="$matchMedia.xl && (!user || user.role === 'Student' )" class="btn--clear" @click="showWishlist">
+              <button v-if="$matchMedia.xl && (!user || user.role === 'student' )" class="btn--clear" @click="showWishlist">
                 <span class="iconify project-card__wish" data-icon="mdi:dots-horizontal" width="22" />
               </button>
               <div v-show="showWish" class="card-wish__container">
                 <button v-debounce:400ms="toggleWishlist" class="btn btn--clear card-wish__button" :debounce-events="'click'">
-                  {{ wishText }}
+                 {{ wishText }}
                 </button>
               </div>
             </div>
@@ -104,40 +95,27 @@ export default {
       snackbar: 'notification/snackbar'
     }),
 
-    expertiseIn () {
-      const expertises = [
-        { name: 'UI/UX Designer', isRequired: this.project.ui_ux_designer },
-        { name: 'Frontend Engineer', isRequired: this.project.front_end_engineer },
-        { name: 'Backend Engineer', isRequired: this.project.back_end_engineer },
-        { name: 'Data Expert', isRequired: this.project.data_expert }
-      ].filter(expertise => expertise.isRequired === true)
-        .map(expertise => expertise.name)
-        .join(', ')
+    // expertiseIn () {
+    //   const expertises = [
+    //     { name: 'UI/UX Designer', isRequired: this.project.ui_ux_designer },
+    //     { name: 'Frontend Engineer', isRequired: this.project.front_end_engineer },
+    //     { name: 'Backend Engineer', isRequired: this.project.back_end_engineer },
+    //     { name: 'Data Expert', isRequired: this.project.data_expert }
+    //   ].filter(expertise => expertise.isRequired === true)
+    //     .map(expertise => expertise.name)
+    //     .join(', ')
 
-      if (expertises === '') return 'Not Specified'
+    //   if (expertises === '') return 'Not Specified'
 
-      return expertises
-    },
+    //   return expertises
+    // },
 
-    rewards () {
-      return this.getRewards({
-        salary: this.project.salary,
-        currency: this.project.currency,
-        salaryAmount: this.project.salary_amount,
-        paymentType: this.project.payment_type,
-        certificate: this.project.certificate,
-        maxPerson: this.project.max_person
-      })
-    },
-
-    project () {
-      if (this.data.project) return this.data.project
-
+    offer () {
       return this.data
     },
 
     wishText () {
-      if (this.project.is_wished && this.project.is_wished.status) {
+      if (this.offer.is_favorited && this.offer.is_favorited.status) {
         return 'Remove from Wishlist'
       }
 
@@ -146,14 +124,6 @@ export default {
   },
 
   methods: {
-
-    getRewards: function ({ salary, currency, salaryAmount, paymentType, certificate, maxPerson }) {
-      if (paymentType === 'person') salaryAmount = salaryAmount * maxPerson
-      if (salary) {
-        return new Intl.NumberFormat('id-ID').format(salaryAmount) + ',- ' + currency
-      } else if (certificate) return 'Certificate'
-      else return 'Not Specified'
-    },
 
     getHumanDate: function (date) {
       return timeago.format(date)
@@ -164,27 +134,28 @@ export default {
     },
 
     async toggleWishlist () {
-      const isWished = this.project.is_wished && this.project.is_wished.status
+      const isWished = this.offer.is_favorited && this.offer.is_favorited.status
 
-      await axios.post(`/api/project/${this.project.project_url}/wishlist`, {
+      await axios.post(`/api/${this.offer.id}/favorite`, {
         status: !isWished
       })
         .then(({ data }) => {
+          console.log(data);
           this.snackbar.open(data.message)
-          this.$store.dispatch('auth/updateWishlists', {
-            wishlists: data.wishlists
+          this.$store.dispatch('auth/updateFavorites', {
+            favorites: data.favorites
           })
-          if (this.project.is_wished) {
-            this.project.is_wished.status = !this.project.is_wished.status
+          if (this.offer.is_favorited) {
+            this.offer.is_favorited.status = !this.offer.is_favorited.status
           } else {
-            this.project.is_wished = {
+            this.offer.is_favorited = {
               status: true
             }
           }
         }).catch((e) => {
-          this.snackbar.open(e.response.data.message)
+          // this.snackbar.open(e.response.data.message)
+          console.log(e);
           this.$router.push({ name: 'login' })
-          // console.log(error.response)
         })
     }
   }

@@ -6,7 +6,7 @@ use App\Experience;
 use App\Http\Controllers\Controller;
 use App\User;
 // use App\UserSkill;
-// use App\Wishlist;
+use App\Favorite;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -24,16 +24,15 @@ class UserController extends Controller
 
         if ($user->role === 'student') {
             // $projects = ProjectBox::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->where('status', 'Finished')->latest()->get();
-            // $wishlists = Wishlist::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->where('status', true)->latest()->get();
-            $user = User::findOrFail($user->id)->with('student')->first();
+            $favorites = Favorite::with('student.user:first_name,family_name,email')->where('id', $user->student()->pluck('id'))->where('status', true)->get();
+            $user = User::with('student')->findOrFail($user->id);
             // ->student()->first();
-            // ->with(['getFullNameAttribute']);
 
             return response()->json(
                 [
                     'user' => $user,
                     // 'projects' => $projects,
-                    // 'wishlists' => $wishlists,
+                    'favorites' => $favorites,
                 ]
             );
         } elseif ($user->role === 'manager') {

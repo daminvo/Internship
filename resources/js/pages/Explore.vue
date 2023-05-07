@@ -2,7 +2,7 @@
   <div class="explore--container">
     <div class="explore__top--container">
       <h1 class="explore__top--h1">
-        Explore for Your Projects
+        Explore for Your Internships
       </h1>
 
       <div class="explore__search--container">
@@ -28,7 +28,7 @@
 
     <div class="explore__main--container">
       <h2 class="explore__main--h2">
-        Available Projects
+        Available Internships
       </h2>
       <button class="btn--clear flex-center" @click="toggleFilter">
         <div class="icon">
@@ -60,25 +60,7 @@
           <span class="focus" />
         </div>
 
-        <div class="checkbox-group--filters">
-          <label v-for="expertise in filters.expertises" :key="`filter-${expertise.name}`" class="checkbox-container checkbox-container--post checkbox-container--filters space-between">{{ expertise.name }}
-            <input v-model="expertise.isChecked" type="checkbox" @change="filterProjects">
-            <span class="checkbox-checkmark " />
-            <p class="text-bold">({{ expertise.count }})</p>
-          </label>
-        </div>
 
-        <div class="select select--small select--border mt-2">
-          <select v-model="filters.selected.reward" @change="filterProjects">
-            <option disabled value="">
-              Rewards:
-            </option>
-            <option v-for="reward in filters.rewards" :key="`SelectRewards-${reward.name}`">
-              {{ reward.name }}
-            </option>
-          </select>
-          <span class="focus" />
-        </div>
       </template>
 
       <template v-slot:footer>
@@ -101,23 +83,6 @@
           </select>
           <span class="focus" />
         </div>
-        <div class="flex-row checkbox-group--filter">
-          <div v-for="expertise in filters.expertises" :key="`filter-${expertise.name}`" class="checkbox-container pl-0">
-            <input :id="`filter-${expertise.name}`" v-model="expertise.isChecked" type="checkbox" @change="filterProjects">
-            <label :for="`filter-${expertise.name}`" class="checkbox-checkmark--filter">{{ expertise.name }}</label>
-          </div>
-        </div>
-        <div class="select select--small select--border">
-          <select v-model="filters.selected.reward" @change="filterProjects">
-            <option disabled value="">
-              Rewards:
-            </option>
-            <option v-for="reward in filters.rewards" :key="`SelectRewards-${reward.name}`">
-              {{ reward.name }}
-            </option>
-          </select>
-          <span class="focus" />
-        </div>
       </div>
     </div>
 
@@ -133,13 +98,13 @@
           <content-placeholders-heading />
         </content-placeholders>
       </template>
-      <ProjectCard v-for="(project) in projects" :key="`ProjectCard-${project.id}`" :data="project" />
-      <p v-if="!loading && projects.length === 0" class="info__p">
+      <ProjectCard v-for="(offer) in offers" :key="`ProjectCard-${offer.id}`" :data="offer" />
+      <p v-if="!loading && offers.length === 0" class="info__p">
         There are no projects with these criteria
       </p>
     </div>
 
-    <button v-if="canLoadMore && projects.length !== 0" class="btn btn--blue btn__load-more" @click="loadMore">
+    <button v-if="canLoadMore && offers.length !== 0" class="btn btn--blue btn__load-more" @click="loadMore">
       <span>Load More</span><span v-if="$matchMedia.xl">Projects</span>
     </button>
   </div>
@@ -169,28 +134,12 @@ export default {
       debounceAutoMore: '',
       loading: true,
       beforeFilterProjects: [],
-      projects: [],
+      offers: [],
       query: '',
       page: 1,
       canLoadMore: true,
       showFilter: false,
       filters: {
-        expertises: [
-          { name: 'UI/UX Designer', isChecked: false, count: 0, apiName: 'ui_ux_designer' },
-          { name: 'Frontend Engineer', isChecked: false, count: 0, apiName: 'front_end_engineer' },
-          { name: 'Backend Engineer', isChecked: false, count: 0, apiName: 'back_end_engineer' },
-          { name: 'Data Expert', isChecked: false, count: 0, apiName: 'data_expert' }
-        ],
-        applicantTypes: [
-          { name: 'Individual', count: 0, apiName: 'applicant_type' },
-          { name: 'Team', count: 0, apiName: 'applicant_type' },
-          { name: 'Individual & Team', count: 0, apiName: 'applicant_type' }
-        ],
-        rewards: [
-          { name: 'Salary & Certificate', icount: 0 },
-          { name: 'Certificate', count: 0, apiName: 'certificate' },
-          { name: 'Salary', icount: 0, apiName: 'salary' }
-        ],
         statuses: [
           { name: 'Hiring', count: 0 },
           { name: 'Ongoing', count: 0 },
@@ -208,6 +157,7 @@ export default {
 
   mounted () {
     if (this.$route.query.query) {
+      console.log(this.$route);
       this.query = this.$route.query.query
       this.searchQuery()
     } else this.getAll()
@@ -241,33 +191,46 @@ export default {
     },
 
     async searchQuery () {
-      await axios.get('/api/projects/search?page=' + this.page, {
+      await axios.get('/api/search?page=' + this.page, {
         params: {
           query: this.query
         }
       })
         .then(response => {
+          console.log(response);
           this.loading = false
           this.beforeFilterProjects = response.data.data
-          this.orderProjects()
-          this.projects = this.beforeFilterProjects
+          // this.orderProjects()
+          this.offers = this.beforeFilterProjects
           this.page++
-          this.filterProjects()
+          // this.filterProjects()
           if (response.data.next_page_url === null) this.canLoadMore = false
           else this.canLoadMore = true
+          console.log(this.offers)
+        })
+        .catch(error => {
+          console.log('Error:', error.response)
+          console.log('Status:', error.response.status)
+          console.log('Data:', error.response.data)
         })
     },
 
     async getAll () {
-      await axios.get('/api/projects?page=' + this.page)
+      await axios.get('/api/getAllOffres?page=' + this.page)
         .then(response => {
           this.loading = false
           this.beforeFilterProjects = response.data.data
-          this.orderProjects()
-          this.projects = this.beforeFilterProjects
+          // this.orderProjects()
+          this.offers = this.beforeFilterProjects
+
           this.page++
-          this.filterProjects()
+          // this.filterProjects()
           if (response.data.next_page_url === null) this.canLoadMore = false
+        })
+        .catch(error => {
+          console.log('Error:', error.response)
+          console.log('Status:', error.response.status)
+          console.log('Data:', error.response.data)
         })
     },
 
@@ -275,15 +238,15 @@ export default {
       let api = ''
 
       if (this.$route.query) {
-        api = `/api/projects/search?page=${this.page}&query=${this.query}`
-      } else api = '/api/projects?page=' + this.page
+        api = `/api/search?page=${this.page}&query=${this.query}`
+      } else api = '/api/getAllOffres?page=' + this.page
 
       await axios.get(api)
         .then(response => {
           // this.projects.push(...response.data.data)
           this.beforeFilterProjects.push(...response.data.data)
-          this.orderProjects()
-          this.filterProjects()
+          // this.orderProjects()
+          // this.filterProjects()
           this.page++
           if (response.data.next_page_url === null) this.canLoadMore = false
         })
@@ -296,12 +259,6 @@ export default {
 
     async filterProjects () {
       let filteredProjects = [...this.beforeFilterProjects]
-
-      for (const i in this.filters.expertises) {
-        if (this.filters.expertises[i].isChecked) {
-          filteredProjects = filteredProjects.filter(project => project[this.filters.expertises[i].apiName] === true)
-        }
-      }
 
       if (this.filters.selected.reward === 'Salary & Certificate') {
         for (const reward of this.filters.rewards.slice(1)) {
@@ -317,36 +274,14 @@ export default {
         filteredProjects = filteredProjects.filter(project => project.status === this.filters.selected.status)
       }
 
-      this.projects = filteredProjects
-      this.countProject()
+      this.offers = filteredProjects
     },
 
     clearFilter () {
-      for (const i in this.filters.expertises) {
-        this.filters.expertises[i].isChecked = false
-      }
-
       this.filters.selected.reward = ''
       this.filters.selected.status = ''
 
       this.projects = [...this.beforeFilterProjects]
-    },
-
-    async countProject () {
-      let counter = {
-        expertises: [...this.filters.expertises]
-      }
-
-      for (let i in counter.expertises) counter.expertises[i].count = 0
-
-      for (let project of this.projects) {
-        if (project.ui_ux_designer) counter.expertises[0].count++
-        if (project.front_end_engineer) counter.expertises[1].count++
-        if (project.back_end_engineer) counter.expertises[2].count++
-        if (project.data_expert) counter.expertises[3].count++
-      }
-
-      this.filters.expertises = counter.expertises
     },
 
     orderProjects () {

@@ -55,12 +55,12 @@ class RegisterController extends Controller
             $student['department_id'] = $request->department;
             $student['speciality'] = $request->speciality;
             $student['grade'] = $request->grade;
-            $student['state'] = true;
+            $student['available'] = true;
 
             $student = Student::create($student);
-            if ($student) {
+            // if ($student) {
                 return response()->json($student);
-            }
+            // }
         }
         elseif ($request->role === 'header') {
             $header['user_id'] = $user->getKey();

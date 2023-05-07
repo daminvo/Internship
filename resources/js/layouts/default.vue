@@ -1,6 +1,6 @@
 <template>
   <div class="main-layout">
-    <Navbar />
+    <Navbar class="scrolled" />
 
     <div class="main-container">
       <div class="container">
@@ -23,7 +23,7 @@ export default {
   components: {
     Navbar,
     Footer
-  }
+  },
 }
 </script>
 

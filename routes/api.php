@@ -89,13 +89,13 @@ Route::group([], function () {
 
 Route::post('newRequest', 'StudentController@createRequest');
 
+//select options
 Route::get('universities', 'UniversityController@index');
-
 Route::get('faculties', 'FacultyController@index');
-
 Route::get('departments', 'DepartmentController@index');
-
 Route::get('companies', 'CompanyController@index');
+Route::get('managers', 'InternshipManagerController@index');
+
 
 
 Route::Post('showRequests', 'InternController@showRequest');
@@ -104,11 +104,13 @@ Route::Post('showCurrentInternships', 'InternController@showCurrentInternships')
 
 Route::Post('showFinchedInternships', 'InternController@showFinchedInternships');
 
+//offers
 Route::Post('applyOffer', 'StudentController@applyOffer');
-
-Route::Get('getAllOffres', 'StudentController@getAllOffres');
-
 Route::Post('getOffre', 'StudentController@getOffre');
+Route::Get('getAllOffres', 'StudentController@getAllOffres');
+Route::get('/search//', 'InternshipOfferController@search');
 
-Route::get('managers', 'InternshipManagerController@index');
+//favorites
+Route::post('{offer:id}/favorite', 'FavoriteController@addToFavorite');
+
 

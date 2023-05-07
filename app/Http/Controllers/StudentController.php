@@ -6,10 +6,13 @@ use App\Student;
 use Illuminate\Http\Request;
 use App\internship;
 use App\internshipManager;
+use App\InternshipOffer;
 use App\company;
 use App\User;
 use App\intern;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class StudentController extends Controller
@@ -35,7 +38,10 @@ class StudentController extends Controller
                 $manager['user_id'] = $users->getKey();
                 $manager = internshipManager::create($manager);
 
-            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
+            $internship = internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
+
+            intern::insert(['student_id'=>$request->studentId, 'internship_id' => $internship->getKey()]);
+
             return response()->json([
                 'msg' => 'information inserted successfuly',
             ]);
@@ -56,15 +62,22 @@ class StudentController extends Controller
             $manager['user_id'] = $users->getKey();
             $manager = internshipManager::create($manager);
 
-            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
+            $internship = internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
+
+            intern::insert(['student_id'=>$request->studentId, 'internship_id' => $internship->getKey()]);
+
             return response()->json([
                 'msg' => 'information inserted successfuly',
             ]);
+
         } else {
-            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$request->managerId,'title'=>$request->title]);
-        return response()->json([
-       'msg' => 'information is inserted successfuly',
-           ]);
+            $internship = internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'manager_id'=>$request->managerId,'title'=>$request->title]);
+
+            intern::insert(['student_id'=>$request->studentId, 'internship_id' => $internship->getKey()]);
+
+            return response()->json([
+                'msg' => 'information is inserted successfuly',
+            ]);
         }
 
     }
@@ -77,9 +90,21 @@ class StudentController extends Controller
     }
 
 
-    public function getAllOffres(){
-        return DB::table('internships')
-        -> get();
+    public function getAllOffres(Request $request){
+
+        $user = $request->user();
+
+        if ($user && $user->role === 'student') {
+            return InternshipOffer::with(['internship.manager.user', 'is_favorited'=>
+                function ($q) use ($user) {
+                    $q->where('favorites.student_id', $user->student()->pluck('id'));
+                }
+            ])
+            ->simplePaginate(9);
+        }
+
+        return InternshipOffer::with(['internship.manager.user'])->simplePaginate(9);
+
     }
 
     public function getOffre(Request $request){

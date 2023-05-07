@@ -1,6 +1,6 @@
 <template>
-  <div class="nav">
-    <div v-if="$matchMedia.xl" class="desktop-nav">
+  <div class="nav" >
+    <div v-if="$matchMedia.xl" class="desktop-nav" :class="{ 'scrolled': scrolledPastThreshold }">
       <div class="flex-row desktop-nav__container">
         <div class="flex-row">
           <router-link :to="{ name: 'index' }">
@@ -25,12 +25,12 @@
               </router-link>
 
               <div class="desktop-nav__right-icon dropdown" :class="{ 'dropdown-hover': dropdown.state }" @mouseover="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
-                <router-link :to="{ name: 'profile.projects' }" class="flex">
+                <router-link :to="{ name: 'profile.internships' }" class="flex">
                   <img class="nav--profile-img" :src="user.avatar" alt="">
                 </router-link>
                 <div class="dropdown-content">
                   <div>
-                    <router-link :to="{ name: 'profile.projects' }">
+                    <router-link :to="{ name: 'profile.internships' }">
                       <b>{{ user.first_name }} {{ user.family_name }}</b>
                     </router-link>
                   </div>
@@ -111,11 +111,11 @@
                 </p>
                 <p class="nav--profile-expertise">
                   <span class="iconify" data-icon="fa-solid:paint-brush" width="10" height="10" />
-                  <span>{{ user.expertise }}</span>
+                  <span>{{ user.role }}</span>
                 </p>
               </div>
             </div>
-            <router-link :to="{ name: 'profile.projects' }" class="nav--profile-link" active-class="nav--profile-link-active">
+            <router-link :to="{ name: 'profile.internships' }" class="nav--profile-link" active-class="nav--profile-link-active">
               View Profile
             </router-link>
           </div>
@@ -187,7 +187,8 @@ export default {
     appName: 'PHive',
     menu: { show: false, hide: false },
     photoUrl: 'https://www.gravatar.com/avatar/67104dea1ce9aef46682a4d8d145588c.jpg?s=200&d=mm',
-    dropdown: { state: false, timeout: '' }
+    dropdown: { state: false, timeout: '' },
+    scrolledPastThreshold: false
   }),
 
   computed: {
@@ -239,10 +240,16 @@ export default {
   watch: {
     $route (to, from) {
       if (this.menu.show) this.closeMenu()
+    },
+
+    'scrolledPastThreshold'() {
+      return this.scrolledPastThreshold
     }
   },
 
   mounted () {
+    window.addEventListener('scroll', this.handleScroll);
+
     if (this.user && this.user.new_notifications_count > 0) {
       this.$nextTick(function () {
         setTimeout(() => {
@@ -250,6 +257,10 @@ export default {
         }, 400)
       })
     }
+  },
+
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.handleScroll);
   },
 
   methods: {
@@ -281,8 +292,23 @@ export default {
       await this.$store.dispatch('auth/logout')
 
       if (this.$route.path !== '/') this.$router.push({ name: 'index' })
+    },
+
+    handleScroll() {
+      if (window.scrollY > 0) {
+        this.scrolledPastThreshold = true;
+      } else {
+        this.scrolledPastThreshold = false;
+      }
     }
 
   }
 }
 </script>
+
+
+<style scoped>
+.scrolled {
+  background: #fff !important;
+}
+</style>

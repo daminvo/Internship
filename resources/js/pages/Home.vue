@@ -4,6 +4,9 @@
       <div>
         <img v-if="$matchMedia.xl" class="slide-1__left-dashed moveInRightDash duration--2" src="/images/left-dashed-desktop.svg" alt="">
       </div>
+      <div v-if="$matchMedia.xl">
+        <img class="slide-1__right-dashed moveInBottomLeft duration--2" src="/images/right-dashed-desktop.svg" alt="">
+      </div>
       <div class="slide-1__container">
         <div class="slide-1__first-block ">
           <h2 class="slide-1__heading moveInTop duration--1">
@@ -13,10 +16,10 @@
             Interships
           </h2>
           <div v-if="$matchMedia.xl" class="slide-1__ornament">
-            <img class="slide-1__triangle fadeIn duration--2" src="/images/triangle.svg" alt="">
+            <!-- <img class="slide-1__triangle fadeIn duration--2" src="/images/triangle.svg" alt=""> -->
           </div>
           <div v-else class="slide-1__ornament">
-            <img class="slide-1__triangle fadeIn duration--2" src="/images/triangle.svg" alt="">
+            <!-- <img class="slide-1__triangle fadeIn duration--2" src="/images/triangle.svg" alt=""> -->
             <img class="slide-1__left-dashed moveInRightDash duration--2" src="/images/left-dashed.svg" alt="">
             <img class="slide-1__right-dashed moveInBottomLeft duration--2" src="/images/right-dashed.svg" alt="">
           </div>
@@ -29,15 +32,13 @@
           </router-link>
         </div>
         <div class="slide-1__image-container moveInTop duration--2">
-          <img class="slide-1__dot-1" src="/images/dot-blue.svg" alt="">
-          <img v-if="!$matchMedia.xl" class="slide-1__dot-2" src="/images/dot-blue.svg" alt="">
-          <img v-if="!$matchMedia.xl" class="slide-1__image" height="344" src="/images/smiling-woman-looking.png" alt="">
-          <img v-else class="slide-1__image" src="/images/smiling-woman-looking-desktop.png" alt="">
+          <!-- <img class="slide-1__dot-1" src="/images/dot-blue.svg" alt=""> -->
+          <!-- <img v-if="!$matchMedia.xl" class="slide-1__dot-2" src="/images/dot-blue.svg" alt=""> -->
+          <img v-if="!$matchMedia.xl" class="slide-1__image" height="280" src="/images/home-bg-desktop.png" alt="">
+          <img v-else class="slide-1__image" src="/images/home-bg-desktop.png" alt="">
         </div>
       </div>
-      <div>
-        <img class="slide-1__right-dashed moveInBottomLeft duration--2" src="/images/right-dashed-desktop.svg" alt="">
-      </div>
+
     </div>
     <div class="slide slide-2__container">
       <div v-if="$matchMedia.xl" class="slide-2__left">
@@ -119,21 +120,23 @@ export default {
     this.appendNavBg()
     this.getHomeData()
 
-    // this.$nextTick(function () {
-    //   document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = 'unset'
-    //   let app = document.querySelector('html')
-    //   window.onscroll = () => {
-    //     clearTimeout(this.debouncedScroll)
-    //     this.debouncedScroll = setTimeout(() => {
-    //       if (app.scrollTop > 0) {
-    //         document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = '0 0.2rem 0.4rem 0 rgba(0, 0, 0, 0.1)'
-    //       } else {
-    //         document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = 'unset'
-    //       }
-    //     }, 50)
-    //   }
-    // })
-    // this.addProximity()
+    this.$nextTick(function () {
+      let nav  = document.querySelector('.desktop-nav', '.nav-base')
+      console.log(nav)
+      nav.style.boxShadow = 'unset'
+      let app = document.querySelector('html')
+      window.onscroll = () => {
+        clearTimeout(this.debouncedScroll)
+        this.debouncedScroll = setTimeout(() => {
+          if (app.scrollTop > 0) {
+            document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = '0 0.2rem 0.4rem 0 rgba(0, 0, 0, 0.1)'
+          } else {
+            document.querySelector('.desktop-nav', '.nav-base').style.boxShadow = 'unset'
+          }
+        }, 50)
+      }
+    })
+    this.addProximity()
   },
 
   beforeDestroy () {
@@ -148,7 +151,7 @@ export default {
     appendNavBg () {
       let sheet = document.createElement('style')
       sheet.setAttribute('id', 'tempNavBg')
-      sheet.innerHTML = '.nav-base { background: #F2F4F6 } .desktop-nav { background: #F2F4F6 }'
+      // sheet.innerHTML = '.desktop-nav { background: #F2F4F6 }'
       document.body.appendChild(sheet)
     },
 
@@ -163,21 +166,21 @@ export default {
         .then(({ data }) => {
           this.projectByStatusCount = data.project_count
         })
+    },
+
+    addProximity () {
+      const app = document.querySelector('html')
+      const footer = document.querySelector('footer')
+      app.classList.add('slide-container')
+      footer.classList.add('slide', 'pt-5')
+    },
+
+    removeProximity () {
+      const app = document.querySelector('html')
+      const footer = document.querySelector('footer')
+      app.classList.remove('slide-container')
+      footer.classList.remove('slide', 'pt-5')
     }
-
-    // addProximity () {
-    //   const app = document.querySelector('html')
-    //   const footer = document.querySelector('footer')
-    //   app.classList.add('slide-container')
-    //   footer.classList.add('slide', 'pt-5')
-    // },
-
-    // removeProximity () {
-    //   const app = document.querySelector('html')
-    //   const footer = document.querySelector('footer')
-    //   app.classList.remove('slide-container')
-    //   footer.classList.remove('slide', 'pt-5')
-    // }
   }
 }
 </script>
@@ -191,5 +194,10 @@ export default {
   @include respon(xl) {
     margin-top: calc(-1 * var(--desktop-nav-height));
   }
+}
+
+.bg-image {
+  width: auto;
+  height: 280px;
 }
 </style>

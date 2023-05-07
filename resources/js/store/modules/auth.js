@@ -6,7 +6,6 @@ import * as types from '../mutation-types'
 export const state = {
   user: null,
   data: null,
-  party: null,
   token: Cookies.get('token')
 }
 
@@ -15,8 +14,6 @@ export const getters = {
   user: state => state.user,
   data: state => state.data,
   projects: state => state.data.projects,
-  party: state => state.party,
-  partyMembers: state => state.party ? state.party.leader.members : null,
   token: state => state.token,
   check: state => state.user !== null
 }
@@ -28,28 +25,17 @@ export const mutations = {
     Cookies.set('token', token, { expires: remember ? 365 : null })
   },
 
-  [types.FETCH_USER_SUCCESS] (state, { user, projects, wishlists }) {
+  [types.FETCH_USER_SUCCESS] (state, { user, projects, favorites }) {
     state.user = user
-    // state.data = {
-    //   projects: projects,
-    //   wishlists: wishlists
-    // }
+    state.data = {
+      // projects: projects,
+      favorites: favorites
+    }
   },
 
   [types.FETCH_USER_FAILURE] (state) {
     state.token = null
     Cookies.remove('token')
-  },
-
-  [types.FETCH_USER_PARTY] (state, { leader, member }) {
-    state.party = {
-      leader: leader,
-      member: member
-    }
-  },
-
-  [types.UPDATE_USER_PARTY] (state, { leader }) {
-    state.party.leader = leader
   },
 
   [types.UPDATE_USER] (state, { user }) {
@@ -64,8 +50,8 @@ export const mutations = {
     state.user.cv = cv
   },
 
-  [types.UPDATE_USER_WISHLISTS] (state, { wishlists }) {
-    state.data.wishlists = wishlists
+  [types.UPDATE_USER_FAVORITES] (state, { favorites }) {
+    state.data.favorites = favorites
   },
 
   [types.UPDATE_USER_NOTIFICATIONS] (state, count) {
@@ -87,19 +73,20 @@ export const actions = {
     commit(types.SAVE_TOKEN, payload)
   },
 
-  async fetchUser ({ commit }) {
+  async fetchUser ({state, commit }) {
     try {
+      console.log(state.token);
       const { data } = await axios.get('/api/user')
-      console.log(data.user)
 
       commit(types.FETCH_USER_SUCCESS, {
-        user: data.user
+        user: data.user,
         // projects: data.projects,
-        // wishlists: data.wishlists
+        favorites: data.favorites
       })
-    } catch (e) {
-      console.log(e)
-      commit(types.FETCH_USER_FAILURE)
+    } catch (error) {
+      console.log('Error:', error.response)
+      console.log('Status:', error.response.status)
+      console.log('Data:', error.response.data)
     }
   },
 
@@ -121,15 +108,9 @@ export const actions = {
     } catch (e) { }
   },
 
-  async updateUserParty ({ commit }, payload) {
+  async updateFavorites ({ commit }, payload) {
     try {
-      commit(types.UPDATE_USER_PARTY, payload)
-    } catch (e) { }
-  },
-
-  async updateWishlists ({ commit }, payload) {
-    try {
-      commit(types.UPDATE_USER_WISHLISTS, payload)
+      commit(types.UPDATE_USER_FAVORITES, payload)
     } catch (e) { }
   },
 

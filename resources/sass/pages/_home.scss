@@ -11,7 +11,7 @@
 }
 
 .slide-1__background {
-  background: #f2f4f6;
+  background: url('/images/bg.png') center no-repeat;
 }
 
 .slide-1__container {
@@ -22,7 +22,7 @@
   flex-direction: column;
   align-items: center;
   // justify-content: space-between;
-  justify-content: space-evenly;
+  justify-content: space-around;
   overflow: hidden;
   letter-spacing: 0.02em;
 
@@ -163,9 +163,10 @@
   right: 0;
   top: -10%;
   max-width: 8rem;
+  z-index: 5 !important;
 
   @include respon(xl) {
-    top: 24vh;
+    top: 38vh;
     max-width: unset;
   }
 }

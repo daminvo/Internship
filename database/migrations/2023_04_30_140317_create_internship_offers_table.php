@@ -14,10 +14,11 @@ class CreateInternshipOffersTable extends migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('internship_offres', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('internship_offers', function (Blueprint $table) {
+            $table->id();
             $table->bigInteger('nmbr_postions');
             $table->boolean('public')->default(true);
+            $table->string('photo', 200)->nullable();
             $table->unsignedBigInteger('internship_id')->index();
             $table->foreign('internship_id')->references('id')->on('internships')->onDelete('cascade');
         });

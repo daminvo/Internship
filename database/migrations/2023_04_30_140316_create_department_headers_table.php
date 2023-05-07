@@ -16,6 +16,7 @@ class CreateDepartmentHeadersTable extends migration
 
         Schema::create('department_header', function (Blueprint $table) {
             $table->id();
+            $table->boolean('validation')->default(false);
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('department_id')->index();

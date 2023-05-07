@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="project--container">
-      <ProjectCard v-for="project in projects" :key="`project-${project.id}`"
-                   :data="project"
+      <ProjectCard v-for="internship in internships" :key="`project-${internship.id}`"
+                   :data="internship"
       />
-      <p v-if="projects.length === 0" class="info__p">
+      <p v-if="internships.length === 0" class="info__p">
         Let fill this page with some projects
       </p>
     </div>
@@ -29,12 +29,12 @@ export default {
       data: 'auth/data'
     }),
 
-    projects () {
-      if (this.user.role === 'Student') {
-        return this.data.projects.map(e => e.project)
+    internships () {
+      if (this.user.role === 'student') {
+        return this.data.internships.map(e => e.internship)
       }
 
-      return this.data.projects
+      return this.data.internships
     }
   }
 }
