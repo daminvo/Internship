@@ -14,7 +14,7 @@ class CreateDepartmentHeadersTable extends migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('department_header', function (Blueprint $table) {
+        Schema::create('department_headers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -30,6 +30,6 @@ class CreateDepartmentHeadersTable extends migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('department_header');
+        Schema::dropIfExists('department_headers');
     }
 };

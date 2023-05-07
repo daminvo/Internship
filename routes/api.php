@@ -112,3 +112,6 @@ Route::Post('getOffre', 'StudentController@getOffre');
 
 Route::get('managers', 'InternshipManagerController@index');
 
+Route::post('showRequests', 'DepartmentHeaderController@showRequests');
+
+

@@ -36,13 +36,13 @@ class StudentController extends Controller
                 $manager['user_id'] = $users->getKey();
                 $manager = internshipManager::create($manager);
             }
-            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'description' => $request->description,'state'=>$request->state,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
+            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
             return response()->json([
                 'msg' => 'information inserted successfuly',
                     ]);
 
         }else {
-            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'description' => $request->description,'state'=>$request->state,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$request->managerId,'title'=>$request->title]);
+            internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'student_id'=>$request->studentId,'manager_id'=>$request->managerId,'title'=>$request->title]);
                 return response()->json([
             'msg' => 'information is inserted successfuly',
                 ]);

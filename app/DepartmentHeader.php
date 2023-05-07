@@ -11,4 +11,11 @@ class DepartmentHeader extends Model
     protected $fillable = [
         'user_id', 'department_id', 'validation'
     ];
+
+    public function department()
+    {
+        return $this->belongsTo('App\department');
+
+    }
+
 }
