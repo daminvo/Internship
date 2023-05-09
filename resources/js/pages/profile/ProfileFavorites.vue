@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="project--container">
-      <ProjectCard v-for="offer in favorites" :key="offer.id"
-                   :data="offer"
+      <ProjectCard v-for="fav in favorites" :key="fav.id"
+                   :data="fav.offer"
       />
       <p v-if="favorites.length === 0" class="info__p">
         Show your interest towards some projects :)
@@ -41,7 +41,6 @@ export default {
 
   methods: {
     async getFavorites () {
-      console.log(this.data);
       this.favorites = this.data.favorites
     }
   }

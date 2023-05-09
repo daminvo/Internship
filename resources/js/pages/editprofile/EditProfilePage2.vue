@@ -6,7 +6,7 @@
           <h4 class="form-group__input-name">
             Expertise Role
           </h4>
-          <template v-if="user.role === 'Student'">
+          <template v-if="user.role === 'student'">
             <div class="select">
               <select v-model="form.user.expertise">
                 <option value="UI/UX Designer">
@@ -82,86 +82,7 @@
           </div>
         </div>
 
-        <hr class="form--hr">
-
-        <h2 class="social-media__heading">
-          Experience
-        </h2>
-
-        <div class="form-group__container">
-          <div class="flex-row space-between">
-            <h4 class="form-group__input-name">
-              Experience
-            </h4>
-          </div>
-          <div class="">
-            <div class="mb-1_5 experiences-list">
-              <p v-show="form.user.experiences.length === 0" class="info__p">
-                Add your experiences here
-              </p>
-              <ExperienceItem v-for="(experience, index) in form.user.experiences" :key="`ExperienceItem-${index}`" :data="experience" :index="index" :deletable="true" @click="deleteExperience" />
-            </div>
-
-            <div class="flex-center unselectable post__add-skill pointer" @click="showAddExperience">
-              <span class="iconify button__add-skill--icon mr-0_5" data-icon="ic:round-add-circle" />
-              <span class="button__add-skill--text">Add Experience</span>
-            </div>
-
-            <Modal ref="addExperienceModal" :type="'small'">
-              <template v-slot:header>
-                <h4 class="post__modal--h4 my-0">
-                  Add Experience
-                </h4>
-              </template>
-
-              <template v-slot:body>
-                <div>
-                  <hr class="my-0 mb-2_5">
-                  <div class="form-group__container">
-                    <h4 class="form-group__input-name post__h4">
-                      Project Name
-                    </h4>
-                    <div class="">
-                      <input v-model="anotherExperience.name" class="form-group__input-text mb-0_5" placeholder="e.g., PHive Web Apps" required>
-                    </div>
-                  </div>
-                  <div class="form-group__container">
-                    <h4 class="form-group__input-name post__h4">
-                      Role
-                    </h4>
-                    <div class="">
-                      <input v-model="anotherExperience.role" class="form-group__input-text mb-0_5" placeholder="e.g., UI/UX Designer, Frontend Engineer" required>
-                    </div>
-                  </div>
-                  <div class="form-group__container">
-                    <h4 class="form-group__input-name post__h4">
-                      Start Date
-                    </h4>
-                    <div class="">
-                      <month-picker v-model="anotherExperience.startDate" :no-default="true" :max-date="anotherExperience.endDate.from" :style="{ width: '100%' }" />
-                    </div>
-                  </div>
-                  <div class="form-group__container">
-                    <h4 class="form-group__input-name post__h4">
-                      End Date
-                    </h4>
-                    <div class="">
-                      <month-picker v-model="anotherExperience.endDate" :no-default="true" :min-date="anotherExperience.startDate.from" :style="{ width: '100%' }" />
-                    </div>
-                  </div>
-                </div>
-              </template>
-
-              <template v-slot:footer>
-                <div class="btn btn--blue ml-auto" @click="addExperience">
-                  Add Experience
-                </div>
-              </template>
-            </Modal>
-          </div>
-        </div>
-
-        <div v-if="user.role === 'Student'" class="edit__hire--container mt-3">
+        <!-- <div v-if="user.role === 'student'" class="edit__hire--container mt-3">
           <span class="newcomer__hire--text">Are you open to be hired?</span>
           <div class="newcomer__hire--button-group">
             <div class="open-hire">
@@ -175,6 +96,21 @@
               </label>
             </div>
           </div>
+        </div> -->
+
+        <hr class="form--hr">
+
+        <h2 class="social-media__heading">
+          Experience
+        </h2>
+
+        <div class="form-group__container">
+          <div class="flex-row space-between">
+            <h4 class="form-group__input-name">
+              Experience
+            </h4>
+          </div>
+
         </div>
 
         <label class="edit__cv--container pointer">
@@ -184,6 +120,12 @@
           <p>File must be .pdf and the size must not more than 1MB </p>
           <input id="form2.file" class="form__input-file" name="form2.file" type="file" @change="uploadCV">
           <has-error :form="form2" field="file" />
+        </label>
+
+        <label class="edit__cv--container pointer" @click="deleteCV" v-if="this.user.student.cv">
+          <p class="edit__cv--heading">
+            Delete CV Document
+          </p>
         </label>
 
         <div class="mt-5 mb-1_5 edit-profile__buttons">
@@ -202,15 +144,12 @@
 
 <script>
 import Form from 'vform'
-import { MonthPicker } from 'vue-month-picker'
 import { mapGetters } from 'vuex'
-import ExperienceItem from '~/components/ExperienceItem'
 import { serialize } from 'object-to-formdata'
 
 export default {
   name: 'EditProfile2Page',
 
-  components: { MonthPicker, ExperienceItem },
 
   metaInfo () { return { title: 'Edit Profile Page 2' } },
 
@@ -371,6 +310,7 @@ export default {
         }]
       })
         .then(({ data }) => {
+          console.log(data);
           this.$store.dispatch('auth/updateCV', {
             cv: data.cv
           })
@@ -378,11 +318,12 @@ export default {
           this.snackbar.open(data.message)
         })
         .catch(e => {
+          console.log(e.response);
           this.snackbar.open(e.response.data.message)
         })
     },
 
-    async deleteCV (e) {
+    async deleteCV () {
       this.form.submit('delete', '/api/user/cv')
         .then(({ data }) => {
           this.$store.dispatch('auth/updateCV', {
@@ -390,6 +331,10 @@ export default {
           })
 
           this.snackbar.open(data.message)
+        })
+        .catch(e => {
+          console.log(e.response);
+          this.snackbar.open(e.response.data.message)
         })
     }
 

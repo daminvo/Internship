@@ -289,7 +289,7 @@ export default {
           console.log(data);
         })
         .then(e => {
-          this.$router.push({ path: `/` })
+          this.$router.push({ path: '/' })
         })
         .catch(e => {
           this.snackbar.open(e.response.data.msg)

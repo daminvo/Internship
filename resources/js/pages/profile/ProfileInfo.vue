@@ -10,7 +10,7 @@
         </p>
       </div>
 
-      <div class="info__sub--container">
+      <!-- <div class="info__sub--container">
         <h3 class="info__h3">
           Skills
         </h3>
@@ -20,9 +20,9 @@
             No skills to show yet
           </p>
         </div>
-      </div>
+      </div> -->
 
-      <div v-if="!$matchMedia.xl" class="info__sub--container">
+      <!-- <div v-if="!$matchMedia.xl" class="info__sub--container">
         <h3 class="info__h3">
           Records
         </h3>
@@ -34,9 +34,9 @@
             </div> {{ record.content }}
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="info__sub--container">
+      <!-- <div class="info__sub--container">
         <h3 class="info__h3">
           Experience
         </h3>
@@ -46,7 +46,7 @@
             No experiences to show yet
           </p>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="info--right">
@@ -103,10 +103,10 @@
         <h3 class="info__h3">
           Curriculum Vitae
         </h3>
-        <div v-if="user && user.cv">
+        <div v-if="user && user.student.cv">
           <p class="info__cv--container pointer">
             <Icon :icon="'bx-bxs-file-pdf'" :width="32" :height="32" :classes="'info__cv--icon'" />
-            <a :href="user.cv" target="_blank" class="info__cv--heading link--clean">{{ user.first_name }} CV.pdf</a>
+            <a :href="user.student.cv" target="_blank" class="info__cv--heading link--clean">{{ user.first_name }} CV.pdf</a>
           </p>
         </div>
         <p v-else class="info__p">
@@ -177,13 +177,12 @@ export default {
     },
 
     records () {
-      if (this.user.role === 'Student') {
+      if (this.user.role === 'student') {
         return [
-          { 'icon': 'bx:bxs-id-card', 'content': this.user.identity_number, 'type': 'icon' },
-          { 'icon': 'fa-solid:building', 'content': `${this.user.faculty}, ${this.user.university}`, 'type': 'icon' },
-          { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.user.joined_since)}`, 'type': 'icon' },
+          { 'icon': 'bx:bxs-id-card', 'content': this.user.student.student_card, 'type': 'icon' },
+          { 'icon': 'fa-solid:building', 'content': `${this.user.student.facultyName}, ${this.user.student.universityName}`, 'type': 'icon' },
+          { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.user.created_at)}`, 'type': 'icon' },
           { 'icon': 'icons8:finish-flag', 'content': `${this.user.finished_project_count} Finished Project`, 'type': 'icon' },
-          { 'icon': 'entypo:squared-cross', 'content': '0 Failed Project', 'type': 'icon' }
         ]
       }
 
@@ -192,7 +191,6 @@ export default {
         { 'icon': 'fa-solid:building', 'content': `${this.user.faculty}, ${this.user.university}`, 'type': 'icon' },
         { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.user.joined_since)}`, 'type': 'icon' },
         { 'icon': 'dashicons-admin-post', 'content': `${this.projects ? this.projects.length : 0} Project Posted`, 'type': 'icon' },
-        { 'icon': 'entypo:squared-cross', 'content': '0 Failed Project', 'type': 'icon' }
       ]
     },
 
@@ -215,7 +213,7 @@ export default {
 
     copyToClipboard () {
       const el = document.createElement('textarea')
-      el.value = window.location.href.replace('profile/info', `@/${this.user.tagname}`)
+      el.value = window.location.href.replace('profile/info', `@/${this.user.id}`)
       el.setAttribute('readonly', '')
       el.style = { position: 'absolute', left: '-999.9rem' }
       document.body.appendChild(el)
@@ -224,7 +222,7 @@ export default {
       document.body.removeChild(el)
 
       this.copyText = 'Copied'
-      this.snackbar.open('Project link copied')
+      this.snackbar.open('Profile link copied')
 
       setTimeout(() => {
         this.copyText = 'Copy'

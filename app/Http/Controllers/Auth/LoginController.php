@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\VerifyEmailException;
 use App\Http\Controllers\Controller;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-// use Illuminate\Foundation\Auth;
 // use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;

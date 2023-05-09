@@ -42,12 +42,12 @@ export const mutations = {
     state.user = user
   },
 
-  [types.UPDATE_USER_AVATAR] (state, { avatar }) {
-    state.user.avatar = avatar
+  [types.UPDATE_USER_AVATAR] (state, { photo }) {
+    state.user.photo = photo
   },
 
   [types.UPDATE_USER_CV] (state, { cv }) {
-    state.user.cv = cv
+    state.user.student.cv = cv
   },
 
   [types.UPDATE_USER_FAVORITES] (state, { favorites }) {
@@ -75,7 +75,7 @@ export const actions = {
 
   async fetchUser ({state, commit }) {
     try {
-      console.log(state.token);
+      console.log('aaaaaaaaaaaaaaa')
       const { data } = await axios.get('/api/user')
 
       commit(types.FETCH_USER_SUCCESS, {

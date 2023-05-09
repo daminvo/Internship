@@ -143,7 +143,7 @@ export default {
   methods: {
     async getUser () {
       await this.$store.dispatch('visit/fetchVisitedUser', {
-        tagname: this.$route.params.tagname
+        userId: this.$route.params.userId
       })
 
       this.changeTitle()

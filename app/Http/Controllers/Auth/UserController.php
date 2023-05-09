@@ -6,6 +6,7 @@ use App\Experience;
 use App\Http\Controllers\Controller;
 use App\User;
 // use App\UserSkill;
+use Illuminate\Support\Facades\Auth;
 use App\Favorite;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,8 +25,8 @@ class UserController extends Controller
 
         if ($user->role === 'student') {
             // $projects = ProjectBox::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->where('status', 'Finished')->latest()->get();
-            $favorites = Favorite::with('student.user:first_name,family_name,email')->where('id', $user->student()->pluck('id'))->where('status', true)->get();
-            $user = User::with('student')->findOrFail($user->id);
+            $favorites = Favorite::with(['student.user:first_name,family_name,email', 'offer.internship.manager.user'])->where('id', $user->student()->pluck('id'))->where('status', true)->get();
+            $user = User::with('student', 'student.department.faculty.university')->findOrFail($user->id);
             // ->student()->first();
 
             return response()->json(
@@ -68,17 +69,17 @@ class UserController extends Controller
             $destinationPath = storage_path('app/public/images/avatar');
             $image->move($destinationPath, $imgName);
 
-            if ($userAuth->photo_url) {
-                $path = storage_path() . '/app/public/images/avatar/' . $userAuth->photo_url;
+            if ($userAuth->photo) {
+                $path = storage_path() . '/app/public/images/avatar/' . $userAuth->photo;
                 if (file_exists($path)) unlink($path);
             }
 
-            $userAuth->photo_url = $imgName;
+            $userAuth->photo = $imgName;
             $userAuth->save();
 
             return response()->json([
                 'message' => 'Photo has been Changed',
-                'avatar' => '/storage/images/avatar/' . $imgName
+                'photo' => $imgName
                 ]);
         }
     }
@@ -87,17 +88,17 @@ class UserController extends Controller
     {
         $userAuth = $request->user();
 
-            if ($userAuth->photo_url) {
-                $path = storage_path() . '/app/public/images/avatar/' . $userAuth->photo_url;
+            if ($userAuth->photo) {
+                $path = storage_path() . '/app/public/images/avatar/' . $userAuth->photo;
                 if (file_exists($path)) unlink($path);
             }
 
-            $userAuth->photo_url = null;
+            $userAuth->photo = null;
             $userAuth->save();
 
         return response()->json([
             'message' => 'Avatar has been deleted',
-            'avatar' => $userAuth->avatar
+            'photo' => $userAuth->photo
         ]);
     }
 
@@ -106,32 +107,20 @@ class UserController extends Controller
         $userAuth = $request->user();
         $newUserData = $request->post('user');
 
-        $this->validate($request, [
-            '*.tagname' => "unique:users,tagname,{$userAuth->id}",
-        ],[
-            '*.tagname.unique' => 'The tagname already been taken.'
-        ]);
 
         $userAuth->first_name = $newUserData['first_name'];
-        $userAuth->last_name = $newUserData['last_name'];
-        $userAuth->identity_number = $newUserData['identity_number'];
-        $userAuth->university = $newUserData['university'];
-        $userAuth->faculty = $newUserData['faculty'];
-        $userAuth->major = $newUserData['major'];
-        $userAuth->location = $newUserData['location'];
+        $userAuth->family_name = $newUserData['family_name'];
+        $userAuth->address = $newUserData['address'];
+        $userAuth->phone = $newUserData['phone'];
         $userAuth->biography = $newUserData['biography'];
 
-        $userAuth->behance = $newUserData['behance'];
-        $userAuth->github = $newUserData['github'];
-        $userAuth->linkedin = $newUserData['linkedin'];
-        $userAuth->dribbble = $newUserData['dribbble'];
-        $userAuth->website = $newUserData['website'];
-
-        $userAuth->tagname = $newUserData['tagname'];
+        // $userAuth->github = $newUserData['github'];
+        // $userAuth->linkedin = $newUserData['linkedin'];
 
         $userAuth->save();
 
-        $user = User::with(['skills', 'experiences'])->findOrFail($userAuth->id);
+        $user = User::with('student', 'student.department.faculty.university')->findOrFail($userAuth->id);
+        // $user = User::with(['skills', 'experiences'])->findOrFail($userAuth->id);
 
         return response()->json([
             'message' => 'Profile has been updated',
@@ -181,7 +170,8 @@ class UserController extends Controller
 
     public function uploadCV(Request $request)
     {
-        $userAuth = $request->user();
+        $userAuth = Auth::user();
+        $student = $userAuth->student;
 
         $this->validate($request, [
             'file' => 'required|mimetypes:application/pdf|max:1024',
@@ -194,36 +184,37 @@ class UserController extends Controller
             $destinationPath = storage_path('app/public/images/cv');
             $image->move($destinationPath, $imgName);
 
-            if ($userAuth->cv_url) {
-                $path = storage_path() . '/app/public/images/cv/' . $userAuth->cv_url;
+            if ($userAuth->cv) {
+                $path = storage_path() . '/app/public/images/cv/' . $student->cv;
                 if (file_exists($path)) unlink($path);
             }
 
-            $userAuth->cv_url = $imgName;
-            $userAuth->save();
+            $student->cv = $imgName;
+            $student->save();
 
             return response()->json([
                 'message' => 'CV has been Changed',
-                'cv' => $userAuth->cv_url
+                'cv' => $student->cv
                 ]);
         }
     }
 
     public function deleteCV(Request $request)
     {
-        $userAuth = $request->user();
+        $userAuth = Auth::user();
+        $student = $userAuth->student;
 
-            if ($userAuth->cv_url) {
-                $path = storage_path() . '/app/public/images/cv/' . $userAuth->cv_url;
+            if ($student->cv) {
+                $path = storage_path() . '/app/public/images/cv/' . $student->cv;
                 if (file_exists($path)) unlink($path);
             }
 
-            $userAuth->cv_url = null;
-            $userAuth->save();
+            $student->cv = null;
+            $student->save();
 
         return response()->json([
             'message' => 'CV has been deleted',
-            'cv' => $userAuth->cv_url
+            'cv' => $student->cv
         ]);
     }
 
