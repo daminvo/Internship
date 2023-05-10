@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="form-avatar-group__container">
-      <img class="edit-profile--img" :src="data.avatar" alt="">
+      <img class="edit-profile--img" :src="getImageUrl(data.photo)" alt="">
       <div class=" form__file-container">
         <div>
           <label for="form2.file" class="btn btn--blue">Upload Photo</label>
@@ -32,10 +32,10 @@
 
           <div class="form-group__container">
             <h4 class="form-group__input-name">
-              Last Name
+              Family Name
             </h4>
             <div class="">
-              <input v-model="form.user.last_name" class="form-group__input-text">
+              <input v-model="form.user.family_name" class="form-group__input-text">
             </div>
           </div>
         </div>
@@ -49,48 +49,32 @@
           </div>
         </div>
 
-        <div class="form-group__container">
-          <h4 class="form-group__input-name">
-            {{ form.user.role }} ID Number
-          </h4>
-          <div class="">
-            <input v-model="form.user.identity_number" class="form-group__input-text" placeholder="e.g., 205150200111042">
+        <div class="form__input--group">
+          <div class="form-group__container">
+            <h4 class="form-group__input-name">
+              Email
+            </h4>
+            <div class="">
+              <input v-model="form.user.email" class="form-group__input-text" disabled>
+            </div>
+          </div>
+
+          <div class="form-group__container">
+            <h4 class="form-group__input-name">
+              Phone Number
+            </h4>
+            <div class="">
+              <input v-model="form.user.phone" class="form-group__input-text">
+            </div>
           </div>
         </div>
 
         <div class="form-group__container">
           <h4 class="form-group__input-name">
-            University
+            Address
           </h4>
           <div class="">
-            <input v-model="form.user.university" class="form-group__input-text" placeholder="e.g., University of Brawijaya">
-          </div>
-        </div>
-
-        <div class="form-group__container">
-          <h4 class="form-group__input-name">
-            Faculty
-          </h4>
-          <div class="">
-            <input v-model="form.user.faculty" class="form-group__input-text" placeholder="e.g., Faculty of Computer Science">
-          </div>
-        </div>
-
-        <div class="form-group__container">
-          <h4 class="form-group__input-name">
-            Major
-          </h4>
-          <div class="">
-            <input v-model="form.user.major" class="form-group__input-text" placeholder="e.g., Informatics Engineering">
-          </div>
-        </div>
-
-        <div class="form-group__container">
-          <h4 class="form-group__input-name">
-            Location
-          </h4>
-          <div class="">
-            <input v-model="form.user.location" class="form-group__input-text" placeholder="e.g., Malang, Indonesia">
+            <input v-model="form.user.address" class="form-group__input-text" placeholder="e.g., Malang, Indonesia">
           </div>
         </div>
 
@@ -106,16 +90,32 @@
 
         <hr class="form--hr">
 
+        <h2 class="social-media__heading">
+          Experience
+        </h2>
+
+        <label class="edit__cv--container pointer">
+          <p class="edit__cv--heading">
+            Upload CV Document
+          </p>
+          <p>File must be .pdf and the size must not more than 1MB </p>
+          <input id="form2.file" class="form__input-file" name="form2.file" type="file" @change="uploadCV">
+          <has-error :form="form2" field="file" />
+        </label>
+
+        <label class="edit__cv--container pointer" @click="deleteCV" v-if="form.user.student.cv">
+          <p class="edit__cv--heading">
+            Delete CV Document
+          </p>
+        </label>
+
+        <hr class="form--hr">
+
         <div>
           <h2 class="social-media__heading">
             Social Media
           </h2>
           <div class="social-media__edit--container">
-            <div class="social-media__edit-input--container">
-              <span class="iconify social-media__edit--icon" data-icon="ant-design:behance-outlined" />
-              <input v-model="form.user.behance" type="url" class="social-media__input" :placeholder="`e.g., behance.net/${firstName}`">
-            </div>
-
             <div class="social-media__edit-input--container">
               <span class="iconify social-media__edit--icon" data-icon="ant-design:github-filled" />
               <input v-model="form.user.github" type="url" class="social-media__input" :placeholder="`e.g., github.com/${firstName}`">
@@ -125,38 +125,14 @@
               <span class="iconify social-media__edit--icon" data-icon="bx-bxl-linkedin" />
               <input v-model="form.user.linkedin" type="url" class="social-media__input" :placeholder="`e.g., linkedin.com/in/${firstName}`">
             </div>
-
-            <div class="social-media__edit-input--container">
-              <span class="iconify social-media__edit--icon" data-icon="whh:dribbblealt" />
-              <input v-model="form.user.dribbble" type="url" class="social-media__input" :placeholder="`e.g., dribbble.com/${firstName}`">
-            </div>
-
-            <div class="social-media__edit-input--container">
-              <span class="iconify social-media__edit--icon" data-icon="whh:website" />
-              <input v-model="form.user.website" type="url" class="social-media__input" :placeholder="`e.g., ${firstName}.github.io`">
-            </div>
           </div>
         </div>
 
         <hr class="form--hr">
 
-        <div class="form-group__container mb-5">
-          <h4 class="form-group__input-name ">
-            Tag Name
-          </h4>
-          <div class=" form-tag__group">
-            <input id="form.user.tagname" v-model="form.user.tagname" class="form-tag__input ">
-            <label for="form.user.tagname" class="form-tag"><span class="iconify" data-icon="entypo:email" /></label>
-          </div>
 
-          <has-error :form="form" field="user.tagname" />
-        </div>
 
         <div class="mb-1_5 mt-5 edit-profile__buttons">
-          <router-link :to="{ name: 'editprofile.page2' }" class="edit-profile__link btn btn--grey">
-            Next
-          </router-link>
-
           <v-button :loading="form.busy" class="btn btn--blue">
             Save Changes
           </v-button>
@@ -179,7 +155,10 @@ export default {
   data: () => ({
     form: new Form({
       user: {
-        first_name: ''
+        // first_name: '',
+        // family_name: '',
+        // address: '',
+        // phone: '',
       }
     }),
 
@@ -197,6 +176,15 @@ export default {
     firstName () {
       return this.data.first_name.toLowerCase()
     }
+  },
+
+  setup() {
+
+    const getImageUrl = (name) => {
+      return window.location.origin + '/storage/images/avatar/' + name;
+    }
+
+    return { getImageUrl }
   },
 
   mounted: function () {
@@ -221,13 +209,16 @@ export default {
         }]
       })
         .then(({ data }) => {
+          console.log(data);
           this.$store.dispatch('auth/updateAvatar', {
-            avatar: data.avatar
+            photo: data.photo
           })
 
           this.snackbar.open(data.message)
         })
         .catch(e => {
+          console.log(e);
+
           this.snackbar.open(e.response.data.message)
         })
     },
@@ -236,7 +227,7 @@ export default {
       this.form.submit('delete', '/api/user/avatar')
         .then(({ data }) => {
           this.$store.dispatch('auth/updateAvatar', {
-            avatar: data.avatar
+            photo: data.photo
           })
 
           this.snackbar.open(data.message)
@@ -248,13 +239,61 @@ export default {
 
       await this.form.post('/api/user/saveprofile/1')
         .then(({ data }) => {
+          console.log(data);
           this.$store.dispatch('auth/updateUser', {
             user: data.user
           })
 
           this.snackbar.open(data.message)
         })
+        .catch(e => {
+          console.log(e.response);
+          this.snackbar.open(e.response.data.message)
+        })
+    },
+
+    async uploadCV (e) {
+      const file = e.target.files[0]
+
+      // Do some client side validation...
+
+      this.form2.file = file
+
+      this.form2.submit('post', '/api/user/cv', {
+        transformRequest: [function (data, headers) {
+          return serialize(data)
+        }]
+      })
+        .then(({ data }) => {
+          console.log(data);
+          this.$store.dispatch('auth/updateCV', {
+            cv: data.cv
+          })
+
+          this.snackbar.open(data.message)
+        })
+        .catch(e => {
+          console.log(e.response);
+          this.snackbar.open(e.response.data.message)
+        })
+    },
+
+    async deleteCV () {
+      this.form.submit('delete', '/api/user/cv')
+        .then(({ data }) => {
+          this.$store.dispatch('auth/updateCV', {
+            cv: null
+          })
+
+          this.snackbar.open(data.message)
+        })
+        .catch(e => {
+          console.log(e.response);
+          this.snackbar.open(e.response.data.message)
+        })
     }
+
+
   }
 
 }

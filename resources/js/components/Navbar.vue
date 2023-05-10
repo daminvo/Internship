@@ -26,7 +26,7 @@
 
               <div class="desktop-nav__right-icon dropdown" :class="{ 'dropdown-hover': dropdown.state }" @mouseover="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
                 <router-link :to="{ name: 'profile.internships' }" class="flex">
-                  <img class="nav--profile-img" :src="user.avatar" alt="">
+                  <img class="nav--profile-img" :src="getImageUrl(user.photo)" alt="">
                 </router-link>
                 <div class="dropdown-content">
                   <div>
@@ -104,7 +104,7 @@
 
           <div v-if="user">
             <div class="nav--profile">
-              <img class="nav--profile-img" :src="user.avatar" alt="">
+              <img class="nav--profile-img" :src="getImageUrl(user.photo)" alt="">
               <div class="nav--profile-desc">
                 <p class="nav--profile-name">
                   {{ user.first_name }} {{ user.family_name }}
@@ -235,6 +235,14 @@ export default {
         { route: { name: 'register' }, text: 'Create an Account', icon: 'ion:mail-unread-sharp', class: '' }
       ]
     }
+  },
+
+  setup() {
+    const getImageUrl = (name) => {
+      return window.location.origin + '/storage/images/avatar/' + name;
+    }
+
+    return { getImageUrl }
   },
 
   watch: {

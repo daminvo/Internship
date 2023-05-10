@@ -27,33 +27,22 @@ export default [
   { path: '/internshipBox', name: 'internshipBox', meta: { title: 'Internship Box' }, component: page('InternshipBox.vue') },
 
   {
-    path: '/newcomer',
-    component: page('auth/newcomer'),
-    children: [
-      { path: '', redirect: { name: 'newcomer.page1' } },
-      { path: '1', name: 'newcomer.page1', component: page('auth/newcomer/NewcomerPage1.vue') },
-      { path: '2', name: 'newcomer.page2', component: page('auth/newcomer/NewcomerPage2.vue') },
-      { path: '3', name: 'newcomer.page3', component: page('auth/newcomer/NewcomerPage3.vue') }
-    ]
-  },
-
-  {
     path: '/profile/edit',
     component: page('editprofile'),
     children: [
-      { path: '', redirect: { name: 'editprofile.page1' } },
-      { path: 'page1', name: 'editprofile.page1', meta: { title: 'Edit Profile' }, component: page('editprofile/EditProfilePage1.vue') },
-      { path: 'page2', name: 'editprofile.page2', meta: { title: 'Edit Profile' }, component: page('editprofile/EditProfilePage2.vue') }
+      { path: '', redirect: { name: 'editprofile.page' } },
+      { path: '/', name: 'editprofile.page', meta: { title: 'Edit Profile' }, component: page('editprofile/EditProfilePage1.vue') },
+      // { path: 'page2', name: 'editprofile.page2', meta: { title: 'Edit Profile' }, component: page('editprofile/EditProfilePage2.vue') }
     ]
   },
 
   {
-    path: '/@/:tagname',
+    path: '/@/:userId',
     component: page('visit'),
     children: [
       { path: '', redirect: { name: '@.info' } },
-      { path: 'projects', name: '@.projects', component: page('visit/VisitProjects.vue') },
-      { path: 'wishlists', name: '@.wishlist', component: page('visit/VisitWishlist.vue') },
+      { path: 'internships', name: '@.internships', component: page('visit/VisitInternships.vue') },
+      { path: 'favorites', name: '@.favorites', component: page('visit/VisitFavorites.vue') },
       { path: 'info', name: '@.info', component: page('visit/VisitInfo.vue') }
     ]
   },
@@ -66,7 +55,7 @@ export default [
 
   { path: '/offer/post', name: 'offer.post', meta: { title: 'Post Offer' }, component: page('internship/OfferPost.vue') },
   { path: '/project/:id/edit-post', name: 'project.editpost', meta: { title: 'Edit Project' }, component: page('internship/ProjectEdit.vue') },
-  { path: '/project/:id', name: 'project.details', meta: { title: 'Project' }, component: page('internship/ProjectDetails.vue') },
+  { path: '/offer/:id', name: 'offer.details', meta: { title: 'Project' }, component: page('internship/OfferDetails.vue') },
   { path: '/project/:id/review', name: 'project.review', meta: { title: 'Review Project' }, component: page('internship/ProjectReview.vue') },
   { path: '/project/:id/dashboard', name: 'project.dashboard', meta: { title: 'Project' }, component: page('internship/dashboard') },
 

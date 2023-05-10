@@ -37,7 +37,7 @@ export const mutations = {
 export const actions = {
   async fetchVisitedUser ({ commit }, payload) {
     try {
-      const { data } = await axios.get('/api/user/' + payload.tagname)
+      const { data } = await axios.get('/api/user/' + payload.userId)
 
       commit(types.FETCH_VISITED_USER, { user: data })
     } catch (e) { }

@@ -25,6 +25,7 @@ class CreateUsersTable extends migration
             $table->string('gender');
             $table->string('role');
             $table->string('photo')->nullable();
+            $table->string('biography', 300)->nullable();
         });
 
         Schema::enableForeignKeyConstraints();

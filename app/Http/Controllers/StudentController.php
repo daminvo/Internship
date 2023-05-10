@@ -110,12 +110,10 @@ class StudentController extends Controller
     }
 
     public function getOffre(Request $request){
-        // return DB::table('internships')
-        // -> where('id','=',$request->internshipId)
-        // -> get();
-
-        InternshipOffre::where($request->internshipOffre)->with(["internship"])
+        $InternshipOffer=InternshipOffer::where('id',$request->internshipOffre)->with(["internship"])
         ->get();
+
+        return $InternshipOffer;
     }
 
 

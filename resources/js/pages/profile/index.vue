@@ -1,18 +1,19 @@
 <template>
   <div class="profile--container">
     <div class="profile__info--container">
-      <img class="profile__info--img" :src="user.avatar" alt="">
+      <img class="profile__info--img" :src="getImageUrl(user.photo)" alt="">
       <div class="profile__info--desc">
         <p class="profile__info--name">
           {{ user.first_name }} {{ user.family_name }}
         </p>
         <p v-if="!$matchMedia.xl" class="profile__info--occupation">
           <!-- {{ major }} <br> -->
-          {{ user.student.university }} <br>
+          {{ user.student.universityName }} <br>
           {{ user.address }}
         </p>
         <p v-else class="profile__info--occupation">
-          {{ major }} / {{ user.student.university }} <br>
+          {{ user.student.speciality }} /
+          {{ user.student.universityName }} <br>
           {{ user.address }}
         </p>
         <p class="profile__info--expertise">
@@ -111,15 +112,19 @@ export default {
       }
 
       return { class: 'profile__info--verified', text: 'Verified' }
-    }
+    },
   },
 
-  mounted() {
-    console.log(this.user);
-  },
+  setup() {
+
+    const getImageUrl = (name) => {
+      return window.location.origin + '/storage/images/avatar/' + name;
+    }
+
+    return { getImageUrl }
+  }
 }
 </script>
 
 <style>
-
 </style>

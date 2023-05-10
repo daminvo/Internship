@@ -1,10 +1,10 @@
 <template>
   <div class="project__card--container">
     <div class="project__card--top-container pointer">
-      <!-- <router-link :to="{ name: 'project.details', params: { id: project.project_url } }"> -->
-        <!-- <img :src="offer.thumbnail_url" height="150"> -->
+      <router-link :to="{ name: 'offer.details', params: { id: offer.id } }">
+        <img :src="getImageUrl(offer.photo)" height="150">
         <!-- loading="lazy" -->
-      <!-- </router-link> -->
+      </router-link>
     </div>
 
     <div class="project__card--body-container">
@@ -121,6 +121,15 @@ export default {
 
       return 'Add to Wishlist'
     }
+  },
+
+  setup() {
+
+    const getImageUrl = (name) => {
+      return window.location.origin + '/storage/images/thumbnail/' + name;
+    }
+
+    return { getImageUrl }
   },
 
   methods: {

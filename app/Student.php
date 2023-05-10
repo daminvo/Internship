@@ -16,15 +16,38 @@ class Student extends Model
 
     //public function offre(): HasOne
 
+    protected $appends = ['departmentName', 'facultyName', 'universityName'];
 
+    public function getDepartmentNameAttribute()
+    {
+        return optional($this->department)->name;
+    }
+
+    public function getFacultyNameAttribute()
+    {
+        return optional(optional($this->department)->faculty)->name;
+    }
+
+    public function getUniversityNameAttribute()
+    {
+        return optional(optional(optional($this->department)->faculty)->university)->name;
+    }
+
+
+
+    public function department()
+    {
+        return $this->belongsTo('App\Department', 'department_id');
+    }
 
     public function intern()
     {
         return $this->hasOne("App\intern");
     }
+
     public function user()
     {
-        return $this->belongsTo('App\user', 'student_id');
+        return $this->belongsTo('App\User');
 
     }
 
@@ -34,11 +57,7 @@ class Student extends Model
 
     }
 
-    public function department()
-    {
-        return $this->belongsTo('App\department');
 
-    }
 
 
 
