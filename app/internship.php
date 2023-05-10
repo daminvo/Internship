@@ -13,7 +13,7 @@ class internship extends Model
      */
     //public function offre(): hasOne
     //{
-      //  return $this->hasOne(InternshipOffre::class);
+      //  return $this->hasOne(InternshipOffer::class);
     ///}
 
     public function intern (): hasmany
@@ -26,5 +26,14 @@ class internship extends Model
         return $this->belongsToMany('App\Student', 'interns', 'internship_id', 'student_id');
     }
 
+    public function manager()
+    {
+        return $this->belongsTo('App\InternshipManager', 'manager_id');
+    }
+
+    public function internshipOffer (): hasone
+    {
+        return $this->hasone('App\internshipOffer');
+    }
 
 }

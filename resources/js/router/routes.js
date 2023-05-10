@@ -16,9 +16,9 @@ export default [
     path: '/profile',
     component: page('profile'),
     children: [
-      { path: '', redirect: { name: 'profile.projects' } },
-      { path: 'projects', name: 'profile.projects', meta: { title: 'Profile' }, component: page('profile/ProfileProjects.vue') },
-      { path: 'wishlists', name: 'profile.wishlist', meta: { title: 'Profile' }, component: page('profile/ProfileWishlist.vue') },
+      { path: '', redirect: { name: 'profile.internships' } },
+      { path: 'internships', name: 'profile.internships', meta: { title: 'Profile' }, component: page('profile/ProfileInternships.vue') },
+      { path: 'favorites', name: 'profile.favorites', meta: { title: 'Profile' }, component: page('profile/ProfileFavorites.vue') },
       { path: 'info', name: 'profile.info', meta: { title: 'Profile' }, component: page('profile/ProfileInfo.vue') }
     ]
   },

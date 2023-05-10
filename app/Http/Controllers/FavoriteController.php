@@ -2,24 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\InternshipOffer;
 use Illuminate\Http\Request;
+use App\Favorite;
+use App\InternshipOffer;
 
-class InternshipOfferController extends Controller
+class FavoriteController extends Controller
 {
-    public function search(Request $request)
+
+    public function addToFavorite(Request $request, InternshipOffer $offer)
     {
-        $query = $request->get('query');
+        $user_id = $request->user()->student()->pluck('id');
 
-        $offer = InternshipOffer::with(['internship.manager.user'])
-            // ->where('internships.title', 'like', "%{$query}%")s
-            ->whereHas('internship', function ($q) use ($query) {
-                $q->where('title', 'like', "%{$query}%");
-            })
-            ->simplePaginate(9);
+        Favorite::updateOrCreate([
+            'offer_id' => $offer->id,
+            'student_id' => $user_id,
+        ], ['status' => $request->post('status')]);
 
-        return response()->json($offer);
+        $favorites = Favorite::with('student.user:first_name,family_name,email')->where('id', $user_id)->where('status', true)->get();
+
+        if ($request->post('status') === true) {
+            return response()->json([
+                'message' => 'Project has been added to your Favorites',
+                'favorites' => $favorites,
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Project has been removed from your Favorites',
+            'favorites' => $favorites,
+        ]);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -54,10 +67,10 @@ class InternshipOfferController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\InternshipOffer  $internshipOffer
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(InternshipOffer $internshipOffer)
+    public function show($id)
     {
         //
     }
@@ -65,10 +78,10 @@ class InternshipOfferController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\InternshipOffer  $internshipOffer
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(InternshipOffer $internshipOffer)
+    public function edit($id)
     {
         //
     }
@@ -77,10 +90,10 @@ class InternshipOfferController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\InternshipOffer  $internshipOffer
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InternshipOffer $internshipOffer)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -88,10 +101,10 @@ class InternshipOfferController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\InternshipOffer  $internshipOffer
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InternshipOffer $internshipOffer)
+    public function destroy($id)
     {
         //
     }

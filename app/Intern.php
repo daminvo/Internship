@@ -7,16 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Intern extends Model
 {
-    // public function student()
-    // {
-    //     return $this->belongsTo("App\student");
-    // }
-
-    // public function internship()
-    // {
-    //     return $this->belongsToMany("App\internship");
-    // }
-
+    public $timestamps = false;
     public function student()
     {
         return $this->belongsTo('App\Student');

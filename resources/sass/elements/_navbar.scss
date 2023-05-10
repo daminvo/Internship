@@ -56,7 +56,7 @@
   height: 5.5rem;
   position: fixed;
   width: 100%;
-  background-color: #ffffff;
+  background-color: #fff;
   z-index: 5;
 
   box-shadow: 0 0.2rem 0.4rem 0 rgba(0, 0, 0, 0.1);
@@ -296,6 +296,10 @@ a.nav--active-link {
 
 /* For Adaptive Desktop */
 
+.scrolled {
+  background: #c60404 !important;
+}
+
 .desktop-nav {
   display: flex;
   flex-direction: row;
@@ -304,8 +308,7 @@ a.nav--active-link {
   height: 9.2rem;
   position: fixed;
   width: min(100%, 100vw);
-  background-color: #ffffff;
-  z-index: 5;
+  z-index: 6;
 
   box-shadow: 0 0.2rem 0.4rem 0 rgba(0, 0, 0, 0.1);
 }

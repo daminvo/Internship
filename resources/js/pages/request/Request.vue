@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submitIndividual" @keydown="form.onKeydown($event)">
+  <form @submit.prevent="submit" @keydown="form.onKeydown($event)">
     <div class="">
 
       <h4 class="form-group__input-name form__input-name h4-title">
@@ -12,7 +12,7 @@
         </h6>
         <div class="select select--big select--border">
           <select name="" v-model="form.companyId">
-            <option value="0" selected>-- Select Company --</option>
+            <option value="" selected>-- Select Company --</option>
             <option v-for="company in companies" :key="company.id" :value="company.id">
               {{ company.name }}
             </option>
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-        <div class="select select--big select--border" v-if="form.company == 'other'">
+        <div class="form__input--group" v-if="form.companyId === 'other'">
           <div class="form-group__container">
             <h6 class="form-group__input-name">
                 Name
@@ -37,20 +37,20 @@
               Address
           </h6>
           <div class="">
-            <input v-model="form.address" :class="{ 'is-invalid': form.errors.has('address') }" class="form-group__input-text" type="text" name="address" placeholder="Address" required>
+            <input v-model="form.address" :class="{ 'is-invalid': form.errors.has('address') }" class="form-group__input-text" type="text" name="address" placeholder="Address" >
             <has-error :form="form" field="address" />
           </div>
         </div>
 
         </div>
 
-        <div class="form-group__container" v-if="form.companyId != 'other'">
+        <div class="form-group__container" v-if="form.companyId !== 'other'">
           <h6 class="form-group__input-name">
             Manager
           </h6>
-          <div class="select select--small select--border">
+          <div class="select select--big select--border">
             <select name="" id="" v-model="form.managerId">
-              <option value="0" selected>-- Select Manager --</option>
+              <option value="" selected>-- Select Manager --</option>
               <option v-for="manager in filteredManagers" :key="manager.id" :value="manager.id">
                 {{ manager.user.first_name }} {{ manager.user.family_name }}
               </option>
@@ -59,9 +59,8 @@
           </div>
         </div>
 
-        <section v-if="form.managerId != 'other'">
+        <section v-if="form.managerId === 'other' || form.companyId === 'other'">
           <hr class="form--hr">
-
           <h4 class="form-group__input-name form__input-name h4-title">
             Manager Informations
           </h4>
@@ -72,7 +71,7 @@
                   First Name
                 </h6>
                 <div class="">
-                  <input v-model="form.firstName" :class="{ 'is-invalid': form.errors.has('first_name') }" class="form-group__input-text" type="text" name="first_name" placeholder="e.g., John" required>
+                  <input v-model="form.firstName" :class="{ 'is-invalid': form.errors.has('first_name') }" class="form-group__input-text" type="text" name="first_name" placeholder="e.g., John">
                   <has-error :form="form" field="first_name" />
                 </div>
               </div>
@@ -82,7 +81,7 @@
                   Family Name
                 </h6>
                 <div class="">
-                  <input v-model="form.lastName" :class="{ 'is-invalid': form.errors.has('last_name') }" class="form-group__input-text" type="text" name="last_name" placeholder="e.g., Doe" required>
+                  <input v-model="form.familyName" :class="{ 'is-invalid': form.errors.has('last_name') }" class="form-group__input-text" type="text" name="last_name" placeholder="e.g., Doe">
                   <has-error :form="form" field="last_name" />
                 </div>
               </div>
@@ -105,25 +104,91 @@
                   Phone number
                 </h6>
                 <div class="">
-                  <input v-model="form.phoneNumber" :class="{ 'is-invalid': form.errors.has('phone_number') }" class="form-group__input-text" type="number" name="phone_number" placeholder="02 11664916" required>
+                  <input v-model="form.phone" :class="{ 'is-invalid': form.errors.has('phone_number') }" class="form-group__input-text" type="number" name="phone_number" placeholder="02 11664916">
                   <has-error :form="form" field="phone_number" />
                 </div>
               </div>
             </div>
+
+            <div class="form-group__container">
+              <h6 class="form-group__input-name">
+                Email
+              </h6>
+              <div class="">
+                <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-group__input-text" type="email" name="email" placeholder="example@mail.com" autocomplete="username">
+                <has-error :form="form" field="email" />
+              </div>
+            </div>
         </section>
 
+        <section>
+          <hr class="form--hr">
+          <h4 class="form-group__input-name form__input-name h4-title">
+            Inernship Informations
+          </h4>
 
-      <hr class="form--hr">
+          <div class="form-group__container">
+              <h6 class="form-group__input-name">
+                  Tell us about it
+              </h6>
+              <div class="">
+                <input v-model="form.title" :class="{ 'is-invalid': form.errors.has('title') }" class="form-group__input-text" type="text" name="title" placeholder="Title">
+                <has-error :form="form" field="title" />
+              </div>
+            </div>
 
-      <!-- Tell me about yourself! -->
-      <div class="form-group__container">
-        <h4 class="form-group__input-name form__input-name">
-          Tell me about yourself!
-        </h4>
-        <div class="">
-          <textarea v-model="form.apply.self_describe" class="form-group__input-textarea" placeholder="Max. 300 words" rows="5" />
-        </div>
-      </div>
+          <div class="form__input--group">
+            <div class="form-group__container">
+              <h6 class="form-group__input-name">
+                Start date
+              </h6>
+              <div class="">
+                <input v-model="form.startDate" :class="{ 'is-invalid': form.errors.has('startDate') }" class="form-group__input-text" type="date" name="startDate" placeholder="">
+                <has-error :form="form" field="startDate" />
+              </div>
+            </div>
+            <div class="form-group__container">
+              <h6 class="form-group__input-name">
+                End date
+              </h6>
+              <div class="">
+                <input v-model="form.endDate" :class="{ 'is-invalid': form.errors.has('endDate') }" class="form-group__input-text" type="date" name="endDate" placeholder="">
+                <has-error :form="form" field="endDate" />
+              </div>
+            </div>
+
+            <div class="form-group__container">
+                <h6 class="form-group__input-name">
+                  Duration
+                </h6>
+                <div class="select select--small select--border" required>
+                  <select name="" id="" v-model="form.duration">
+                    <option value="1">1 Month</option>
+                    <option value="2">2 Months</option>
+                    <option value="3">3 Months</option>
+                    <option value="4">4 Months</option>
+                    <option value="5">5 Months</option>
+                    <option value="6">6 Months</option>
+                    <option value="7">7 Months</option>
+                    <option value="8">8 Months</option>
+                    <option value="9">9 Months</option>
+                    <option value="10">10 Months</option>
+                    <option value="11">11 Months</option>
+                    <option value="12">12 Months</option>
+                  </select>
+                </div>
+              </div>
+          </div>
+          <div class="form-group__container">
+            <h4 class="form-group__input-name form__input-name">
+              Tell us your motivations
+            </h4>
+            <div class="">
+              <textarea v-model="form.motivation" class="form-group__input-textarea" placeholder="Max. 300 words" rows="5" />
+            </div>
+          </div>
+        </section>
+
 
       <div class="">
         <!-- Submit Button -->
@@ -151,15 +216,21 @@ export default {
 
   data: () => ({
     form: new Form({
-      companyId: 0,
-      managerId: 0,
+      studentId: '',
+      companyId: '',
+      managerId: '',
       name: '',
       address: '',
       firstName: '',
       familyName: '',
       phone: '',
-      gender: '',
-
+      gender: 'male',
+      title:'',
+      startDate:'',
+      endDate:'',
+      duration: 1,
+      motivation: '',
+      demandDate: '2023-05-05'
     })
   }),
 
@@ -178,14 +249,13 @@ export default {
     },
 
     filteredManagers () {
-      console.log(this.$store.getters['selectOptions/getCompanies']);
       return this.managers.filter(option => option['company_id'] === this.form.companyId);
     },
   },
 
   watch: {
     'form.company'() {
-      this.form.managerId = 0;
+      this.form.managerId = "";
     },
   },
 
@@ -195,32 +265,39 @@ export default {
   },
 
   mounted () {
-    this.getUser()
-    console.log(this.companies);
+
+    this.form.studentId = this.user.student.id;
 
   },
 
   methods: {
-    async getUser () {
-      this.form.apply = {
-        expertise: this.user.expertise,
-        tagname: this.user.tagname,
-        self_describe: '',
-        apply_reason: '',
-        project_id: this.$route.params.id
-      }
-    },
+    // async getUser () {
+    //   this.form.apply = {
+    //     expertise: this.user.expertise,
+    //     tagname: this.user.tagname,
+    //     self_describe: '',
+    //     apply_reason: '',
+    //     project_id: this.$route.params.id
+    //   }
+    // },
 
-    async submitIndividual () {
-      await this.form.post('/api' + this.$route.path)
+    async submit () {
+      console.log(this.form);
+      await this.form.post('/api/newRequest')
         .then(({ data }) => {
-          this.snackbar.open(data.message)
+          // this.snackbar.open(data.message)
+          console.log(data);
         })
         .then(e => {
-          this.$router.push({ path: `/project/${this.$route.params.id}` })
+          this.$router.push({ path: `/` })
         })
         .catch(e => {
-          this.snackbar.open(e.response.data.message)
+          this.snackbar.open(e.response.data.msg)
+        })
+        .catch(error => {
+          console.log('Error:', error.response)
+          console.log('Status:', error.response.status)
+          console.log('Data:', error.response.data)
         })
     }
   }
@@ -230,7 +307,7 @@ export default {
 
 <style scoped>
 .h4-title {
-  margin-bottom: 3vw;
+  margin: 3vw 0;
   font-weight: 700;
 }
 

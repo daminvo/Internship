@@ -432,7 +432,7 @@ export default {
       })
         .then(({ data }) => {
           this.snackbar.open(data.message)
-          this.$store.dispatch('auth/updateWishlists', {
+          this.$store.dispatch('auth/updateFavorites', {
             wishlists: data.wishlists
           })
           if (this.project.is_wished) {

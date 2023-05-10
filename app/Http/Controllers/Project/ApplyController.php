@@ -12,7 +12,7 @@ use App\ProjectTeamMember;
 use App\TeamApplicant;
 use App\User;
 use Illuminate\Http\Request;
-use App\InternshipOffre;
+use App\InternshipOffer;
 class ApplyController extends Controller
 {
 

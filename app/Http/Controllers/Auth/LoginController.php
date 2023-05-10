@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\VerifyEmailException;
 use App\Http\Controllers\Controller;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Foundation\Auth;
+// use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+
 
 class LoginController extends Controller
 {
@@ -22,6 +25,15 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('throttle:6,1')->only('attemptLogin');
+    }
+
+    protected function login(Request $request)
+    {
+        if( $this->attemptLogin($request) ) {
+            return $this->sendLoginResponse($request);
+        }
+
+        return $this->sendFailedLoginResponse($request);
     }
 
     /**
@@ -62,6 +74,7 @@ class LoginController extends Controller
         $expiration = $this->guard()->getPayload()->get('exp');
 
         return response()->json([
+            'user' => $request->user(),
             'token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $expiration - time(),

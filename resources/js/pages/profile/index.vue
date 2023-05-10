@@ -4,19 +4,19 @@
       <img class="profile__info--img" :src="user.avatar" alt="">
       <div class="profile__info--desc">
         <p class="profile__info--name">
-          {{ user.full_name }}
+          {{ user.first_name }} {{ user.family_name }}
         </p>
         <p v-if="!$matchMedia.xl" class="profile__info--occupation">
-          {{ major }} <br>
-          {{ user.university }} <br>
-          {{ user.location }}
+          <!-- {{ major }} <br> -->
+          {{ user.student.university }} <br>
+          {{ user.address }}
         </p>
         <p v-else class="profile__info--occupation">
-          {{ major }} / {{ user.university }} <br>
-          {{ user.location }}
+          {{ major }} / {{ user.student.university }} <br>
+          {{ user.address }}
         </p>
         <p class="profile__info--expertise">
-          <span class="iconify" data-icon="fa-solid:paint-brush" width="15" height="10" /> {{ user.expertise }}
+          <span class="iconify" data-icon="fa-solid:paint-brush" width="15" height="10" /> {{ user.role }}
         </p>
 
         <div v-if="$matchMedia.xl" class="profile__info--buttons">
@@ -25,7 +25,7 @@
           </router-link>
         </div>
 
-        <p v-if="user.role === 'Student'" :class="userStatus.class">
+        <p v-if="user.role === 'student'" :class="userStatus.class">
           <span class="iconify profile__info--icon" data-icon="carbon:dot-mark" />
           <span>{{ userStatus.text }}</span>
         </p>
@@ -84,10 +84,10 @@ export default {
     }),
 
     tabs () {
-      if (this.user.role === 'Student') {
+      if (this.user.role === 'student') {
         return [
-          { name: 'Projects', route: 'profile.projects' },
-          { name: 'Wishlist', route: 'profile.wishlist' },
+          { name: 'Internships', route: 'profile.internships' },
+          { name: 'Favorites', route: 'profile.favorites' },
           { name: 'Info', route: 'profile.info' }
         ]
       }
@@ -99,20 +99,24 @@ export default {
     },
 
     major () {
-      if (this.user.role === 'Student') return this.user.major + ' Major'
+      if (this.user.role === 'student') return this.user.major + ' Major'
       else return this.user.major
     },
 
     userStatus () {
-      if (this.user.role === 'Student') {
+      if (this.user.role === 'student') {
         return {
-          class: this.user.is_open_hired ? 'profile__info--available' : 'profile__info--unavailable',
-          text: this.user.is_open_hired ? 'Available' : 'Unavailable' }
+          class: this.user.student.available ? 'profile__info--available' : 'profile__info--unavailable',
+          text: this.user.student.available ? 'Available' : 'Unavailable' }
       }
 
       return { class: 'profile__info--verified', text: 'Verified' }
     }
-  }
+  },
+
+  mounted() {
+    console.log(this.user);
+  },
 }
 </script>
 

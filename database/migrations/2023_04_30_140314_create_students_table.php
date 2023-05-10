@@ -16,6 +16,7 @@ class CreateStudentsTable extends migration
 
         Schema::create('students', function (Blueprint $table) {
             $table->id();
+            $table->boolean('validation')->default(false);
             $table->string('grade');
             $table->bigInteger('student_card');
             $table->boolean('available')->default(true);
@@ -24,8 +25,8 @@ class CreateStudentsTable extends migration
             $table->bigInteger('security_number')->nullable();
             $table->date('birthday');
             $table->string('birth_place');
-            $table->unsignedBigInteger('departement_id')->index();
-            $table->foreign('departement_id')->references('id')->on('departments')->onDelete('cascade');
+            $table->unsignedBigInteger('department_id')->index();
+            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
