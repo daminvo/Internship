@@ -98,11 +98,10 @@ Route::get('managers', 'InternshipManagerController@index');
 
 //intern fcts
 
-Route::Post('showRequests', 'InternController@showRequest');
+Route::Post('getPendingRequests', 'InternController@getPendingRequests');
+Route::Post('getAcceptedRequests', 'InternController@getAcceptedRequests');
+Route::Post('getFinishedRequests', 'InternController@getFinishedRequests');
 
-Route::Post('showCurrentInternships', 'InternController@showCurrentInternships');
-
-Route::Post('showFinchedInternships', 'InternController@showFinchedInternships');
 
 //offers
 Route::Post('applyOffer', 'StudentController@applyOffer');

@@ -21,4 +21,9 @@ class InternshipManager extends Model
     {
         return $this->belongsTo('App\company', 'company_id');
     }
+
+    public function internship (): hasone
+    {
+        return $this->hasone('App\internship');
+    }
 }
