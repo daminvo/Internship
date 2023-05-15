@@ -8,8 +8,8 @@ export const state = {
       avatar: null
     }
   },
-  project: {
-    applicant_type: null,
+  offer: {
+    // applicant_type: null,
     user: {
       tagname: 0
     }
@@ -19,7 +19,7 @@ export const state = {
 // getters
 export const getters = {
   user: state => state.user,
-  project: state => state.project
+  offer: state => state.offer
 
 }
 
@@ -28,8 +28,8 @@ export const mutations = {
   [types.FETCH_VISITED_USER] (state, { user }) {
     state.user = user
   },
-  [types.FETCH_VISITED_PROJECT] (state, { project }) {
-    state.project = project
+  [types.FETCH_VISITED_OFFER] (state, { offer }) {
+    state.offer = offer
   }
 }
 
@@ -43,13 +43,15 @@ export const actions = {
     } catch (e) { }
   },
 
-  async fetchVisitedProject ({ commit }, payload) {
+  async fetchVisitedOffer ({ commit }, payload) {
     try {
-      const { data } = await axios.get('/api/project/' + payload.id)
+      const { data } = await axios.post('/api/getOffre', payload )
 
-      commit(types.FETCH_VISITED_PROJECT, { project: data })
-    } catch (e) {
 
+      commit(types.FETCH_VISITED_OFFER, { offer: data[0] })
+
+
+    } catch (error) {
     }
   }
 }

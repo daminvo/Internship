@@ -1,39 +1,50 @@
 <template>
   <div>
-    <InternshipDetailsAvailable v-if="project.status === 'Hiring'" />
-    <InternshipDetailsOngoing v-else-if="project.status === 'Ongoing'" />
-    <InternshipDetailsFinished v-else-if="project.status === 'Finished'" />
+    <InternshipDetailsAvailable  v-if="offer.internship.state === 'pending'"/>
+    <!-- <InternshipDetailsOngoing v-else-if="offer.internship.state === 'Ongoing'" /> -->
+    <!-- <InternshipDetailsFinished v-else-if="offer.internship.state === 'Finished'" /> -->
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import InternshipDetailsAvailable from '~/components/InternshipDetails/InternshipDetailsHiring'
-import InternshipDetailsOngoing from '~/components/InternshipDetails/InternshipDetailsOngoing'
-import InternshipDetailsFinished from '~/components/InternshipDetails/InternshipDetailsFinished'
+import InternshipDetailsAvailable from '~/components/InternshipDetails/InternshipDetailsAvailable.vue'
+// import InternshipDetailsOngoing from '~/components/InternshipDetails/InternshipDetailsOngoing.vue'
+// import InternshipDetailsFinished from '~/components/InternshipDetails/InternshipDetailsFinished.vue'
 
 export default {
   name: 'OfferDetailsPage',
 
-  components: { InternshipDetailsAvailable, InternshipDetailsOngoing, InternshipDetailsFinished },
+  components: {
+    InternshipDetailsAvailable,
+    // InternshipDetailsOngoing,
+    // InternshipDetailsFinished
+  },
 
-  metaInfo () { return { title: this.offer.internship.title } },
+  // metaInfo () { return { title: this.offer.internship.title } },
 
   computed: {
     ...mapGetters({
-      project: 'visit/project'
+      offer: 'visit/offer'
     })
   },
 
-  mounted () {
+  watch: {
+    offer () {
+      return this.offer
+    }
+  },
+
+  created () {
     this.getDetails()
   },
 
   methods: {
     async getDetails () {
-      await this.$store.dispatch('visit/fetchVisitedProject', {
+      await this.$store.dispatch('visit/fetchVisitedOffer', {
         id: this.$route.params.id
       })
+      .then(() => console.log(this.offer))
     }
   }
 

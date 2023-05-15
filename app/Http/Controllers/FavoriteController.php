@@ -15,10 +15,10 @@ class FavoriteController extends Controller
 
         Favorite::updateOrCreate([
             'offer_id' => $offer->id,
-            'student_id' => $user_id,
+            'student_id' => $user_id[0],
         ], ['status' => $request->post('status')]);
 
-        $favorites = Favorite::with('student.user:first_name,family_name,email')->where('id', $user_id)->where('status', true)->get();
+        $favorites = Favorite::with('student.user:first_name,family_name,email')->where('student_id', $user_id[0])->where('status', true)->get();
 
         if ($request->post('status') === true) {
             return response()->json([

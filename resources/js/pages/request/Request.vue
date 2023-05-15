@@ -208,11 +208,11 @@ import Form from 'vform'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'ApplyIndividualPage',
+  name: 'Request Page',
 
   middleware: ['auth', 'student'],
 
-  metaInfo () { return { title: 'Apply - Individual' } },
+  metaInfo () { return { title: 'New Internship Request' } },
 
   data: () => ({
     form: new Form({
@@ -230,7 +230,6 @@ export default {
       endDate:'',
       duration: 1,
       motivation: '',
-      demandDate: '2023-05-05'
     })
   }),
 
@@ -285,17 +284,16 @@ export default {
       console.log(this.form);
       await this.form.post('/api/newRequest')
         .then(({ data }) => {
-          // this.snackbar.open(data.message)
           console.log(data);
         })
         .then(e => {
           this.$router.push({ path: '/' })
         })
-        .catch(e => {
-          this.snackbar.open(e.response.data.msg)
-        })
+        // .catch(e => {
+        //   this.snackbar.open(e.response.data.msg)
+        // })
         .catch(error => {
-          console.log('Error:', error.response)
+          console.log('Error:', error)
           console.log('Status:', error.response.status)
           console.log('Data:', error.response.data)
         })

@@ -25,7 +25,7 @@ class UserController extends Controller
 
         if ($user->role === 'student') {
             // $projects = ProjectBox::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->where('status', 'Finished')->latest()->get();
-            $favorites = Favorite::with(['student.user:first_name,family_name,email', 'offer.internship.manager.user'])->where('id', $user->student()->pluck('id'))->where('status', true)->get();
+            $favorites = Favorite::with(['student.user:first_name,family_name,email', 'offer.internship.manager.user'])->where('student_id', $user->student()->pluck('id'))->where('status', true)->get();
             $user = User::with('student', 'student.department.faculty.university')->findOrFail($user->id);
             // ->student()->first();
 
@@ -113,9 +113,8 @@ class UserController extends Controller
         $userAuth->address = $newUserData['address'];
         $userAuth->phone = $newUserData['phone'];
         $userAuth->biography = $newUserData['biography'];
-
-        // $userAuth->github = $newUserData['github'];
-        // $userAuth->linkedin = $newUserData['linkedin'];
+        $userAuth->github = $newUserData['github'];
+        $userAuth->linkedin = $newUserData['linkedin'];
 
         $userAuth->save();
 

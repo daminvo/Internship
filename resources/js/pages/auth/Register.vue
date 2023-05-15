@@ -442,7 +442,7 @@ export default {
       return {
         img: {
           top: '/images/login-top-lecturer.png',
-          midLeft: '/images/login-mid-left-1-lecturer.png',
+          midLeft: '/images/login-bg2.jpg',
           midRight: '/images/login-mid-right-lecturer.png'
         },
         class: {

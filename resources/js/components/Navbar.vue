@@ -7,8 +7,14 @@
             <img class="desktop-nav__logo" src="/images/logo-blue.svg" alt="">
           </router-link>
 
+          <!-- <router-link :to="{ name: 'internshipBox' }">
+            simple-icons:polymerproject
+            <img class="desktop-nav__logo" src="/images/logo-blue.svg" alt="">
+          </router-link> -->
+
           <div class="desktop-nav__link--container">
             <router-link v-for="(menu, index) in leftMenu" :key="`LeftMenu-${index}`" :to="menu.route" class="desktop-nav__link " active-class="desktop-nav__active-link">
+              <Icon :refs="menu.route" :icon="menu.icon" :width="20" :height="20" />
               <span>{{ menu.text }}</span>
             </router-link>
           </div>
@@ -25,16 +31,19 @@
               </router-link>
 
               <div class="desktop-nav__right-icon dropdown" :class="{ 'dropdown-hover': dropdown.state }" @mouseover="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
-                <router-link :to="{ name: 'profile.internships' }" class="flex">
+                <router-link :to="{ name: 'profile.info' }" class="flex">
                   <img class="nav--profile-img" :src="getImageUrl(user.photo)" alt="">
                 </router-link>
                 <div class="dropdown-content">
                   <div>
-                    <router-link :to="{ name: 'profile.internships' }">
+                    <router-link :to="{ name: 'profile.info' }">
                       <b>{{ user.first_name }} {{ user.family_name }}</b>
                     </router-link>
                   </div>
                   <div class="nav-separator" />
+                  <router-link :to="{ name: 'profile.internships' }">
+                    Dashboard
+                  </router-link>
                   <router-link :to="{ name: 'settings' }">
                     Settings
                   </router-link>
@@ -115,7 +124,7 @@
                 </p>
               </div>
             </div>
-            <router-link :to="{ name: 'profile.internships' }" class="nav--profile-link" active-class="nav--profile-link-active">
+            <router-link :to="{ name: 'profile.info' }" class="nav--profile-link" active-class="nav--profile-link-active">
               View Profile
             </router-link>
           </div>
@@ -207,7 +216,9 @@ export default {
 
     leftMenu () {
       return [
-        { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' }
+        { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' },
+        { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
+
         // { route: { name: 'leaderboard' }, text: 'Leaderboard', icon: 'gridicons:stats-up-alt' }
       ]
     },
@@ -219,7 +230,7 @@ export default {
             // { route: { name: 'project.post' }, text: 'Post Project', icon: 'ic:baseline-post-add' },
             { route: { name: 'internship.request' }, text: 'apply to new internship', icon: 'ic:baseline-post-add' },
             { route: { name: 'inbox' }, text: 'Inbox', icon: 'ion:mail-unread-sharp' },
-            { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
+            // { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
           ]
         }
 

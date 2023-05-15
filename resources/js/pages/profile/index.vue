@@ -87,9 +87,9 @@ export default {
     tabs () {
       if (this.user.role === 'student') {
         return [
-          { name: 'Internships', route: 'profile.internships' },
+          { name: 'Info', route: 'profile.info' },
+          { name: 'Dashboard', route: 'profile.internships' },
           { name: 'Favorites', route: 'profile.favorites' },
-          { name: 'Info', route: 'profile.info' }
         ]
       }
 

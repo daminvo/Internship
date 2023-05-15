@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Intern extends Model
 {
+    protected $fillable = [
+        'student_id', 'internship_id', 'start_date', 'end_date', 'motivation', 'valide'
+    ];
+
     public $timestamps = false;
     public function student()
     {

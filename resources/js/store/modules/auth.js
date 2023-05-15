@@ -75,8 +75,9 @@ export const actions = {
 
   async fetchUser ({state, commit }) {
     try {
-      console.log('aaaaaaaaaaaaaaa')
       const { data } = await axios.get('/api/user')
+
+      console.log(data);
 
       commit(types.FETCH_USER_SUCCESS, {
         user: data.user,

@@ -19,13 +19,15 @@ class CreateUsersTable extends migration
             $table->string('first_name');
             $table->string('family_name');
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->bigInteger('phone');
             $table->string('address');
             $table->string('gender');
             $table->string('role');
             $table->string('photo')->nullable();
-            $table->string('biography', 300)->nullable();
+            $table->longText('biography')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('github')->nullable();
         });
 
         Schema::enableForeignKeyConstraints();
