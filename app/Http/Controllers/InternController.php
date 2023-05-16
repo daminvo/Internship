@@ -19,10 +19,7 @@ class InternController extends Controller
         $intern = Intern::where([['student_id', $request->studentId],['student_validation',null]])
          ->with(['internship' => function ($query) {
             $query->select('id','title','manager_id', 'duration',);
-        },"internship.manager"
-        => function ($query) {
-            $query->select('id','company_id');
-        },"internship.manager.company" => function ($query) {
+        },"internship.manager.user","internship.manager.company" => function ($query) {
             $query->select('id','name');
         }])
         ->get();
@@ -48,10 +45,8 @@ class InternController extends Controller
         $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '>', $today]])
         ->with(['internship' => function ($query) use ($today){
            $query->select('id','title','manager_id', 'duration',);
-       },"internship.manager"
-       => function ($query) {
-           $query->select('id','company_id');
-       },"internship.manager.company" => function ($query) {
+       },"internship.manager.user"
+       ,"internship.manager.company" => function ($query) {
            $query->select('id','name');
        }])
        ->get();
@@ -74,10 +69,7 @@ class InternController extends Controller
         $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '<', $today]])
         ->with(['internship' => function ($query){
            $query->select('id','title','manager_id', 'duration',);
-       },"internship.manager"
-       => function ($query) {
-           $query->select('id','company_id');
-       },"internship.manager.company" => function ($query) {
+       },"internship.manager.user","internship.manager.company" => function ($query) {
            $query->select('id','name');
        }])
        ->get();
@@ -101,10 +93,7 @@ class InternController extends Controller
         $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','>', $today]])
         ->with(['internship' => function ($query) use ($today){
            $query->select('id','title','manager_id', 'duration',);
-       },"internship.manager"
-       => function ($query) {
-           $query->select('id','company_id');
-       },"internship.manager.company" => function ($query) {
+       },"internship.manager.user","internship.manager.company" => function ($query) {
            $query->select('id','name');
        }])
        ->get();
