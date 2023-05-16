@@ -45,11 +45,9 @@ class InternController extends Controller
      public function getOngoinginternships(Request $request){
         try{
         $today = Carbon::today()->toDateString();
-        $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1]])
+        $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '>', $today]])
         ->with(['internship' => function ($query) use ($today){
-           $query->select('id','title','manager_id', 'duration',)
-           ->where('start_date','<', $today)
-           ->where('end_date', '>', $today);
+           $query->select('id','title','manager_id', 'duration',);
        },"internship.manager"
        => function ($query) {
            $query->select('id','company_id');
@@ -73,11 +71,9 @@ class InternController extends Controller
     public function getFinishedinternships(Request $request){
         try{
         $today = Carbon::today()->toDateString();
-        $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1]])
-        ->with(['internship' => function ($query) use ($today){
-           $query->select('id','title','manager_id', 'duration',)
-           ->where('start_date','<', $today)
-           ->where('end_date', '<', $today);
+        $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '<', $today]])
+        ->with(['internship' => function ($query){
+           $query->select('id','title','manager_id', 'duration',);
        },"internship.manager"
        => function ($query) {
            $query->select('id','company_id');
@@ -102,10 +98,9 @@ class InternController extends Controller
     public function getAcceptedinternships(Request $request){
         try{
         $today = Carbon::today()->toDateString();
-        $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1]])
+        $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','>', $today]])
         ->with(['internship' => function ($query) use ($today){
-           $query->select('id','title','manager_id', 'duration',)
-           ->where('start_date','>', $today);
+           $query->select('id','title','manager_id', 'duration',);
        },"internship.manager"
        => function ($query) {
            $query->select('id','company_id');
