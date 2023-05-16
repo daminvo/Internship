@@ -215,12 +215,26 @@ export default {
     },
 
     leftMenu () {
+      if (this.user) {
+        if (this.user.role === 'student') {
+          return [
+            { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' },
+            { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
+          ]
+        }
+        else {
+          return [
+            { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' },
+            { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
+          ]
+        }
+      }
+
       return [
         { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' },
-        { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
+      ]
 
         // { route: { name: 'leaderboard' }, text: 'Leaderboard', icon: 'gridicons:stats-up-alt' }
-      ]
     },
 
     rightMenu () {

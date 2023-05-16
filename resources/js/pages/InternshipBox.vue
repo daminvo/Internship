@@ -38,7 +38,7 @@
 
 
         <div class="inbox--container">
-          <ProjectBoxItem v-for="project in projectBoxes" :key="`project-box-${project.id}`" :data="project" :role="user.role" />
+          <ProjectBoxItem v-for="project in internshipBox" :key="`project-box-${project.id}`" :data="project" :role="user.role" />
           <p v-if="isNoProject" class="info__p">
             {{ isNoProject }}
           </p>
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 import ProjectBoxItem from '~/components/ProjectBoxItem'
 
@@ -91,8 +92,8 @@ export default {
 
   data: () => {
     return {
-      internshipBoxes: {},
-      manger: {},
+      internshipBox: {},
+      // manger: {},
       selected: ''
     }
   },
@@ -103,7 +104,7 @@ export default {
     }),
 
     isNoProject () {
-      if (this.internshipBoxes.length === 0) {
+      if (this.internshipBox.length === 0) {
         if (this.selected) return 'There are no projects to be handled yet with this criteria'
         else return 'There are no projects to be handled yet'
       }
@@ -127,6 +128,14 @@ export default {
   methods: {
     async getInternshipBox () {
       // this.$store.dispatch('notification/fetchProjectBox')
+      axios
+        .post('http://localhost:8000/api/getOngoinginternships', this.user.student.id)
+        .then(res => {
+          this.internshipBox = res.data
+          this.manager = this.internshipBox.manager
+          console.log(res)
+        })
+        .catch( e => console.log(e.response))
     },
   }
 }

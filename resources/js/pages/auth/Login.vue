@@ -192,7 +192,7 @@ export default {
             token: data.token,
             remember: this.remember
           })
-          // this.$router.back()
+          this.$router.go('/')
         })
         .catch(error => {
           console.log('Error:', error.response)
