@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Intern extends Model
 {
     protected $fillable = [
-        'student_id', 'internship_id', 'start_date', 'end_date', 'motivation', 'valide'
+        'header_validation','student_id', 'internship_id', 'start_date', 'end_date', 'motivation', 'student_validation','manager_validation'
     ];
 
     public $timestamps = false;

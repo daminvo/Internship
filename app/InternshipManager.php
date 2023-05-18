@@ -9,7 +9,7 @@ class InternshipManager extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'user_id', 'company_id'
+        'user_id', 'company_id','validation'
     ];
 
     public function user()

@@ -36,7 +36,7 @@ class InternController extends Controller
      private function getRequestType($id)
         {
             $offre = internshipOffer::where('internship_id', $id)->first();
-            return $offre ? 'offer' : 'request';
+            return $offre ? 'public' : 'private';
         }
 
      public function getOngoinginternships(Request $request){
@@ -110,6 +110,20 @@ class InternController extends Controller
 
     }
     }
+
+    public function deleteRequest(Request $request){
+        $intern = intern::find($request->id);
+        if ($request->type == "private") {
+            $intern->delete();
+            $intern->internship->delete();
+        } else {
+            $intern->delete();
+        }
+        return response()->json([
+            'msg' => 'request deleted successfully',
+        ]);
+    }
+
 
 
 
