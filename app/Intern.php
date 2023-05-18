@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Intern extends Model
 {
+    protected $fillable = [
+        // other fillable fields
+        'header_validation',
+    ];
     public $timestamps = false;
     public function student()
     {

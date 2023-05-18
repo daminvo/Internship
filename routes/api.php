@@ -102,6 +102,8 @@ Route::Post('getPendingRequests', 'InternController@getPendingRequests');
 Route::Post('getOngoinginternships', 'InternController@getOngoinginternships');
 Route::Post('getFinishedinternships', 'InternController@getFinishedinternships');
 Route::Post('getAcceptedinternships', 'InternController@getAcceptedinternships');
+Route::Post('deleteRequest', 'InternController@deleteRequest');
+
 
 
 
@@ -118,5 +120,7 @@ Route::post('{offer:id}/favorite', 'FavoriteController@addToFavorite');
 //header fcts
 Route::post('showRequests', 'DepartmentHeaderController@showRequests');
 Route::post('acceptRequest', 'DepartmentHeaderController@acceptRequest');
+
+
 
 
