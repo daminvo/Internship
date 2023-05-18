@@ -76,6 +76,7 @@ class InternController extends Controller
        $intern->each(function ($intern) {
            $internship = $intern->internship;
            $internship->type = $this->getRequestType($internship->id);
+
        });
 
        return $intern;
@@ -123,6 +124,30 @@ class InternController extends Controller
             'msg' => 'request deleted successfully',
         ]);
     }
+
+    public function studentRefuse(Request $request){
+        $intern = intern::find($request->id);
+        if ($request->type == "private") {
+            $intern->delete();
+            $intern->internship->delete();
+        } else {
+            $intern->delete();
+        }
+        return response()->json([
+            'msg' => 'request deleted successfully',
+        ]);
+    }
+
+    public function studentSubmition(Request $request){
+        $intern = intern::find($request->id);
+        $intern ->update(["student_validation" => 1]);
+        return response()->json([
+            'msg' => 'submition updated successfully',
+        ]);
+
+    }
+
+
 
 
 

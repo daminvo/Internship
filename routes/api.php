@@ -103,6 +103,10 @@ Route::Post('getOngoinginternships', 'InternController@getOngoinginternships');
 Route::Post('getFinishedinternships', 'InternController@getFinishedinternships');
 Route::Post('getAcceptedinternships', 'InternController@getAcceptedinternships');
 Route::Post('deleteRequest', 'InternController@deleteRequest');
+Route::Post('studentSubmition', 'InternController@studentSubmition');
+Route::Post('studentRefuse', 'InternController@studentRefuse');
+
+
 
 
 
