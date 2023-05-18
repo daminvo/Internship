@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
+
 class internship extends Model
 {
     public $timestamps = false;
@@ -37,7 +39,7 @@ class internship extends Model
         return $this->belongsTo('App\InternshipManager', 'manager_id');
     }
 
-    public function internshipOffer (): hasone
+    public function internshipOffer ()
     {
         return $this->hasone('App\internshipOffer');
     }

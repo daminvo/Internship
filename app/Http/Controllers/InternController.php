@@ -26,6 +26,9 @@ class InternController extends Controller
         $intern->each(function ($intern) {
             $internship = $intern->internship;
             $internship->type = $this->getRequestType($internship->id);
+            if($internship->type == "public"){
+                $internship->id = $internship->internshipOffer->id;
+               }
         });
 
         return $intern;
@@ -53,6 +56,9 @@ class InternController extends Controller
        $intern->each(function ($intern) {
            $internship = $intern->internship;
            $internship->type = $this->getRequestType($internship->id);
+           if($internship->type == "public"){
+            $internship->id = $internship->internshipOffer->id;
+           }
        });
 
        return $intern;
@@ -76,6 +82,9 @@ class InternController extends Controller
        $intern->each(function ($intern) {
            $internship = $intern->internship;
            $internship->type = $this->getRequestType($internship->id);
+           if($internship->type == "public"){
+            $internship->id = $internship->internshipOffer->id;
+           }
 
        });
 
@@ -101,6 +110,9 @@ class InternController extends Controller
        $intern->each(function ($intern) {
            $internship = $intern->internship;
            $internship->type = $this->getRequestType($internship->id);
+           if($internship->type == "public"){
+            $internship->id = $internship->internshipOffer->id;
+           }
        });
 
        return $intern;
