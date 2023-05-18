@@ -122,7 +122,6 @@ export default {
 
     this.$nextTick(function () {
       let nav  = document.querySelector('.desktop-nav', '.nav-base')
-      console.log(nav)
       nav.style.boxShadow = 'unset'
       let app = document.querySelector('html')
       window.onscroll = () => {

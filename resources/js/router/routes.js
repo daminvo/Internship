@@ -10,13 +10,14 @@ export default [
   { path: '/password/reset/:token', name: 'password.reset', component: page('auth/password/ResetPassword.vue') },
 
   { path: '/request',  name: 'internship.request', component: page('request') },
+  { path: '/apply',  name: 'internship.apply', component: page('apply') },
 
 
   {
     path: '/profile',
     component: page('profile'),
     children: [
-      { path: '', redirect: { name: 'profile.internships' } },
+      { path: '', redirect: { name: 'profile.info' } },
       { path: 'internships', name: 'profile.internships', meta: { title: 'Profile' }, component: page('profile/ProfileInternships.vue') },
       { path: 'favorites', name: 'profile.favorites', meta: { title: 'Profile' }, component: page('profile/ProfileFavorites.vue') },
       { path: 'info', name: 'profile.info', meta: { title: 'Profile' }, component: page('profile/ProfileInfo.vue') }
@@ -32,7 +33,6 @@ export default [
     children: [
       { path: '', redirect: { name: 'editprofile.page' } },
       { path: '/', name: 'editprofile.page', meta: { title: 'Edit Profile' }, component: page('editprofile/EditProfilePage1.vue') },
-      // { path: 'page2', name: 'editprofile.page2', meta: { title: 'Edit Profile' }, component: page('editprofile/EditProfilePage2.vue') }
     ]
   },
 
@@ -55,7 +55,7 @@ export default [
 
   { path: '/offer/post', name: 'offer.post', meta: { title: 'Post Offer' }, component: page('internship/OfferPost.vue') },
   { path: '/project/:id/edit-post', name: 'project.editpost', meta: { title: 'Edit Project' }, component: page('internship/ProjectEdit.vue') },
-  { path: '/offer/:id', name: 'offer.details', meta: { title: 'Project' }, component: page('internship/OfferDetails.vue') },
+  { path: '/offer/:id', name: 'offer.details', meta: { title: 'Offer' }, component: page('internship/OfferDetails.vue') },
   { path: '/project/:id/review', name: 'project.review', meta: { title: 'Review Project' }, component: page('internship/ProjectReview.vue') },
   { path: '/project/:id/dashboard', name: 'project.dashboard', meta: { title: 'Project' }, component: page('internship/dashboard') },
 
@@ -66,6 +66,15 @@ export default [
       { path: '', redirect: { name: 'shortlist.individual' } },
       { path: '/project/:id/shorlisted/individual', name: 'shortlist.individual', meta: { title: 'Apply Project' }, component: page('internship/shortlist/ShortlistIndividual.vue') },
       { path: '/project/:id/shorlisted/team', name: 'shortlist.team', meta: { title: 'Apply Project' }, component: page('internship/shortlist/ShortlistTeam.vue') }
+    ]
+  },
+
+  {
+    path: '/offer/:id/apply',
+    component: page('internship/apply'),
+    children: [
+      { path: '', redirect: { name: 'offer.apply' } },
+      { path: '/offer/:id/apply', name: 'offer.apply', meta: { title: 'Apply offer' }, component: page('internship/apply/Apply.vue') }
     ]
   },
 

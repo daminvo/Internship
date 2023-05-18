@@ -17,12 +17,9 @@ class CreateInternshipsTable extends migration
         Schema::create('internships', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('duration');
-            $table->longText('motivation')->nullable();
             $table->longText('description')->nullable();
             $table->string('title');
             $table->boolean('state')->default(false);
-            $table->date('start_date');
-            $table->date('end_date');
             $table->date('demand_date');
             $table->unsignedBigInteger('manager_id')->index();
             $table->foreign('manager_id')->references('id')->on('internship_managers')->onDelete('cascade');

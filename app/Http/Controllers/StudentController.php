@@ -10,6 +10,7 @@ use App\InternshipOffer;
 use App\company;
 use App\User;
 use App\intern;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,9 +40,9 @@ class StudentController extends Controller
                 $manager = internshipManager::create($manager);
 
 
-            $internship = internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'manager_id'=>$manager->getKey(),'title'=>$request->title]);
+            $internship = internship::create(['duration'=>$request->duration, 'demand_date'=>Carbon::today()->toDateString(),'manager_id'=>$manager->getKey(),'title'=>$request->title, 'state' => 'pending']);
 
-            intern::insert(['student_id'=>$request->studentId, 'internship_id' => $internship->getKey()]);
+            intern::create(['student_id'=>$request->studentId, 'internship_id' => $internship->getKey(), 'start_date'=>$request->startDate,'end_date'=>$request->endDate,'motivation' => $request->motivation]);
 
             return response()->json([
                 'msg' => 'information inserted successfuly',
@@ -59,22 +60,22 @@ class StudentController extends Controller
             $users['role'] = "manager";
             $users = User::create($users);
 
-            $manager['company_id'] = $company->id;
+            $manager['company_id'] = $request->companyId;
             $manager['user_id'] = $users->getKey();
             $manager = internshipManager::create($manager);
 
-            $internship = internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>Carbon::today()->toDateString(),'manager_id'=>$manager->getKey(),'title'=>$request->title]);
+            $internship = internship::create(['duration'=>$request->duration,'demand_date'=>Carbon::today()->toDateString(),'manager_id'=>$manager->getKey(),'title'=>$request->title, 'state' => 'pending']);
 
-            intern::insert(['student_id'=>$request->studentId, 'internship_id' => $internship->getKey()]);
+            intern::create(['student_id'=>$request->studentId, 'internship_id' => $internship->getKey(), 'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate]);
 
             return response()->json([
                 'msg' => 'information inserted successfuly',
             ]);
 
         } else {
-            $internship = internship::insert(['duration'=>$request->duration,'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,'demand_date'=>$request->demandDate,'manager_id'=>$request->managerId,'title'=>$request->title]);
+            $internship = internship::create(['duration'=>$request->duration,'demand_date'=>Carbon::today()->toDateString(),'manager_id'=>$request->managerId,'title'=>$request->title, 'state' => 'pending']);
 
-            intern::insert(['student_id'=>$request->studentId, 'internship_id' => $internship->getKey()]);
+            intern::create(['student_id'=>$request->studentId, 'internship_id' => $internship->getKey(), 'motivation' => $request->motivation,'start_date'=>$request->startDate,'end_date'=>$request->endDate,]);
 
             return response()->json([
                 'msg' => 'information is inserted successfuly',
@@ -85,10 +86,10 @@ class StudentController extends Controller
     }
 
     public function applyOffer(Request $request) {
-        intern::insert(['student_id'=>$request->studentId,'internship_id'=>$request->internshipId]);
+        intern::insert(['student_id' => $request->studentId,'internship_id' => $request->internshipId, 'motivation' => $request->motivation, 'start_date' => $request->startDate, 'end_date' => $request->endDate]);
         return response()->json([
             'msg' => 'information is inserted successfuly',
-                ]);
+        ]);
     }
 
 
@@ -110,7 +111,14 @@ class StudentController extends Controller
     }
 
     public function getOffre(Request $request){
-        $InternshipOffer=InternshipOffer::where('id',$request->internshipOffre)->with(["internship"])
+
+        $user = $request->user();
+
+        $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user", "is_favorited" =>
+            function ($q) use ($user) {
+                $q->where('favorites.student_id', $user->student()->pluck('id'));
+            }
+        ])
         ->get();
 
         return $InternshipOffer;

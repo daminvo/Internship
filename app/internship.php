@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class internship extends Model
 {
+    public $timestamps = false;
+
+    protected $fillable = [
+        'duration', 'title', 'description', 'state', 'gender', 'demand_date', 'manager_id'
+    ];
+
     /**
      * Get the offre associated with the internship
      *

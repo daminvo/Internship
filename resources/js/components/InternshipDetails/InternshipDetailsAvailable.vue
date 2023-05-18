@@ -5,7 +5,7 @@
         <div class="project-details--image-container">
           <div class="project-details--image">
             <expandable-image
-              :src="project.thumbnail_url"
+              :src="gethumbnail(offer.photo)"
               :close-on-background-click="true"
               class="details__image"
             />
@@ -15,50 +15,50 @@
       <div v-if="$matchMedia.xl" class="details__top--left">
         <div class="z-1">
           <h1 class="project-details--h1 text-outline--thin">
-            {{ project.title }}
+            {{ offer.internship.title }}
           </h1>
         </div>
         <div class="project-details--action-button">
-          <router-link class="btn btn--blue btn--large" :to="{ name: applyRoute, params: { title: project.title , type: project.applicant_type } }" tag="button">
-            Apply Project
+          <router-link class="btn btn--blue btn--large" :to="{ name: 'offer.apply' , params: { title: offer.internship.title, internshipId: offer.internship.id } }" tag="button">
+            Apply To Offer
           </router-link>
           <button v-debounce:300ms="toggleWishlist" :debounce-events="'click'" class="btn btn--white btn--large" :disabled="user && user.role === 'Lecturer'">
-            <div v-show="project.is_wished && project.is_wished.status" class="flex">
+            <div v-show="offer.is_favorited && offer.is_favorited.status" class="flex">
               <span class="iconify" data-icon="ic:round-remove-circle-outline" width="24" height="24" />
             </div>
-            <div v-show="!project.is_wished || !project.is_wished.status" class="flex">
+            <div v-show="!offer.is_favorited || !offer.is_favorited.status" class="flex">
               <span class="iconify" data-icon="ic:round-add-circle-outline" width="24" height="24" />
             </div>
-            <span>Wishlist</span>
+            <span>Favorite</span>
           </button>
         </div>
       </div>
       <div v-else class="mb-2_5">
         <h1 class="project-details--h1">
-          {{ project.title }}
+          {{ offer.internship.title }}
         </h1>
       </div>
 
       <div v-if="!$matchMedia.xl">
-        <div v-if="project.status === 'Hiring'" class="project-details--action-button">
-          <router-link class="btn btn--blue btn--large" :to="{ name: applyRoute, params: { title: project.title , type: project.applicant_type } }" tag="button" @click="nyoba">
-            Apply Project
+        <div v-if="offer.internship.state === 'available'" class="project-details--action-button">
+          <router-link class="btn btn--blue btn--large" :to="{ name: 'offer.apply', params: { title: offer.internship.title , internshipId: offer.internship.id } }" tag="button" @click="apply">
+            Apply To Offer
           </router-link>
           <button v-debounce:400ms="toggleWishlist" class="btn btn--white btn--large" :disabled="user && user.role === 'Lecturer'" :debounce-events="'click'">
-            <div v-show="project.is_wished && project.is_wished.status" class="flex">
+            <div v-show="offer.is_favorited && offer.is_favorited.status" class="flex">
               <span class="iconify" data-icon="ic:round-remove-circle-outline" width="24" height="24" />
             </div>
-            <div v-show="!project.is_wished || !project.is_wished.status" class="flex">
+            <div v-show="!offer.is_favorited || !offer.is_favorited.status" class="flex">
               <span class="iconify" data-icon="ic:round-add-circle-outline" width="24" height="24" />
             </div>
-            <span>Wishlist</span>
+            <span>Favorite</span>
           </button>
         </div>
       </div>
       <h2 v-if="!$matchMedia.xl" id="project-details" v-scroll-to="'#project-details'" class="project-details--h2">
         <a href="#project-details" class="button__project--more">
           <span class="iconify" data-icon="zmdi:more" />
-          <span>Project Details</span>
+          <span>Offer Details</span>
         </a>
       </h2>
     </div>
@@ -70,16 +70,16 @@
         <div v-if="!$matchMedia.xl" class="project-details__lecturer-info">
           <div class="lecturer-info--left">
             <div class="lecturer-info--image-container mr-1">
-              <router-link :to="{ path: '/@/' + project.user.tagname }" class="lencturer-text-link">
-                <img :src="project.user.avatar" :alt="`${project.user.full_name} Photo Profile`">
+              <router-link :to="{ path: '/@/' + offer.internship.manager.user.id }" class="lencturer-text-link">
+                <img :src="getImageUrl(offer.internship.manager.user.photo)" alt="">
               </router-link>
             </div>
 
             <div>
               <div><strong>Posted By</strong></div>
-              <div>{{ project.user.full_name }}</div>
-              <div>{{ project.user.identity_number }}</div>
-              <div>{{ project.user.expertise }}</div>
+              <div>{{ offer.internship.manager.user.first_name }} {{ offer.internship.manager.user.family_name }}</div>
+              <div>{{ offer.internship.manager.company_id }}</div>
+              <!-- <div>{{ project.user.expertise }}</div> -->
             </div>
           </div>
           <div class="lecturer-info--right">
@@ -90,7 +90,7 @@
         <div>
           <div class="project-description">
             <h3>Description</h3>
-            <p>{{ project.description || "-" }}</p>
+            <p>{{ offer.internship.description || "-" }}</p>
           </div>
           <div>
             <div class="project-requirements">
@@ -138,21 +138,21 @@
       <div class="desktop__body--right">
         <div v-if="$matchMedia.xl" class="lecturer-info--left">
           <div class="lecturer-info--image-container mr-1">
-            <router-link :to="{ path: '/@/' + project.user.tagname }" class="lencturer-text-link">
-              <img :src="project.user.avatar" :alt="`${project.user.full_name} Photo Profile`">
+            <router-link :to="{ path: '/@/' + offer.internship.manager.user.id }" class="lencturer-text-link">
+              <img :src="getImageUrl(offer.internship.manager.user.photo)" alt="">
             </router-link>
           </div>
 
           <div class="details__poster--info">
             <p><strong>Posted By</strong></p>
-            <p>{{ project.user.full_name }}</p>
-            <p>NIP. {{ project.user.identity_number }}</p>
-            <p>{{ project.user.expertise }}</p>
+            <div>{{ offer.internship.manager.user.first_name }} {{ offer.internship.manager.user.family_name }}</div>
+            <div>{{ offer.internship.manager.company_id }}</div>
+            <!-- <p>{{ project.user.expertise }}</p> -->
           </div>
         </div>
-        <router-link :to="{ name: 'message', params: { tagname: project.user.tagname } }" class="btn btn--blue btn--large" tag="button" :disabled="isSelf">
+        <!-- <router-link :to="{ name: 'message', params: { tagname: project.user.tagname } }" class="btn btn--blue btn--large" tag="button" :disabled="isSelf">
           Contact Lecturer
-        </router-link>
+        </router-link> -->
         <div v-if="$matchMedia.xl" class="project-summary">
           <div class="details__share--container">
             <h2 class="">
@@ -179,7 +179,7 @@
 
           <div>
             <h2 class="summary--h2">
-              Summary Project
+              Summary Offer
             </h2>
             <div class="summary--items">
               <div v-for="(summary, index) in summaries" :key="`SummaryItem-${index}`" class="summary--item">
@@ -203,7 +203,7 @@
     <div v-if="$matchMedia.xl">
       <div class="desktop__other-projects">
         <h2 class="other-projects__h2">
-          Other Projects You Might Like
+          Other Offers You Might Like
         </h2>
         <div class="project--container">
           <content-placeholders
@@ -232,7 +232,7 @@ import ProjectCard from '~/components/ProjectCard'
 // import snarkdown from 'snarkdown'
 
 export default {
-  name: 'ProjectDetailsHiring',
+  name: 'InternshipDetailsAvailable',
 
   components: {
     ProjectCard
@@ -249,9 +249,7 @@ export default {
       { network: 'facebook', name: 'Facebook', icon: 'fa-brands:facebook-f' },
       { network: 'telegram', name: 'Telegram', icon: 'fa-brands:telegram-plane' },
       { network: 'twitter', name: 'Twitter', icon: 'fa-brands:twitter' },
-      { network: 'line', name: 'Line', icon: 'fa-brands:line' },
       { network: 'whatsapp', name: 'Whatsapp', icon: 'fa-brands:whatsapp' }
-      // { network: 'pinterest', name: 'Pinterest', icon: 'fa-brands:pinterest' },
     ]
 
   }),
@@ -259,7 +257,7 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
-      project: 'visit/project',
+      offer: 'visit/offer',
       snackbar: 'notification/snackbar'
     }),
 
@@ -271,8 +269,8 @@ export default {
     sharing () {
       return {
         url: window.location.href,
-        title: this.project.title ? this.project.title : 'undefined',
-        description: this.project.description
+        title: this.offer.internship.title ? this.offer.internship.title : 'undefined',
+        description: this.offer.internship.description
       }
     },
 
@@ -282,43 +280,17 @@ export default {
       return false
     },
 
-    startSince () {
-      const date = new Date(this.project.start_time)
-      let options = { year: 'numeric', month: 'long', 'day': 'numeric' }
-      return date.toLocaleString('en-US', options)
-    },
-
     summaries () {
       return [
-        { type: 'icon', icon: 'bi:brush', text: `Expertise in ${this.expertiseIn}` },
-        { type: 'icon', icon: 'fa-solid:dollar-sign', text: this.rewards },
-        { type: 'icon', icon: 'ic:round-access-time', text: `Posted ${this.getHumanDate(this.project.created_at)}` },
-        { type: 'icon', icon: 'ic:baseline-work', text: `${this.totalApplicants} Total Applicants` },
-        { type: 'icon', icon: 'ant-design:star-filled', text: `Joining Project Grant up to ${this.grantMaximumPoints} Points` },
-        { type: 'icon', icon: 'ic:round-supervisor-account', text: this.maxPerson },
-        { type: 'text', icon: 'LVL', text: this.project.level_applicant },
-        { type: 'text', icon: 'Pts', text: `Require Minimal ${this.minimumPoints} Points for each Person` }
+        // { type: 'icon', icon: 'bi:brush', text: `Expertise in ${this.expertiseIn}` },
+        // { type: 'icon', icon: 'fa-solid:dollar-sign', text: this.rewards },
+        { type: 'icon', icon: 'ic:round-access-time', text: `Posted ${this.getHumanDate(this.offer.internship.demand_date)}` },
+        // { type: 'icon', icon: 'ic:baseline-work', text: `${this.totalApplicants} Total Applicants` },
+        // { type: 'icon', icon: 'ant-design:star-filled', text: `Joining Project Grant up to ${this.grantMaximumPoints} Points` },
+        { type: 'icon', icon: 'ic:round-supervisor-account', text: this.offer.nmbr_postions },
+        { type: 'icon', icon: 'ant-design:star-filled', text: this.offer.internship.duration },
+        // { type: 'text', icon: 'Pts', text: `Require Minimal ${this.minimumPoints} Points for each Person` }
       ]
-    },
-
-    grantMaximumPoints () {
-      if (this.project.level_applicant === 'Easy') return 2000
-      else if (this.project.level_applicant === 'Medium') return 2500
-      else if (this.project.level_applicant === 'Hard') return 4000
-      else if (this.project.level_applicant === 'Expert') return 5000
-      else return 0
-    },
-
-    minimumPoints () {
-      if (this.project.level_applicant === 'Easy') return 0
-      else if (this.project.level_applicant === 'Medium') return 1500
-      else if (this.project.level_applicant === 'Hard') return 4500
-      else if (this.project.level_applicant === 'Expert') return 9000
-      else return 0
-    },
-
-    applyRoute () {
-      return 'project.apply'
     },
 
     expertiseIn () {
@@ -334,24 +306,6 @@ export default {
       return expertises
     },
 
-    rewards () {
-      if (this.project.salary) {
-        const paymentType = this.project.payment_type === 'person' ? 'for each person' : 'for whole project'
-
-        return `${new Intl.NumberFormat('id-ID').format(this.project.salary_amount)},- ${this.project.currency} ${paymentType} ${this.project.certificate ? `+ Certificate` : ''}`
-      }
-
-      return 'Certificate'
-    },
-
-    maxPerson () {
-      const type = this.project.max_person === 1 ? 'Person' : 'Persons'
-      return `Max. ${this.project.max_person} ${type} (${this.project.applicant_type})`
-    },
-
-    totalApplicants () {
-      return this.project.individual_applicants_count
-    }
   },
 
   watch: {
@@ -364,6 +318,19 @@ export default {
     }
   },
 
+  setup() {
+
+    const gethumbnail = (name) => {
+      return window.location.origin + '/storage/images/thumbnail/' + name;
+    }
+
+    const getImageUrl = (name) => {
+      return window.location.origin + '/storage/images/avatar/' + name;
+    }
+
+    return { gethumbnail, getImageUrl}
+  },
+
   mounted () {
     this.activateOnScroll()
   },
@@ -374,6 +341,10 @@ export default {
   },
 
   methods: {
+    apply() {
+
+    },
+
     async similarProjects () {
       await axios.get(`/api/project/${this.$route.params.id}/similar`)
         .then(({ data }) => {
@@ -395,28 +366,30 @@ export default {
     },
 
     async toggleWishlist () {
-      const isWished = this.project.is_wished && this.project.is_wished.status
+      const isWished = this.offer.is_favorited && this.offer.is_favorited.status
 
-      await axios.post(`/api/project/${this.$route.params.id}/wishlist`, {
+      await axios.post(`/api/${this.offer.id}/favorite`, {
         status: !isWished
       })
         .then(({ data }) => {
+          console.log(data);
           this.snackbar.open(data.message)
           this.$store.dispatch('auth/updateFavorites', {
-            wishlists: data.wishlists
+            favorites: data.favorites
           })
-          if (this.project.is_wished) {
-            this.project.is_wished.status = !this.project.is_wished.status
+          if (this.offer.is_favorited) {
+            this.offer.is_favorited.status = !this.offer.is_favorited.status
           } else {
-            this.project.is_wished = {
+            this.offer.is_favorited = {
               status: true
             }
           }
-        }).catch((e) => {
-          this.snackbar.open(e.response.data.message)
-          this.$router.push({ name: 'login' })
-          // console.log(error.response)
-        })
+        }).catch( error => {
+        console.log('Error:', error.response)
+      console.log('Status:', error.response.status)
+      console.log('Data:', error.response.data)
+      })
+        // this.$router.push({ name: 'login' })
     },
 
     activateOnScroll () {

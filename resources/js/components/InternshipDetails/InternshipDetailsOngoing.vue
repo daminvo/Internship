@@ -254,7 +254,7 @@ import ProjectCard from '~/components/ProjectCard'
 // import snarkdown from 'snarkdown'
 
 export default {
-  name: 'ProjectDetailsOngoingPage',
+  name: 'InternshipDetailsOngoing',
 
   components: { ProjectCard },
 

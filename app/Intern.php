@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Intern extends Model
 {
     protected $fillable = [
-        // other fillable fields
-        'header_validation',
+        'header_validation','student_id', 'internship_id', 'start_date', 'end_date', 'motivation', 'student_validation','manager_validation'
     ];
+
     public $timestamps = false;
     public function student()
     {

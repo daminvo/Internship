@@ -161,11 +161,12 @@ export default {
               status: true
             }
           }
-        }).catch((e) => {
-          // this.snackbar.open(e.response.data.message)
-          console.log(e);
-          this.$router.push({ name: 'login' })
-        })
+        }).catch( error => {
+        console.log('Error:', error.response)
+      console.log('Status:', error.response.status)
+      console.log('Data:', error.response.data)
+      })
+        // this.$router.push({ name: 'login' })
     }
   }
 }

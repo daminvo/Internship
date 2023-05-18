@@ -273,7 +273,7 @@ import ParticipantReview from '~/components/ProjectDetails/ParticipantReview'
 // import snarkdown from 'snarkdown'
 
 export default {
-  name: 'FinishedProjectDetailsPage',
+  name: 'InternshipDetailsFinished',
 
   components: {
     ProjectCard, ParticipantReview

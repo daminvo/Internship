@@ -154,21 +154,12 @@ export default {
   computed: {
     socmeds () {
       const socmeds = [
-        { 'icon': 'ant-design:behance-outlined',
-          'link': this.user.behance ? this.user.behance : '',
-          'linkFiltered': this.user.behance ? this.filterLink(this.user.behance) : '' },
         { 'icon': 'ant-design:github-filled',
           'link': this.user.github ? this.user.github : '',
           'linkFiltered': this.user.github ? this.filterLink(this.user.github) : '' },
         { 'icon': 'bx-bxl-linkedin',
           'link': this.user.linkedin ? this.user.linkedin : '',
           'linkFiltered': this.user.linkedin ? this.filterLink(this.user.linkedin) : '' },
-        { 'icon': 'whh:dribbblealt',
-          'link': this.user.dribbble ? this.user.dribbble : '',
-          'linkFiltered': this.user.dribbble ? this.filterLink(this.user.dribbble) : '' },
-        { 'icon': 'whh:website',
-          'link': this.user.website ? this.user.website : '',
-          'linkFiltered': this.user.website ? this.filterLink(this.user.website) : '' }
       ]
 
       if (this.$matchMedia.xl) return socmeds.filter(e => e.link !== '')
