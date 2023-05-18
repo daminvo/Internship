@@ -15,21 +15,19 @@
                       >
                       {{column.label}}
                       </th>
-                      <!-- <th
-                          style="width: 40%; cursor:pointer;"
-                      >Title</th>
                       <th
                           style="width: 40%; cursor:pointer;"
-                      >Company</th>
+                      >Response
+                      </th>
                       <th
                           style="width: 40%; cursor:pointer;"
-                      >Duration</th>
+                      >Visit  -  Delete
+                      </th>
                       <th
-                          style="width: 40%; cursor:pointer;"
-                      >Type</th> -->
-                      <th
-                          style="width: 40%; cursor:pointer;"
-                      >Response</th>
+                        style="width: 40%; cursor:pointer;"
+                      >
+                        Submittion
+                      </th>
                   </tr>
                   <tr
                       v-for="(internship, index) in filteredInternships"
@@ -53,12 +51,35 @@
                       </td>
 
                       <td>
+                          <div class="pending" v-if="internship.manager_validation === null">
+                              <p>PENDING</p>
+                          </div>
                           <div class="refused" v-if="internship.manager_validation === false">
                               <p>REFUSED</p>
                           </div>
                           <div class="accepted" v-if="internship.manager_validation ">
                               <p>ACCEPTED</p>
+                              <div>
+                                <span class="iconify" data-icon="heroicons:information-circle-solid" width="25" height="25" color="#3A455B"/>
+                              </div>
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <div>
+                                <span class="iconify" data-icon="heroicons:minus-circle-solid" width="25" height="25" color="#c50000"/>
+                              </div>
                           </div>
+                      </td>
+
+                      <td>
+                        <div>
+                          <span class="iconify" data-icon="heroicons:information-circle-solid" width="25" height="25" color="#3A455B"/>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <div>
+                          <span class="iconify" data-icon="heroicons:trash-solid" width="25" height="25" color="#c50000"/>
+                        </div>
+                      </td>
+                      <td>
+
                       </td>
 
                       <!-- <td>
@@ -230,6 +251,10 @@ table {
 td ,th {
     width: 100%;
     padding-left: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .table-header {
@@ -288,6 +313,17 @@ tr {
     color: #9D2A22;
     padding: 5px;
     background: #F1A4A4;
+    border-radius: 5px;
+}
+
+.pending{
+    width: 83px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #716f31;
+    padding: 5px;
+    background: #cdce94;
     border-radius: 5px;
 }
 

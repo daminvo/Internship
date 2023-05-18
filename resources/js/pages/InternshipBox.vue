@@ -1,7 +1,7 @@
 <template>
   <div class="inbox__container">
     <h2 v-if="$matchMedia.xl" class="desktop-inbox__heading">
-      Internship Box
+      {{ internshipBox.internship.title }}
     </h2>
     <div class="inbox__body--container">
       <div class="inbox__info--container">
@@ -10,16 +10,16 @@
               Your manager
             </h2>
           </div>
-        <!-- <img class="inbox__info--img" :src="getImageUrl(manager.photo)" alt=""> -->
+        <img class="inbox__info--img" :src="getImageUrl(manager.user.photo)" alt="">
         <div class="inbox__info--desc">
-          <!-- <p class="inbox__info--name">
-            {{ manager.first_name }} {{ manager.family_name }}
+          <p class="inbox__info--name">
+            {{ manager.user.first_name }} {{ manager.user.family_name }}
           </p>
           <p class="inbox__info--occupation">
             {{ manager.company.name }}<br>
             {{ manager.adress }}
           </p>
-          <p v-if="!$matchMedia.xl" class="inbox__info--expertise">
+          <!-- <p v-if="!$matchMedia.xl" class="inbox__info--expertise">
             <span class="iconify inbox__info--expertise-icon" data-icon="fa-solid:paint-brush" /> {{ user.expertise }}
           </p>
           <p v-else class="inbox__info--expertise">
@@ -29,16 +29,22 @@
       </div>
 
       <div class="inbox__right--container">
-          <div class="inbox--top-left">
-            <h2 class="inbox--heading">
-              Absences
-            </h2>
-          </div>
+
+        <div class="project-description">
+          <p>
+            {{ internshipBox.internship.description }}
+          </p>
+        </div>
+        <div class="inbox--top-left">
+          <h2 class="inbox--heading">
+            Absences
+          </h2>
+        </div>
 
 
 
         <div class="inbox--container">
-          <ProjectBoxItem v-for="project in internshipBox" :key="`project-box-${project.id}`" :data="project" :role="user.role" />
+          <!-- <ProjectBoxItem v-for="project in internshipBox" :key="`project-box-${project.id}`" :data="project" :role="user.role" /> -->
           <p v-if="isNoProject" class="info__p">
             {{ isNoProject }}
           </p>
@@ -93,7 +99,7 @@ export default {
   data: () => {
     return {
       internshipBox: {},
-      // manger: {},
+      manager: {},
       selected: ''
     }
   },
@@ -128,12 +134,15 @@ export default {
   methods: {
     async getInternshipBox () {
       // this.$store.dispatch('notification/fetchProjectBox')
+      console.log(this.user.student.id);
       axios
-        .post('http://localhost:8000/api/getOngoinginternships', this.user.student.id)
+        .post('/api/getOngoinginternships', { studentId:this.user.student.id })
         .then(res => {
-          this.internshipBox = res.data
-          this.manager = this.internshipBox.manager
-          console.log(res)
+          this.internshipBox = res.data[0]
+          console.log(this.internshipBox)
+
+          this.manager = this.internshipBox.internship.manager
+          console.log(this.manager)
         })
         .catch( e => console.log(e.response))
     },
