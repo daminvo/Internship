@@ -14,15 +14,16 @@ use Carbon\Carbon;
 class InternController extends Controller
 {
 
-     public function getPendingRequests(Request $request){
+     public function getPendingRequests( $id){
 
-        $intern = Intern::where([['student_id', $request->studentId],['student_validation',null]])
+        $intern = Intern::where([['student_id', $id],['student_validation',null]])
          ->with(['internship' => function ($query) {
             $query->select('id','title','manager_id', 'duration',);
         },"internship.manager.user","internship.manager.company" => function ($query) {
             $query->select('id','name');
         }])
         ->get();
+        try{
         $intern->each(function ($intern) {
             $internship = $intern->internship;
             $internship->type = $this->getRequestType($internship->id);
@@ -30,6 +31,11 @@ class InternController extends Controller
                 $internship->id = $internship->internshipOffer->id;
                }
         });
+        }catch (Throwable $e) {
+            $errorMessage = $e->getMessage();
+            return response()->json(['error' => $errorMessage], 500);
+        }
+
 
         return $intern;
         }
@@ -43,7 +49,6 @@ class InternController extends Controller
         }
 
      public function getOngoinginternships(Request $request){
-        try{
         $today = Carbon::today()->toDateString();
         $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '>', $today]])
         ->with(['internship' => function ($query) use ($today){
@@ -53,6 +58,7 @@ class InternController extends Controller
            $query->select('id','name');
        }])
        ->get();
+        try{
        $intern->each(function ($intern) {
            $internship = $intern->internship;
            $internship->type = $this->getRequestType($internship->id);
@@ -60,53 +66,51 @@ class InternController extends Controller
             $internship->id = $internship->internshipOffer->id;
            }
        });
+        }catch (Throwable $e) {
+            $errorMessage = $e->getMessage();
+            return response()->json(['error' => $errorMessage], 500);
+        }
 
        return $intern;
         }
-       catch (Throwable $e) {
-        $errorMessage = $e->getMessage();
-        return response()->json(['error' => $errorMessage], 500);
-    }
-    }
 
-    public function getFinishedinternships(Request $request){
-        try{
+
+    public function getFinishedinternships($id){
         $today = Carbon::today()->toDateString();
-        $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '<', $today]])
+        $intern = Intern::where([['student_id', $id],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '<', $today]])
         ->with(['internship' => function ($query){
            $query->select('id','title','manager_id', 'duration',);
        },"internship.manager.user","internship.manager.company" => function ($query) {
            $query->select('id','name');
        }])
        ->get();
+       try{
        $intern->each(function ($intern) {
            $internship = $intern->internship;
            $internship->type = $this->getRequestType($internship->id);
            if($internship->type == "public"){
             $internship->id = $internship->internshipOffer->id;
            }
-
        });
-
-       return $intern;
         }
-       catch (Throwable $e) {
+        catch (Throwable $e) {
         $errorMessage = $e->getMessage();
         return response()->json(['error' => $errorMessage], 500);
+        }
 
-    }
+       return $intern;
     }
 
-    public function getAcceptedinternships(Request $request){
-        try{
+    public function getAcceptedinternships($id){
         $today = Carbon::today()->toDateString();
-        $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','>', $today]])
+        $intern = Intern::where([['student_id', $id],['student_validation',1],['manager_validation',1],['start_date','>', $today]])
         ->with(['internship' => function ($query) use ($today){
            $query->select('id','title','manager_id', 'duration',);
        },"internship.manager.user","internship.manager.company" => function ($query) {
            $query->select('id','name');
        }])
        ->get();
+       try{
        $intern->each(function ($intern) {
            $internship = $intern->internship;
            $internship->type = $this->getRequestType($internship->id);
@@ -114,18 +118,22 @@ class InternController extends Controller
             $internship->id = $internship->internshipOffer->id;
            }
        });
+        }
+        catch (Throwable $e) {
+            $errorMessage = $e->getMessage();
+            return response()->json(['error' => $errorMessage], 500);
+        }
 
        return $intern;
         }
-       catch (Throwable $e) {
-        $errorMessage = $e->getMessage();
-        return response()->json(['error' => $errorMessage], 500);
 
-    }
-    }
 
     public function deleteRequest(Request $request){
         $intern = intern::find($request->id);
+        $studentId = $intern->student_id;
+        $pending = $this->getPendingRequests($studentId);
+        $accepted = $this->getAcceptedinternships($studentId);
+        $finished = $this->getFinishedinternships($studentId);
         if ($request->type == "private") {
             $intern->delete();
             $intern->internship->delete();
@@ -134,11 +142,18 @@ class InternController extends Controller
         }
         return response()->json([
             'msg' => 'request deleted successfully',
+            'pending'=> $pending,
+            'accepted'=> $accepted,
+            'finished'=> $finished
         ]);
     }
 
     public function studentRefuse(Request $request){
         $intern = intern::find($request->id);
+        $studentId = $intern->student_id;
+        $pending = $this->getPendingRequests($studentId);
+        $accepted = $this->getAcceptedinternships($studentId);
+        $finished = $this->getFinishedinternships($studentId);
         if ($request->type == "private") {
             $intern->delete();
             $intern->internship->delete();
@@ -147,24 +162,25 @@ class InternController extends Controller
         }
         return response()->json([
             'msg' => 'request deleted successfully',
+            'pending'=> $pending,
+            'accepted'=> $accepted,
+            'finished'=> $finished
         ]);
     }
 
     public function studentSubmition(Request $request){
         $intern = intern::find($request->id);
+        $studentId = $intern->student_id;
+        $pending = $this->getPendingRequests($studentId);
+        $accepted = $this->getAcceptedinternships($studentId);
+        $finished = $this->getFinishedinternships($studentId);
         $intern ->update(["student_validation" => 1]);
         return response()->json([
             'msg' => 'submition updated successfully',
+            'pending'=> $pending,
+            'accepted'=> $accepted,
+            'finished'=> $finished
         ]);
 
     }
-
-
-
-
-
-
-
-
-
 }
