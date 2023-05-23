@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ManagerPasswordEmail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
+use Carbon\Carbon;
+
 
 class DepartmentHeaderController extends Controller
 {
@@ -63,24 +65,66 @@ public function refuseRequest(Request $request ){
     ]);
 
 }
-public function getAcceptedInterns(Request $request)
+public function getOngoingInternsNumber(Request $request)
 {
+    $today = Carbon::today()->toDateString();
     $department = departmentHeader::find($request->headerId);
-    $students = student::where("department_id", $department->department_id)
-        ->with([ "intern" => function ($query) {
-            $query->where('header_validation', '=', 1);
-        }])
+    $students = Student::where("department_id", $department->department_id)
+        ->whereHas('intern', function ($query)use ($today) {
+            $query->where([['header_validation', 1],['manager_validation', 1],['start_date','<', $today],['end_date', '>', $today]]);
+        })
+        ->count();
+    return $students;
+}
+public function getAllStudentsNumber(Request $request){
+    $department = departmentHeader::find($request->headerId);
+    $students = Student::where("department_id", $department->department_id)
+    ->count();
+    return $students;
+}
+
+
+public function getOngoingInterns(Request $request)
+{
+    $today = Carbon::today()->toDateString();
+    $department = departmentHeader::find($request->headerId);
+    $students = Student::where("department_id", $department->department_id)
+        ->whereHas('intern', function ($query) use ($today) {
+            $query->where([['header_validation', 1],['manager_validation', 1],['start_date','<', $today],['end_date', '>', $today]]);
+        })
+        ->with(['user', 'intern.internship'])
         ->get();
     return $students;
 }
 
 
+public function getIntern(Request $request)
+{
+    $intern = Intern::where("id", $request->internId)
+        ->with([
+            "student.user",
+            "internship.manager.company"
+        ])
+        ->first();
 
-
-
-
-
+    return $intern;
+}
 
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

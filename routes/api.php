@@ -123,7 +123,13 @@ Route::post('{offer:id}/favorite', 'FavoriteController@addToFavorite');
 Route::post('showRequests', 'DepartmentHeaderController@showRequests');
 Route::post('acceptRequest', 'DepartmentHeaderController@acceptRequest');
 Route::post('refuseRequest', 'DepartmentHeaderController@refuseRequest');
-Route::post('getacceptedinterns', 'DepartmentHeaderController@getacceptedinterns');
+Route::post('getOngoingInternsNumber', 'DepartmentHeaderController@getOngoingInternsNumber');
+Route::post('getAllStudentsNumber', 'DepartmentHeaderController@getAllStudentsNumber');
+Route::post('getOngoingInterns', 'DepartmentHeaderController@getOngoingInterns');
+Route::post('getIntern', 'DepartmentHeaderController@getIntern');
+
+
+
 
 
 
