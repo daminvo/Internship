@@ -23,7 +23,7 @@ public function showRequests(Request $request)
 {
     $department = departmentHeader::find($request->headerId);
     $students = student::where("department_id", $department->department_id)
-    ->with(["user","intern.internship","department.faculty.university"])
+    ->with(["user","intern.internship.manager.company","department.faculty.university"])
     ->get();
     return $students;
 }
@@ -52,6 +52,32 @@ public function acceptRequest(Request $request){
     ]);
 
 }
+public function refuseRequest(Request $request ){
+    $intern = intern::where([
+        ["id", $request->internId],
+        ['internship_id', $request->internshipId]
+    ])->first();
+    $intern->update(["header_validation" => 0]);
+    return response()->json([
+        'msg' => 'information updated successfully',
+    ]);
+
+}
+public function getAcceptedInterns(Request $request)
+{
+    $department = departmentHeader::find($request->headerId);
+    $students = student::where("department_id", $department->department_id)
+        ->with([ "intern" => function ($query) {
+            $query->where('header_validation', '=', 1);
+        }])
+        ->get();
+    return $students;
+}
+
+
+
+
+
 
 
 

@@ -119,11 +119,14 @@ Route::get('/search//', 'InternshipOfferController@search');
 
 //favorites
 Route::post('{offer:id}/favorite', 'FavoriteController@addToFavorite');
-
-
 //header fcts
 Route::post('showRequests', 'DepartmentHeaderController@showRequests');
 Route::post('acceptRequest', 'DepartmentHeaderController@acceptRequest');
+Route::post('refuseRequest', 'DepartmentHeaderController@refuseRequest');
+Route::post('getacceptedinterns', 'DepartmentHeaderController@getacceptedinterns');
+
+
+
 
 
 
