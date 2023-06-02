@@ -35,24 +35,20 @@ public function acceptRequest(Request $request){
         ["id", $request->internId],
         ['internship_id', $request->internshipId]
     ])->first();
-
     $internship = $intern->internship;
     $manager = $internship->manager;
-    $password = Str::random(8);
-    $hashed_password =  bcrypt($password);
-    $manager->update(["validation" => 1]);
-    $manager->user->update(['password' => $hashed_password]);
-    $intern->update(["header_validation" => 1]);
-    $user=$manager->user->first_name;
 
-
+    if($manager->validaion == "0"){
+        $password = Str::random(8);
+        $hashed_password =  bcrypt($password);
+        $manager->update(["validation" => 1]);
+        $manager->user->update(['password' => $hashed_password]);
         Mail::to($manager->user->email)->send(new ManagerPasswordEmail($password,$user));
-
-
+    }
+    $intern->update(["header_validation" => 1]);
     return response()->json([
         'msg' => 'information updated successfully',
     ]);
-
 }
 public function refuseRequest(Request $request ){
     $intern = intern::where([
@@ -109,8 +105,6 @@ public function getIntern(Request $request)
 
     return $intern;
 }
-
-
 
 }
 

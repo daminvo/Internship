@@ -24,7 +24,7 @@ class internship extends Model
       //  return $this->hasOne(InternshipOffer::class);
     ///}
 
-    public function intern (): hasmany
+    public function intern ()
     {
         return $this->hasMany('App\Intern');
     }

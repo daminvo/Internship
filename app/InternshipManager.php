@@ -22,7 +22,7 @@ class InternshipManager extends Model
         return $this->belongsTo('App\company', 'company_id');
     }
 
-    public function internship (): hasone
+    public function internship ()
     {
         return $this->hasone('App\internship');
     }
