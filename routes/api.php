@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PDFController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +131,13 @@ Route::post('getOngoingInternsNumber', 'DepartmentHeaderController@getOngoingInt
 Route::post('getAllStudentsNumber', 'DepartmentHeaderController@getAllStudentsNumber');
 Route::post('getOngoingInterns', 'DepartmentHeaderController@getOngoingInterns');
 Route::post('getIntern', 'DepartmentHeaderController@getIntern');
+
+// manager fct
+Route::post('generatePDF', 'PDFController@generatePDF');
+Route::post('refuseHeaderRequest', 'ManagerController@refuseRequest');
+Route::post('acceptHeaderRequest', 'ManagerController@acceptRequest');
+Route::post('getInternshipIterns', 'ManagerController@getInternshipIterns');
+
 
 
 

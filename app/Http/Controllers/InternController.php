@@ -35,8 +35,6 @@ class InternController extends Controller
             $errorMessage = $e->getMessage();
             return response()->json(['error' => $errorMessage], 500);
         }
-
-
         return $intern;
         }
 
