@@ -12,6 +12,11 @@ class InternshipOffer extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    public $timestamps = false;
+
+    protected $fillable = [
+        'nmbr_positions', 'photo','internship_id'
+    ];
     public function internship()
     {
         return $this->belongsTo('App\internship');
