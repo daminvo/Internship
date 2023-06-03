@@ -34,8 +34,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('project/{project:project_url}/save', 'Project\ProjectLecturerController@updateProject');
     Route::post('project/post', 'Project\ProjectLecturerController@postProject');
-    Route::post('project/thumbnail', 'Project\ProjectLecturerController@uploadTempThumbnail');
-    Route::delete('project/thumbnail', 'Project\ProjectLecturerController@deleteTempThumbnail');
+    Route::post('project/thumbnail', 'InternshipOfferController@uploadTempThumbnail');
+    Route::delete('project/thumbnail', 'InternshipOfferController@deleteTempThumbnail');
     Route::post('project/{project:project_url}/thumbnail', 'Project\ProjectLecturerController@uploadThumbnail');
     Route::delete('project/{project:project_url}/thumbnail', 'Project\ProjectLecturerController@deleteThumbnail');
     Route::post('user/{user:tagname}/invite/project', 'Project\ProjectLecturerController@inviteToProject');
@@ -78,7 +78,6 @@ Route::group(['middleware' => 'guest:api'], function () {
 Route::group([], function () {
     Route::get('home', 'HomeController@index');
 
-    Route::get('user/{user:tagname}', 'ProfileController@getUser');
 
     Route::get('projects', 'Project\ProjectController@explore');
     Route::get('projects/search/', 'Project\ProjectController@search');
@@ -86,6 +85,9 @@ Route::group([], function () {
     Route::get('project/{project:project_url}/similar', 'Project\ProjectController@similarProjects');
 
 });
+
+Route::get('user/{user:id}', 'ProfileController@getUser');
+
 
 Route::post('newRequest', 'StudentController@createRequest');
 

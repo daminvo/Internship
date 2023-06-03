@@ -5,7 +5,7 @@
                    :data="project"
       />
       <p v-if="projects.length === 0" class="info__p">
-        Let fill this page with some projects
+        no interships are finished yet
       </p>
     </div>
   </div>

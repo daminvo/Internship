@@ -47,22 +47,6 @@ class User extends Authenticatable implements JWTSubject
 
     // protected $withCount = ['finishedProject'];
 
-    /**
-     * Get the profile photo URL attribute.
-     *
-     * @return string
-     */
-    public function getAvatarAttribute()
-    {
-        if ($this->photo_url === null) {
-            // return 'https://www.gravatar.com/avatar/'.md5(strtolower($this->email)).'.jpg?s=200&d=mm';
-            return 'https://i.pravatar.cc/150?u=' . $this->id;
-
-        } else {
-            return '/storage/images/avatar/' . $this->photo_url;
-        }
-
-    }
 
     public function getCvAttribute()
     {
@@ -138,6 +122,15 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne('App\Student');
     }
 
+    public function header()
+    {
+        return $this->hasOne('App\DepartmentHeader');
+    }
+
+    public function manager()
+    {
+        return $this->hasOne('App\InternshipManager');
+    }
     // public function lecturer()
     // {
     //     return $this->hasOne('App\Lecturer');

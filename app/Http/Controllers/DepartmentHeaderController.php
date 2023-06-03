@@ -103,7 +103,8 @@ public function getIntern(Request $request)
     $intern = Intern::where("id", $request->internId)
         ->with([
             "student.user",
-            "internship.manager.company"
+            "internship.manager.company",
+            "internship.manager.user"
         ])
         ->first();
 

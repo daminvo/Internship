@@ -20,79 +20,55 @@ class InternshipOfferController extends Controller
 
         return response()->json($offer);
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+
+    public function uploadTempThumbnail(Request $request)
     {
-        //
+        $userAuth = $request->user();
+
+        $this->validate($request, [
+            'file' => 'required|image|mimes:jpeg,png,jpg|max:516',
+        ]);
+
+        if ($userAuth->role === 'manager' && $request->hasFile('file')) {
+
+            $image = $request->file('file');
+            $extension = $image->extension();
+            $imgName = $this->generateRandomString(25) . '.' . $extension;
+            $destinationPath = storage_path('app/public/images/thumbnail/');
+            $image->move($destinationPath, $imgName);
+
+            return response()->json([
+                'message' => 'Project Thumbnail has been uploaded',
+                'thumbnail' => "{$imgName}",
+            ]);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function deleteTempThumbnail(Request $request)
     {
-        //
+        $userAuth = $request->user();
+
+        if ($request->exists('file')) {
+            $path = storage_path() . '/app/public/images/thumbnail/' . $request->file;
+            if (file_exists($path)) unlink($path);
+
+        }
+
+        return response()->json([
+            'message' => 'Project Thumbnail has been deleted',
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    private function generateRandomString($length = 10)
     {
-        //
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\InternshipOffer  $internshipOffer
-     * @return \Illuminate\Http\Response
-     */
-    public function show(InternshipOffer $internshipOffer)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\InternshipOffer  $internshipOffer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(InternshipOffer $internshipOffer)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\InternshipOffer  $internshipOffer
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, InternshipOffer $internshipOffer)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\InternshipOffer  $internshipOffer
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(InternshipOffer $internshipOffer)
-    {
-        //
-    }
 }

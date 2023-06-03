@@ -24,10 +24,10 @@ class UserController extends Controller
         $user = $request->user();
 
         if ($user->role === 'student') {
-            // $projects = ProjectBox::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->where('status', 'Finished')->latest()->get();
+
+            // $projects = Project::with('user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->latest()->get();
             $favorites = Favorite::with(['student.user:first_name,family_name,email', 'offer.internship.manager.user'])->where('student_id', $user->student()->pluck('id'))->where('status', true)->get();
             $user = User::with('student', 'student.department.faculty.university')->findOrFail($user->id);
-            // ->student()->first();
 
             return response()->json(
                 [
@@ -37,8 +37,7 @@ class UserController extends Controller
                 ]
             );
         } elseif ($user->role === 'manager') {
-            // $projects = Project::with('user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->latest()->get();
-            // $user = User::with(['skills', 'experiences'])->withCount(['new_notifications'])->findOrFail($user->id);
+            $user = User::with('manager', 'manager.company')->findOrFail($user->id);
 
             return response()->json(
                 [
@@ -46,6 +45,9 @@ class UserController extends Controller
                 ]
             );
         } else {
+
+            $user = User::with('header', 'header.department.faculty.university')->findOrFail($user->id);
+
             return response()->json(
                 [
                     'user' => $user,

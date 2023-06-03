@@ -12,13 +12,17 @@ export default [
   { path: '/request',  name: 'internship.request', component: page('request') },
   { path: '/apply',  name: 'internship.apply', component: page('apply') },
 
+  { path: '/intern=:internId',  name: 'request.informations', component: page('dashboard/showIntern') },
+
+  { path: '/dashboard', name: 'dashboard', meta: { title: 'Dashboard' }, component: page('dashboard'), },
+
+  { path: '/noteIntern=:internIdTwo', name: 'Marks', meta: { title: 'Marks' }, component: page('marks'), },
 
   {
     path: '/profile',
     component: page('profile'),
     children: [
       { path: '', redirect: { name: 'profile.info' } },
-      { path: 'internships', name: 'profile.internships', meta: { title: 'Profile' }, component: page('profile/ProfileInternships.vue') },
       { path: 'favorites', name: 'profile.favorites', meta: { title: 'Profile' }, component: page('profile/ProfileFavorites.vue') },
       { path: 'info', name: 'profile.info', meta: { title: 'Profile' }, component: page('profile/ProfileInfo.vue') }
     ]
@@ -53,11 +57,13 @@ export default [
 
   { path: '/explore', name: 'explore', meta: { title: 'Explore' }, component: page('Explore.vue') },
 
+  // { path: '/dashboard', name: 'dashboard', component: page('Dashboard.vue') },
+
   { path: '/offer/post', name: 'offer.post', meta: { title: 'Post Offer' }, component: page('internship/OfferPost.vue') },
   { path: '/project/:id/edit-post', name: 'project.editpost', meta: { title: 'Edit Project' }, component: page('internship/ProjectEdit.vue') },
   { path: '/offer/:id', name: 'offer.details', meta: { title: 'Offer' }, component: page('internship/OfferDetails.vue') },
   { path: '/project/:id/review', name: 'project.review', meta: { title: 'Review Project' }, component: page('internship/ProjectReview.vue') },
-  { path: '/project/:id/dashboard', name: 'project.dashboard', meta: { title: 'Project' }, component: page('internship/dashboard') },
+  // { path: '/project/:id/dashboard', name: 'project.dashboard', meta: { title: 'Project' }, component: page('internship/dashboard') },
 
   {
     path: '/project/:id/shorlisted',

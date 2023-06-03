@@ -12,6 +12,14 @@ class InternshipManager extends Model
         'user_id', 'company_id','validation'
     ];
 
+    protected $appends = ['companyName'];
+
+
+    public function getCompanyNameAttribute()
+    {
+        return optional($this->company)->name;
+    }
+
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
@@ -22,7 +30,7 @@ class InternshipManager extends Model
         return $this->belongsTo('App\company', 'company_id');
     }
 
-    public function internship (): hasone
+    public function internship ()
     {
         return $this->hasone('App\internship');
     }

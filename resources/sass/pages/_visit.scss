@@ -149,7 +149,7 @@
 
   @include respon(xl) {
     background-color: white;
-    color: #001534;
+    color: var(--dark-blue);
   }
 }
 

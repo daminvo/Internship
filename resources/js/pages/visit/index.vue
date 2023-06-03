@@ -1,28 +1,26 @@
 <template>
   <div class="user__container">
     <div class="user__info--container">
-      <img class="user__info--img" :src="data.user.avatar" alt="">
+      <img class="user__info--img" :src="getImageUrl(data.user.photo)" alt="">
       <p class="user__info--name">
-        {{ data.user.full_name }}
+        {{ data.user.first_name }} {{ data.user.family_name }}
       </p>
       <p class="user__info--occupation">
-        {{ data.user.expertise }}
+        {{ data.user.role }}
       </p>
     </div>
 
     <div class="user__action--container">
-      <template v-if="data.user.role === 'Student'">
-        <button v-if="user && user.role === 'Lecturer'" class="btn action--button btn--blue" :disabled="isSelf || !data.user.is_open_hired" @click="showOwnProjects">
+      <template v-if="data.user.role === 'student'">
+        <button v-if="user && user.role === 'student'" class="btn action--button btn--blue" @click="showOwnProjects">
           Invite To Project
         </button>
-        <button v-else class="btn action--button btn--blue" :disabled="isSelf" @click="inviteToTeam">
-          Invite To Party
-        </button>
-        <router-link :to="{ name: 'message', params: { tagname: this.$route.params.tagname } }" class="btn action--button btn--white" tag="button" :disabled="isSelf">
-          Direct Message
+
+        <router-link :to="`mailto:${data.user.email}`" class="btn action--button btn--white" tag="button">
+          Send Email
         </router-link>
       </template>
-      <template v-else>
+      <template v-if="data.user.role === 'manager'">
         <router-link :to="{ name: 'message', params: { tagname: this.$route.params.tagname } }" class="btn action--button btn--white" tag="button" :disabled="isSelf">
           Contact Lecturer
         </router-link>
@@ -134,6 +132,16 @@ export default {
     hiringProjects () {
       return this.ownProjects.filter(project => project.status === 'Hiring')
     }
+  },
+
+  setup() {
+
+  const getImageUrl = (name) => {
+    if (name === null) return '/images/missing-avatar.svg'
+    else return window.location.origin + '/storage/images/avatar/' + name;
+  }
+
+  return { getImageUrl }
   },
 
   mounted () {

@@ -14,8 +14,6 @@ class Student extends Model
         'user_id', 'student_card', 'cv', 'grade', 'security_number', 'birthday', 'birth_place', 'university_id', 'faculty_id', 'department_id', 'speciality', 'state'
     ];
 
-    //public function offre(): HasOne
-
     protected $appends = ['departmentName', 'facultyName', 'universityName'];
 
     public function getDepartmentNameAttribute()
@@ -48,7 +46,6 @@ class Student extends Model
     public function user()
     {
         return $this->belongsTo('App\User');
-
     }
 
     public function internships()

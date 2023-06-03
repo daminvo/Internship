@@ -10,18 +10,6 @@
         </p>
       </div>
 
-      <div class="info__sub--container">
-        <h3 class="info__h3">
-          Skills
-        </h3>
-        <div class="info__skill-container">
-          <BubbleSkill v-for="(skill, index) in data.user.skills" :key="`UserSkill-${index}`" :color="`blue`" :name="skill.name" />
-          <p v-if="data.user.skills && data.user.skills.length === 0" class="info__p margin-0_5">
-            No skills to show yet
-          </p>
-        </div>
-      </div>
-
       <div v-if="!$matchMedia.xl" class="info__sub--container">
         <h3 class="info__h3">
           Records
@@ -36,17 +24,6 @@
         </div>
       </div>
 
-      <div class="info__sub--container">
-        <h3 class="info__h3">
-          Experience
-        </h3>
-        <div class="mb-2 experiences-list">
-          <ExperienceItem v-for="(experience, index) in data.user.experiences" :key="`ExperienceItem-${index}`" :data="experience" />
-          <p v-if="data.user.experiences && data.user.experiences.length === 0" class="info__p">
-            No experiences to show yet
-          </p>
-        </div>
-      </div>
     </div>
 
     <div class="info--right">
@@ -149,21 +126,12 @@ export default {
   computed: {
     socmeds () {
       const socmeds = [
-        { 'icon': 'ant-design:behance-outlined',
-          'link': this.data.user.behance ? this.data.user.behance : '',
-          'linkFiltered': this.data.user.behance ? this.filterLink(this.data.user.behance) : '' },
         { 'icon': 'ant-design:github-filled',
           'link': this.data.user.github ? this.data.user.github : '',
           'linkFiltered': this.data.user.github ? this.filterLink(this.data.user.github) : '' },
         { 'icon': 'bx-bxl-linkedin',
           'link': this.data.user.linkedin ? this.data.user.linkedin : '',
           'linkFiltered': this.data.user.linkedin ? this.filterLink(this.data.user.linkedin) : '' },
-        { 'icon': 'whh:dribbblealt',
-          'link': this.data.user.dribbble ? this.data.user.dribbble : '',
-          'linkFiltered': this.data.user.dribbble ? this.filterLink(this.data.user.dribbble) : '' },
-        { 'icon': 'whh:website',
-          'link': this.data.user.website ? this.data.user.website : '',
-          'linkFiltered': this.data.user.website ? this.filterLink(this.data.user.website) : '' }
       ]
 
       if (this.$matchMedia.xl) return socmeds.filter(e => e.link !== '')
@@ -172,23 +140,29 @@ export default {
     },
 
     records () {
-      if (this.data.user.role === 'Student') {
+    console.log(this.data.user.role)
+      if (this.data.user.role === 'student') {
         return [
-          { 'icon': 'bx:bxs-id-card', 'content': this.data.user.identity_number, 'type': 'icon' },
-          { 'icon': 'fa-solid:building', 'content': `${this.data.user.faculty}, ${this.data.user.university}`, 'type': 'icon' },
-          { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.data.user.joined_since)}`, 'type': 'icon' },
+          { 'icon': 'bx:bxs-id-card', 'content': this.data.user.student.student_card, 'type': 'icon' },
+          { 'icon': 'fa-solid:building', 'content': `${this.data.user.student.facultyName}, ${this.data.user.student.universityName}`, 'type': 'icon' },
+          { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.data.user.created_at)}`, 'type': 'icon' },
           { 'icon': 'icons8:finish-flag', 'content': `${this.data.user.finished_project_count} Finished Project`, 'type': 'icon' },
-          { 'icon': 'entypo:squared-cross', 'content': '0 Failed Project', 'type': 'icon' }
         ]
       }
-
-      return [
-        { 'icon': 'bx:bxs-id-card', 'content': this.data.user.identity_number, 'type': 'icon' },
-        { 'icon': 'fa-solid:building', 'content': `${this.data.user.faculty}, ${this.data.user.university}`, 'type': 'icon' },
-        { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.data.user.joined_since)}`, 'type': 'icon' },
-        { 'icon': 'dashicons-admin-post', 'content': `${this.data.projects ? this.data.projects.length : 0} Project Posted`, 'type': 'icon' },
-        { 'icon': 'entypo:squared-cross', 'content': `0 Failed Project`, 'type': 'icon' }
-      ]
+      else if (this.data.user.role === 'header') {
+        return [
+          { 'icon': 'fa-solid:building', 'content': `${this.data.user.header.facultyName}, ${this.data.user.header.universityName}`, 'type': 'icon' },
+          { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.data.user.created_at)}`, 'type': 'icon' },
+          { 'icon': 'dashicons-admin-post', 'content': `${this.projects ? this.projects.length : 0} Project Posted`, 'type': 'icon' },
+        ]
+      }
+      else if (this.data.user.role === 'manager') {
+        return [
+          { 'icon': 'fa-solid:building', 'content': `${this.data.user.manager.companyName}`, 'type': 'icon' },
+          { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.data.user.created_at)}`, 'type': 'icon' },
+          { 'icon': 'dashicons-admin-post', 'content': `${this.projects ? this.projects.length : 0} Project Posted`, 'type': 'icon' },
+        ]
+      }
     },
 
     ...mapGetters({

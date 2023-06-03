@@ -2,9 +2,13 @@
   <div class="profile--container">
     <div class="profile__info--container">
       <img class="profile__info--img" :src="getImageUrl(user.photo)" alt="">
-      <div class="profile__info--desc">
+
+      <div class="profile__info--desc" v-if="user.role === 'student'">
         <p class="profile__info--name">
           {{ user.first_name }} {{ user.family_name }}
+        </p>
+        <p class="profile__info--expertise">
+          <span class="iconify" data-icon="fa-solid:paint-brush" width="15" height="10" /> {{ user.role }}
         </p>
         <p v-if="!$matchMedia.xl" class="profile__info--occupation">
           <!-- {{ major }} <br> -->
@@ -15,9 +19,6 @@
           {{ user.student.speciality }} /
           {{ user.student.universityName }} <br>
           {{ user.address }}
-        </p>
-        <p class="profile__info--expertise">
-          <span class="iconify" data-icon="fa-solid:paint-brush" width="15" height="10" /> {{ user.role }}
         </p>
 
         <div v-if="$matchMedia.xl" class="profile__info--buttons">
@@ -35,6 +36,40 @@
           <span>{{ userStatus.text }}</span>
         </p>
       </div>
+
+      <div class="profile__info--desc" v-if="user.role === 'header'">
+        <p class="profile__info--name">
+          {{ user.first_name }} {{ user.family_name }}
+        </p>
+        <p class="profile__info--expertise">
+          <span class="iconify" data-icon="fa-solid:paint-brush" width="15" height="10" /> {{ user.role }}
+        </p>
+        <p v-if="!$matchMedia.xl" class="profile__info--occupation">
+          <!-- {{ major }} <br> -->
+          {{ user.header.universityName }} <br>
+          {{ user.address }}
+        </p>
+        <p v-else class="profile__info--occupation">
+          {{ user.header.universityName }} <br>
+          {{ user.address }}
+        </p>
+
+        <div v-if="$matchMedia.xl" class="profile__info--buttons">
+          <router-link :to="{ path: '/profile/edit' }" class="profile__info--edit-profile" tag="button">
+            Edit Profile
+          </router-link>
+        </div>
+
+        <p v-if="user.role === 'student'" :class="userStatus.class">
+          <span class="iconify profile__info--icon" data-icon="carbon:dot-mark" />
+          <span>{{ userStatus.text }}</span>
+        </p>
+        <p v-else-if="user.role === 'Lecturer'" :class="userStatus.class">
+          <span class="iconify profile__info--icon" data-icon="bi:shield-fill-check" />
+          <span>{{ userStatus.text }}</span>
+        </p>
+      </div>
+
     </div>
 
     <router-link v-if="!$matchMedia.xl" :to="{ path: '/profile/edit' }" class="edit-profile__link">
@@ -88,14 +123,13 @@ export default {
       if (this.user.role === 'student') {
         return [
           { name: 'Info', route: 'profile.info' },
-          { name: 'Dashboard', route: 'profile.internships' },
           { name: 'Favorites', route: 'profile.favorites' },
         ]
       }
 
       return [
+        { name: 'Info', route: 'profile.info' },
         { name: 'Projects', route: 'profile.projects' },
-        { name: 'Info', route: 'profile.info' }
       ]
     },
 
@@ -118,7 +152,8 @@ export default {
   setup() {
 
     const getImageUrl = (name) => {
-      return window.location.origin + '/storage/images/avatar/' + name;
+      if (name === null) return '/images/missing-avatar.svg'
+      else return window.location.origin + '/storage/images/avatar/' + name;
     }
 
     return { getImageUrl }

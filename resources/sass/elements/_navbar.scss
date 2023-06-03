@@ -342,7 +342,7 @@ a.nav--active-link {
 }
 
 .desktop-nav__right-icon {
-  background-color: #366a66;
+  background-color: var(--dark-blue);
   padding: 0 1rem;
   height: 4rem;
   border-radius: 1rem;
@@ -392,7 +392,7 @@ a.nav--active-link {
 
   & > .desktop-nav__link:hover {
     border-radius: 0.5rem;
-    background-color: #e0fcf2;
+    background-color: #FFFACA;
   }
 }
 
