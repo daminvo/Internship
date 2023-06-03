@@ -63,7 +63,6 @@
             "time": "2019-12-24T22:41:47+00:00"
         },
         {
-<<<<<<< HEAD
             "name": "beyondcode/laravel-websockets",
             "version": "1.14.0",
             "source": {
@@ -107,54 +106,12 @@
                     ],
                     "aliases": {
                         "WebSocketRouter": "BeyondCode\\LaravelWebSockets\\Facades\\WebSocketRouter"
-=======
-            "name": "barryvdh/laravel-dompdf",
-            "version": "v2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/barryvdh/laravel-dompdf.git",
-                "reference": "9843d2be423670fb434f4c978b3c0f4dd92c87a6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-dompdf/zipball/9843d2be423670fb434f4c978b3c0f4dd92c87a6",
-                "reference": "9843d2be423670fb434f4c978b3c0f4dd92c87a6",
-                "shasum": ""
-            },
-            "require": {
-                "dompdf/dompdf": "^2.0.1",
-                "illuminate/support": "^6|^7|^8|^9|^10",
-                "php": "^7.2 || ^8.0"
-            },
-            "require-dev": {
-                "nunomaduro/larastan": "^1|^2",
-                "orchestra/testbench": "^4|^5|^6|^7|^8",
-                "phpro/grumphp": "^1",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                },
-                "laravel": {
-                    "providers": [
-                        "Barryvdh\\DomPDF\\ServiceProvider"
-                    ],
-                    "aliases": {
-                        "Pdf": "Barryvdh\\DomPDF\\Facade\\Pdf",
-                        "PDF": "Barryvdh\\DomPDF\\Facade\\Pdf"
->>>>>>> 8c629521ae605e72ad0f4c85139d9e61eb1ca358
                     }
                 }
             },
             "autoload": {
                 "psr-4": {
-<<<<<<< HEAD
                     "BeyondCode\\LaravelWebSockets\\": "src"
-=======
-                    "Barryvdh\\DomPDF\\": "src"
->>>>>>> 8c629521ae605e72ad0f4c85139d9e61eb1ca358
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -163,7 +120,6 @@
             ],
             "authors": [
                 {
-<<<<<<< HEAD
                     "name": "Marcel Pociot",
                     "email": "marcel@beyondco.de",
                     "homepage": "https://beyondcode.de",
@@ -187,33 +143,6 @@
                 "source": "https://github.com/beyondcode/laravel-websockets/tree/1.14.0"
             },
             "time": "2023-02-15T10:40:49+00:00"
-=======
-                    "name": "Barry vd. Heuvel",
-                    "email": "barryvdh@gmail.com"
-                }
-            ],
-            "description": "A DOMPDF Wrapper for Laravel",
-            "keywords": [
-                "dompdf",
-                "laravel",
-                "pdf"
-            ],
-            "support": {
-                "issues": "https://github.com/barryvdh/laravel-dompdf/issues",
-                "source": "https://github.com/barryvdh/laravel-dompdf/tree/v2.0.1"
-            },
-            "funding": [
-                {
-                    "url": "https://fruitcake.nl",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/barryvdh",
-                    "type": "github"
-                }
-            ],
-            "time": "2023-01-12T15:12:49+00:00"
->>>>>>> 8c629521ae605e72ad0f4c85139d9e61eb1ca358
         },
         {
             "name": "brick/math",
