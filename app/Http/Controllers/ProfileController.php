@@ -9,31 +9,37 @@ use App\Wishlist;
 
 class ProfileController extends Controller
 {
-    public function getUser($tagname)
+    public function getUser($id)
     {
-        $user = User::where('tagname', $tagname)->firstOrFail();
+        $user = User::where('id', $id)->firstOrFail();
 
-        if ($user->role === 'Student') {
-            $projects = ProjectBox::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where([
-                'user_id' => $user->id,
-                'status' => 'Finished'
-            ])->latest()->get();
-            $wishlists = Wishlist::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->where('status', true)->latest()->get();
+        if ($user->role === 'student') {
+            // $projects = Intern::with('project.user:id,tagname,first_name,last_name,photo_url,email')->where([
+            //     'user_id' => $user->id,
+            //     'status' => 'Finished'
+            // ])->latest()->get();
+            $user = User::with('student', 'student.department.faculty.university')->findOrFail($user->id);
 
             return response()->json(
                 [
                     'user' => $user,
-                    'projects' => $projects,
-                    'wishlists' => $wishlists
+                    // 'projects' => $projects,
                 ]);
-        } else {
-            $projects = Project::with('user:id,tagname,first_name,last_name,photo_url,email')->where('user_id', $user->id)->latest()->get();
+        } elseif ($user->role === 'header') {
+            $user = User::with('header', 'header.department.faculty.university')->findOrFail($user->id);
 
             return response()->json(
                 [
                     'user' => $user,
-                    'projects' => $projects,
-                    'wishlists' => []
+                    // 'projects' => $projects,
+                ]);
+        } elseif ($user->role === 'manager') {
+            $user = User::with('manager', 'manager.company')->findOrFail($user->id);
+
+            return response()->json(
+                [
+                    'user' => $user,
+                    // 'projects' => $projects,
                 ]);
         }
     }

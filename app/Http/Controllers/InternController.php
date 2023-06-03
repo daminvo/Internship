@@ -129,15 +129,18 @@ class InternController extends Controller
     public function deleteRequest(Request $request){
         $intern = intern::find($request->id);
         $studentId = $intern->student_id;
-        $pending = $this->getPendingRequests($studentId);
-        $accepted = $this->getAcceptedinternships($studentId);
-        $finished = $this->getFinishedinternships($studentId);
+
         if ($request->type == "private") {
             $intern->delete();
             $intern->internship->delete();
         } else {
             $intern->delete();
         }
+
+        $pending = $this->getPendingRequests($studentId);
+        $accepted = $this->getAcceptedinternships($studentId);
+        $finished = $this->getFinishedinternships($studentId);
+
         return response()->json([
             'msg' => 'request deleted successfully',
             'pending'=> $pending,
@@ -149,15 +152,17 @@ class InternController extends Controller
     public function studentRefuse(Request $request){
         $intern = intern::find($request->id);
         $studentId = $intern->student_id;
-        $pending = $this->getPendingRequests($studentId);
-        $accepted = $this->getAcceptedinternships($studentId);
-        $finished = $this->getFinishedinternships($studentId);
+
         if ($request->type == "private") {
             $intern->delete();
             $intern->internship->delete();
         } else {
             $intern->delete();
         }
+
+        $pending = $this->getPendingRequests($studentId);
+        $accepted = $this->getAcceptedinternships($studentId);
+        $finished = $this->getFinishedinternships($studentId);
         return response()->json([
             'msg' => 'request deleted successfully',
             'pending'=> $pending,
@@ -169,10 +174,10 @@ class InternController extends Controller
     public function studentSubmition(Request $request){
         $intern = intern::find($request->id);
         $studentId = $intern->student_id;
+        $intern ->update(["student_validation" => 1]);
         $pending = $this->getPendingRequests($studentId);
         $accepted = $this->getAcceptedinternships($studentId);
         $finished = $this->getFinishedinternships($studentId);
-        $intern ->update(["student_validation" => 1]);
         return response()->json([
             'msg' => 'submition updated successfully',
             'pending'=> $pending,

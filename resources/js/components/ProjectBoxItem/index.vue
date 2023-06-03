@@ -1,6 +1,6 @@
 <template>
   <div class="project-box__container">
-    <template v-if="role === 'Student'">
+    <template v-if="role === 'student'">
       <ProjectBoxItemWaiting v-if="data.status === 'Waiting'" :data="data" />
       <ProjectBoxItemAccepted v-else-if="data.status === 'Accepted'" :data="data" />
       <ProjectBoxItemRejected v-else-if="data.status === 'Rejected'" :data="data" />

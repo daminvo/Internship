@@ -38,9 +38,15 @@ export const actions = {
   async fetchVisitedUser ({ commit }, payload) {
     try {
       const { data } = await axios.get('/api/user/' + payload.userId)
+      // .then(res => console.log(res))
+      // .catch(e => {
+      //   console.log('Error:', error.response)
+      // })
 
       commit(types.FETCH_VISITED_USER, { user: data })
-    } catch (e) { }
+    } catch (error) {
+      console.log('Error:', error.response)
+     }
   },
 
   async fetchVisitedOffer ({ commit }, payload) {

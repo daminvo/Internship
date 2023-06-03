@@ -24,30 +24,29 @@
           </div>
           <div>
             <div class="project__card--bounty-info">
-
-              <div v-if="offer.salary" class="info-item--container">
+              <div class="info-item--container">
                 <span>
                   <span
                     class="iconify info-item--icon"
-                    data-icon="fa-solid:dollar-sign"
-
-                    width="8"
-                    height="15"
-                  />
-                </span>
-                <span>Salary</span>
-              </div>
-              <div v-if="offer.certificate" class="info-item--container">
-                <span>
-                  <span
-                    class="iconify info-item--icon"
-                    data-icon="la:certificate-solid"
+                    data-icon="fa-solid:building"
 
                     width="15"
                     height="15"
                   />
                 </span>
-                <span>Certificate</span>
+                <span>{{ offer.internship.manager.company.name }}</span>
+              </div>
+              <div class="info-item--container">
+                <span>
+                  <span
+                    class="iconify info-item--icon"
+                    data-icon="mdi:location"
+
+                    width="8"
+                    height="15"
+                  />
+                </span>
+                <span>{{ offer.internship.manager.company.address }}</span>
               </div>
             </div>
             <div class="project-card__extra-info--container">
@@ -95,22 +94,8 @@ export default {
       snackbar: 'notification/snackbar'
     }),
 
-    // expertiseIn () {
-    //   const expertises = [
-    //     { name: 'UI/UX Designer', isRequired: this.project.ui_ux_designer },
-    //     { name: 'Frontend Engineer', isRequired: this.project.front_end_engineer },
-    //     { name: 'Backend Engineer', isRequired: this.project.back_end_engineer },
-    //     { name: 'Data Expert', isRequired: this.project.data_expert }
-    //   ].filter(expertise => expertise.isRequired === true)
-    //     .map(expertise => expertise.name)
-    //     .join(', ')
-
-    //   if (expertises === '') return 'Not Specified'
-
-    //   return expertises
-    // },
-
     offer () {
+      console.log(this.data);
       return this.data
     },
 
@@ -166,7 +151,7 @@ export default {
       console.log('Status:', error.response.status)
       console.log('Data:', error.response.data)
       })
-        // this.$router.push({ name: 'login' })
+
     }
   }
 }

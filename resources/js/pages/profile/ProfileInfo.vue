@@ -22,7 +22,7 @@
         </div>
       </div> -->
 
-      <!-- <div v-if="!$matchMedia.xl" class="info__sub--container">
+      <div v-if="!$matchMedia.xl" class="info__sub--container">
         <h3 class="info__h3">
           Records
         </h3>
@@ -34,7 +34,7 @@
             </div> {{ record.content }}
           </div>
         </div>
-      </div> -->
+      </div>
 
       <!-- <div class="info__sub--container">
         <h3 class="info__h3">
@@ -60,9 +60,6 @@
         </div>
       </div>
       <div v-if="$matchMedia.xl" class="info__sub--container">
-        <h3 class="info__h3">
-          Records
-        </h3>
         <div class="record--items">
           <div v-for="(record, index) in records" :key="`Record-${index}`" class="record--container">
             <div class="record--icon-visited">
@@ -99,7 +96,7 @@
         </div>
       </div>
 
-      <div class="info__sub--container">
+      <div class="info__sub--container" v-if="user.role === 'student'">
         <h3 class="info__h3">
           Curriculum Vitae
         </h3>
@@ -143,12 +140,6 @@ export default {
   data: () => ({
     bgBubble: 'blue',
     copyText: 'Copy',
-
-    badges: [
-      { 'name': 'Top 5 Designer' },
-      { 'name': 'Best Student Review' },
-      { 'name': 'Painter Specialist' }
-    ]
   }),
 
   computed: {
@@ -176,13 +167,17 @@ export default {
           { 'icon': 'icons8:finish-flag', 'content': `${this.user.finished_project_count} Finished Project`, 'type': 'icon' },
         ]
       }
+      else if (this.user.role === 'header') {
+        return [
+          { 'icon': 'fa-solid:building', 'content': `${this.user.header.facultyName}, ${this.user.header.universityName}`, 'type': 'icon' },
+          { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.user.created_at)}`, 'type': 'icon' },
+          { 'icon': 'dashicons-admin-post', 'content': `${this.projects ? this.projects.length : 0} Project Posted`, 'type': 'icon' },
+        ]
+      }
+      else {
 
-      return [
-        { 'icon': 'bx:bxs-id-card', 'content': this.user.identity_number, 'type': 'icon' },
-        { 'icon': 'fa-solid:building', 'content': `${this.user.faculty}, ${this.user.university}`, 'type': 'icon' },
-        { 'icon': 'ic:baseline-card-membership', 'content': `Joined since ${timeago.format(this.user.joined_since)}`, 'type': 'icon' },
-        { 'icon': 'dashicons-admin-post', 'content': `${this.projects ? this.projects.length : 0} Project Posted`, 'type': 'icon' },
-      ]
+      }
+
     },
 
     ...mapGetters({

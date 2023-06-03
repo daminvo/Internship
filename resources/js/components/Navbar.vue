@@ -1,16 +1,12 @@
 <template>
   <div class="nav" >
+    <NotificationsComp
+      v-if="showNotifications"
+                class="notif"
+    ></NotificationsComp>
     <div v-if="$matchMedia.xl" class="desktop-nav" :class="{ 'scrolled': scrolledPastThreshold }">
       <div class="flex-row desktop-nav__container">
         <div class="flex-row">
-          <router-link :to="{ name: 'index' }">
-            <img class="desktop-nav__logo" src="/images/logo-blue.svg" alt="">
-          </router-link>
-
-          <!-- <router-link :to="{ name: 'internshipBox' }">
-            simple-icons:polymerproject
-            <img class="desktop-nav__logo" src="/images/logo-blue.svg" alt="">
-          </router-link> -->
 
           <div class="desktop-nav__link--container">
             <router-link v-for="(menu, index) in leftMenu" :key="`LeftMenu-${index}`" :to="menu.route" class="desktop-nav__link " active-class="desktop-nav__active-link">
@@ -29,6 +25,10 @@
                 <!-- <span class="iconify" :data-icon="menu.icon" width="20" height="20" /> -->
                 <span class="tooltip">{{ menu.text }}</span>
               </router-link>
+              <div @click="switchNofif()"  class="desktop-nav__link">
+                <span class="iconify" data-icon="ri:notification-4-fill" width="20" height="20" />
+                <span class="tooltip">Notifications</span>
+              </div>
 
               <div class="desktop-nav__right-icon dropdown" :class="{ 'dropdown-hover': dropdown.state }" @mouseover="toggleDropdown(true)" @mouseleave="toggleDropdown(false)">
                 <router-link :to="{ name: 'profile.info' }" class="flex">
@@ -41,9 +41,6 @@
                     </router-link>
                   </div>
                   <div class="nav-separator" />
-                  <router-link :to="{ name: 'profile.internships' }">
-                    Dashboard
-                  </router-link>
                   <router-link :to="{ name: 'settings' }">
                     Settings
                   </router-link>
@@ -190,14 +187,20 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import NotificationsComp from './Notifications.vue'
 
 export default {
+  components: {
+    NotificationsComp
+  },
+
   data: () => ({
+    showNotifications: false,
     appName: 'PHive',
     menu: { show: false, hide: false },
     photoUrl: 'https://www.gravatar.com/avatar/67104dea1ce9aef46682a4d8d145588c.jpg?s=200&d=mm',
     dropdown: { state: false, timeout: '' },
-    scrolledPastThreshold: false
+    scrolledPastThreshold: false,
   }),
 
   computed: {
@@ -219,13 +222,20 @@ export default {
         if (this.user.role === 'student') {
           return [
             { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' },
+            { route: { name: 'dashboard' }, text: 'Dashboard', icon: 'fluent-mdl2:b-i-dashboard' },
+            { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
+          ]
+        }
+        else if (this.user.role === 'manager') {
+          return [
+            { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' },
             { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
           ]
         }
         else {
           return [
             { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' },
-            { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
+            { route: { name: 'dashboard' }, text: 'Dashboard', icon: 'fluent-mdl2:b-i-dashboard' },
           ]
         }
       }
@@ -241,30 +251,35 @@ export default {
       if (this.user) {
         if (this.user.role === 'student') {
           return [
-            // { route: { name: 'project.post' }, text: 'Post Project', icon: 'ic:baseline-post-add' },
             { route: { name: 'internship.request' }, text: 'apply to new internship', icon: 'ic:baseline-post-add' },
-            { route: { name: 'inbox' }, text: 'Inbox', icon: 'ion:mail-unread-sharp' },
+            // { route: { name: 'inbox' }, text: 'Notifications', icon: 'ri:notification-4-fill' },
             // { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
           ]
         }
+        else if (this.user.role === 'header') {
+          return [
+          // { route: { name: 'inbox' }, text: 'Notifications', icon: 'ri:notification-4-fill' },
+          ]
+        }
+        else {
+          return [
+            { route: { name: 'offer.post' }, text: 'Create new offer', icon: 'ic:baseline-post-add' },
+          ]
+        }
 
-        return [
-          { route: { name: 'offer.post' }, text: 'Create new offer', icon: 'ic:baseline-post-add' },
-          { route: { name: 'inbox' }, text: 'Inbox', icon: 'ion:mail-unread-sharp' },
-          { route: { name: 'projectbox' }, text: 'Project Box', icon: 'simple-icons:polymerproject' }
-        ]
       }
 
       return [
         { route: { name: 'login' }, text: 'Sign In', icon: 'ic:baseline-post-add', class: '' },
         { route: { name: 'register' }, text: 'Create an Account', icon: 'ion:mail-unread-sharp', class: '' }
       ]
-    }
+    },
   },
 
   setup() {
     const getImageUrl = (name) => {
-      return window.location.origin + '/storage/images/avatar/' + name;
+      if (name === null) return '/images/missing-avatar.svg'
+      else return window.location.origin + '/storage/images/avatar/' + name;
     }
 
     return { getImageUrl }
@@ -333,6 +348,10 @@ export default {
       } else {
         this.scrolledPastThreshold = false;
       }
+    },
+
+    switchNofif() {
+      this.showNotifications = !this.showNotifications;
     }
 
   }
@@ -341,6 +360,18 @@ export default {
 
 
 <style scoped>
+
+.nav {
+  position: relative
+}
+
+.notif{
+    position: absolute;
+    bottom: -470px;
+    right: 22px;
+    z-index: 20;
+}
+
 .scrolled {
   background: #fff !important;
 }

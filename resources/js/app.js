@@ -16,15 +16,33 @@ import Paginate from 'vuejs-paginate'
 import '~/plugins'
 import '~/components'
 
-// import Echo from 'laravel-echo'
-
 // window.Pusher = require('pusher-js')
+
+// Pusher.logToConsole = true;
+
+// var pusher = new Pusher('c3de3c9c5a7c194e8405', {
+//   cluster: 'eu'
+// });
+
+// var channel = pusher.subscribe('my-channel');
+// channel.bind('my-event', function(data) {
+//   app.messages.push(JSON.stringify(data));
+// });
+
+
+
+import Echo from 'laravel-echo'
+
+window.Pusher = require('pusher-js')
 
 // window.Echo = new Echo({
 //   broadcaster: 'pusher',
 //   key: process.env.MIX_PUSHER_APP_KEY,
 //   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//   encrypted: false
+//   encrypted: false,
+//   forceTLS: false,
+//   wsHost: window.location.hostname,
+//   wsPort: 6001
 // })
 
 // LogRocket.init('i0tmx9/phive')
