@@ -135,6 +135,8 @@ Route::post('generatePDF', 'PDFController@generatePDF');
 Route::post('refuseHeaderRequest', 'ManagerController@refuseRequest');
 Route::post('acceptHeaderRequest', 'ManagerController@acceptRequest');
 Route::post('getInternshipIterns', 'ManagerController@getInternshipIterns');
+Route::post('try', 'PDFController@try');
+
 
 
 

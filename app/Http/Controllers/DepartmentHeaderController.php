@@ -37,7 +37,6 @@ public function acceptRequest(Request $request){
     ])->first();
     $internship = $intern->internship;
     $manager = $internship->manager;
-
     if($manager->validaion == "0"){
         $password = Str::random(8);
         $hashed_password =  bcrypt($password);

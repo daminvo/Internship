@@ -86,7 +86,7 @@ class StudentController extends Controller
     }
 
     public function applyOffer(Request $request) {
-        intern::insert(['student_id' => $request->studentId,'internship_id' => $request->internshipId, 'motivation' => $request->motivation, 'start_date' => $request->startDate, 'end_date' => $request->endDate]);
+        intern::insert(['student_id' => $request->studentId ,'motivation' => $request->motivation,'internship_id' => $request->internshipId,'start_date' => $request->startDate, 'end_date' => $request->endDate, 'header_validation' => 1]);
         return response()->json([
             'msg' => 'information is inserted successfuly',
         ]);

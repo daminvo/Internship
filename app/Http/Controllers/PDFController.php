@@ -10,7 +10,7 @@ use App\Student;
 use App\departmentHeader;
 use App\User;
 use App\company;
-use App\InternshipManager;
+use App\internshipManager;
 class PDFController extends Controller
 {
     /**
@@ -23,21 +23,24 @@ class PDFController extends Controller
         $intern = intern::find($request->id);
         $data = [
             'title' => 'Welcome to ',
-            'firstname' =>  $intern->internsip->manager->user->firstname,
-            'familyname' =>  $intern->internsip->manager->user->familyname,
-            'fstname' =>  $intern->student->user->firstname,
-            'fmname' =>  $intern->student->user->familyname,
+            'firstname' =>  $intern->internship->manager->user->first_name,
+            'familyname' =>  $intern->internship->manager->user->family_name,
+            'fststudent' =>  $intern->student->user->first_name,
+            'fmstudent' =>  $intern->student->user->family_name,
             'theme' =>  $intern->internship->title,
             'birthday'=>  $intern->student->birthday,
-            'birthday_place'=>  $intern->student->birth_place,
+            'birth_place'=>  $intern->student->birth_place,
             'speciality'=>  $intern->student->speciality,
-            'company_name'=>  $intern->internsip->manager->company->name,
-            'company_address'=>  $intern->internsip->manager->company->address,
+            'company_name'=>  $intern->internship->manager->company->name,
+            'start_date'=>  $intern->start_date,
+            'end_date'=>  $intern->end_date,
+            'company_adresse'=>  $intern->internship->manager->company->address,
             'date' => date('m/d/Y'),
         ];
 
         $pdf = PDF::loadView('myPDF', $data);
 
         return $pdf->download('laraveltuts.pdf');
+
     }
 }
