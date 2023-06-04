@@ -40,7 +40,7 @@ class Student extends Model
 
     public function intern()
     {
-        return $this->hasOne("App\intern");
+        return $this->hasMany("App\intern");
     }
 
     public function user()

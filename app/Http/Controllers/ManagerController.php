@@ -99,6 +99,12 @@ class ManagerController extends Controller
             return $interns;
         }
 
+        public function managerOffers(Request $request){
+            $internship =find($request->manager_id){
+            $internshipOffer =  internshipOffer::where("internship_id",$internship->internship_id)
+            };
+            return $internshipOffer;
+        }
 
 
 }

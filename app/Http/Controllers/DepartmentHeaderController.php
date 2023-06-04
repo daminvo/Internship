@@ -24,19 +24,17 @@ class DepartmentHeaderController extends Controller
     public function showRequests(Request $request)
     {
         $department = departmentHeader::find($request->headerId);
-
-        $interns = intern::where('header_validation', null)
-            ->whereHas('student', function ($query) use ($department) {
-                $query->where('department_id', $department->department_id);
+        $student = student:: where('department_id', $department->department_id)
+            ->whereHas('intern', function ($query) {
+                $query->where('header_validation', null);
             })
             ->with([
-                "student.user",
-                "student.intern.internship.manager.company",
-                "student.department.faculty.university"
+                "user",
+                "intern.internship.manager.company",
+                "department.faculty.university"
             ])
             ->get();
-
-        return $interns;
+        return $student;
     }
 
 
