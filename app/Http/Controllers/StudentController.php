@@ -114,6 +114,7 @@ class StudentController extends Controller
 
         $user = $request->user();
 
+<<<<<<< HEAD
         if ($user->role === 'student') {
             $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user", "is_favorited" =>
                 function ($q) use ($user) {
@@ -124,6 +125,13 @@ class StudentController extends Controller
         }
 
         $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user"])
+=======
+        $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user", "is_favorited" =>
+            function ($q) use ($user) {
+                $q->where('favorites.student_id', $user->student()->pluck('id'));
+            },
+        "InternshipOffer.internship.intern.student.user"])
+>>>>>>> f819b5a35a6ea7751f6edf1a6f3a3b8f1359ffa8
         ->get();
 
 
