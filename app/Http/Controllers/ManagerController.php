@@ -38,7 +38,7 @@ class ManagerController extends Controller
 
     public function getInternshipIterns(Request $request) {
         $internship = Internship::find($request->id);
-        $interns = $internship->intern()
+        $interns = $internship->intern
             ->where([
                 ['manager_validation', null],
                 ['header_validation', 1],
