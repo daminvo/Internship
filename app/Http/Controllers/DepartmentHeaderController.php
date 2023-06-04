@@ -43,7 +43,6 @@ class DepartmentHeaderController extends Controller
 public function acceptRequest(Request $request){
     $intern = intern::where([
         ["id", $request->internId],
-        ['internship_id', $request->internshipId]
     ])->first();
     $internship = $intern->internship;
     $manager = $internship->manager;
@@ -61,8 +60,7 @@ public function acceptRequest(Request $request){
 }
 public function refuseRequest(Request $request ){
     $intern = intern::where([
-        ["id", $request->internId],
-        ['internship_id', $request->internshipId]
+        ["id", $request->internId]
     ])->first();
     $intern->update(["header_validation" => 0]);
     return response()->json([

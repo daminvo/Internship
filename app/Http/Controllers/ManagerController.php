@@ -17,7 +17,6 @@ class ManagerController extends Controller
     public function acceptRequest(Request $request ){
         $intern = intern::where([
             ["id", $request->internId],
-            ['internship_id', $request->internshipId]
         ])->first();
         $intern->update(["manager_validation" => 1]);
         return response()->json([
@@ -28,8 +27,7 @@ class ManagerController extends Controller
 
     public function refuseRequest(Request $request ){
         $intern = intern::where([
-            ["id", $request->internId],
-            ['internship_id', $request->internshipId]
+            ["id", $request->internId]
         ])->first();
         $intern->update(["manager_validation" => 0]);
         return response()->json([
