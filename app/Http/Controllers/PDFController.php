@@ -18,9 +18,9 @@ class PDFController extends Controller
      *
      * @return \Illuminate\Http\Response
     */
-    public function generatePDF(Request $request)
+    public function generatePDF( $id)
     {
-        $intern = intern::find($request->id);
+        $intern = intern::find($id);
         $data = [
             'title' => 'Welcome to ',
             'firstname' =>  $intern->internship->manager->user->first_name,
@@ -38,9 +38,13 @@ class PDFController extends Controller
             'date' => date('m/d/Y'),
         ];
 
-        $pdf = PDF::loadView('myPDF', $data);
+        return response()->json([
+            'id' => $id,
+        ]);
 
-        return $pdf->download('laraveltuts.pdf');
+        // $pdf = PDF::loadView('myPDF', $data);
+
+        // return $pdf->download('laraveltuts.pdf');
 
     }
 }

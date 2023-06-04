@@ -247,13 +247,14 @@
 import ProjectCard from '~/components/ProjectCard'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
+// import FileComponent from './components/FileComponent';
 
 
 export default {
   name: 'UserProfileProjectsPage',
   scrollToTop: false,
 
-  components: { ProjectCard },
+  components: { ProjectCard},
 
   metaInfo () { return { title: 'Profile Internships' } },
 
@@ -298,11 +299,39 @@ export default {
   methods: {
     showPDF(internId){
       console.log(internId);
-      axios.post('/api/generatePDF', {id: internId})
+      // axios.post('/api/generatePDF', {id: internId}, {
+      //   headers:{
+      //     responseType: 'blob', // had to add this one here
+      //   }
+      //   })
+      axios({
+                    url: '/api/generatePDF/' +  internId, // File URL Goes Here
+                    method: 'GET',
+                    // responseType: 'blob',
+                })
+        // .then((res) => {
+        //              var FILE = window.URL.createObjectURL(new Blob([res.data]));
+
+        //              var docUrl = document.createElement('x');
+        //              docUrl.href = FILE;
+        //              docUrl.setAttribute('download', 'file.pdf');
+        //              document.body.appendChild(docUrl);
+        //              docUrl.click();
+        //         })
+        .then((response) => {
+          // window.open(URL.createObjectURL(response.data));
+          console.log(response.data);
+})
+
+        // .then(response => {
+        //    const content = response.headers['content-type'];
+        //    download(response.data, file.file_name, content)
+        // })
+      // .then(res => console.log(res))
       .catch(error => {
-          console.log('Error:', error.response)
-          console.log('Status:', error.response.status)
           console.log('Data:', error.response.data)
+          // window.open(URL.createObjectURL(error.response.data));
+
         })
     },
 
