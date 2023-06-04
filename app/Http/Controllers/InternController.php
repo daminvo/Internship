@@ -8,6 +8,7 @@ use App\internship;
 use App\Student;
 use App\InternshipOffer;
 use App\internshipManager;
+use APP\presence;
 use Carbon\Carbon;
 
 
@@ -51,7 +52,7 @@ class InternController extends Controller
         $intern = Intern::where([['student_id', $request->studentId],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '>', $today]])
         ->with(['internship' => function ($query) use ($today){
            $query->select('id','title', 'description', 'manager_id', 'duration',);
-       },"internship.manager.user"
+       },"internship.manager.user","presence"
        ,"internship.manager.company" => function ($query) {
            $query->select('id','name');
        }])
@@ -63,6 +64,7 @@ class InternController extends Controller
            if($internship->type == "public"){
             $internship->id = $internship->internshipOffer->id;
            }
+
        });
         }catch (Throwable $e) {
             $errorMessage = $e->getMessage();
@@ -130,7 +132,7 @@ class InternController extends Controller
         $intern = intern::find($request->id);
         $studentId = $intern->student_id;
 
-        if ($request->type == "private") {
+        if ($request->type === "private") {
             $intern->delete();
             $intern->internship->delete();
         } else {
@@ -185,5 +187,21 @@ class InternController extends Controller
             'finished'=> $finished
         ]);
 
+
+    }
+
+    public function deleteSameRequests($type,$id){
+        $intern = intern::find($id);
+        $studentId = $intern->student_id;
+        if($intern->start_date >= "start_date" && $intern->end_date  = "end_date"  )
+        if ($request->type == "private") {
+            $intern->delete();
+            $intern->internship->delete();
+        } else {
+            $intern->delete();
+        }
+        return response()->json([
+            'msg' => 'request deleted successfully',
+        ]);
     }
 }

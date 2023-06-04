@@ -8,7 +8,7 @@ class presence extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        'entry_time','exit_time','observation','date','intern_id'
+        'entry_time','exit_time','observation','date','intern_id','state'
     ];
     public function intern()
     {
