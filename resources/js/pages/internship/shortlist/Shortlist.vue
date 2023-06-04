@@ -9,7 +9,7 @@
 
     <div v-if="$matchMedia.xl" class="separator-short mb-1" />
 
-    <paginate
+    <!-- <paginate
       v-if="$matchMedia.xl"
       :page-count="pageCount"
       :page-range="7"
@@ -25,7 +25,7 @@
       :next-class="'page-item'"
       :next-link-class="'page-item--link'"
       :active-class="'page-item--active'"
-    />
+    /> -->
 
     <Modal ref="showApplicantDetails" :type="`medium`">
       <template v-slot:header>
@@ -40,39 +40,27 @@
 
         <div class="shortlist-item__container">
           <div class="shortlist-item__left-container mb-1_5">
-            <router-link :to="{ name: '@.info', params: { tagname: applicantDetails.tagname } }">
-              <img class="shortlist-avatar" :src="applicantDetails.avatar" alt="">
+            <router-link :to="{ name: '@.info', params: { tagname: applicantDetails.id } }">
+              <img class="shortlist-avatar" :src="applicantDetails.photo" alt="">
             </router-link>
             <div class="shortlist-item__body justify-center">
               <div class="">
                 <div class="shortlist-item__name">
-                  {{ applicantDetails.full_name }}
-                </div>
-                <div class="shortlist-item__expertise">
-                  {{ applicantDetails.expertise }}
+                  {{ applicantDetails.first_name }} {{ applicantDetails.family_name }}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Tell me about yourself! -->
-        <div class="form-group__container mb-1_5">
-          <h4 class="form-group__input-name form__input-name">
-            Tell me about yourself!
-          </h4>
-          <div class="">
-            <textarea v-model="applicantDetails.self_describe" class="form-group__input-textarea" placeholder="Max. 300 words" rows="5" readonly />
-          </div>
-        </div>
 
         <!-- Why you ? -->
         <div class="form-group__container">
           <h4 class="form-group__input-name form__input-name mb-1">
-            Why are you interested in joining this project?
+            Why are you interested in joining this internship?
           </h4>
           <div class="">
-            <textarea v-model="applicantDetails.apply_reason" class="form-group__input-textarea" placeholder="Max. 300 words" rows="5" readonly />
+            <textarea v-model="applicantDetails.motivation" class="form-group__input-textarea" placeholder="Max. 300 words" rows="5" readonly />
           </div>
         </div>
       </template>
@@ -92,6 +80,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import ShortlistItemIndividual from '~/components/ShortlistItemIndividual'
+import axios from 'axios'
 
 export default {
   name: 'ShortlistIndividualPage',
@@ -101,9 +90,8 @@ export default {
   metaInfo () { return { title: 'Shortlist Individual' } },
 
   data: () => ({
-    page: 1,
-    teams: [],
-    project: {},
+    // page: 1,
+    individuals: [],
     applicantDetails: {
       isAccepted: false
     }
@@ -113,24 +101,20 @@ export default {
     ...mapGetters({
       user: 'auth/user',
       snackbar: 'notification/snackbar',
-      data: 'page/shortlistIndividuals'
+      // data: 'page/shortlistIndividuals'
     }),
 
-    pageCount () {
-      return this.data.length / 8
-    },
-
-    individuals () {
-      if (this.$matchMedia.xl) return this.data.slice(((this.page - 1) * 8), this.page * 8)
-      else return this.data
-    }
   },
 
   mounted () {
-
+    this.getIndividuals()
   },
 
   methods: {
+    getIndividuals() {
+      axios.post('')
+    },
+
     async acceptIndividual (e) {
       this.individuals[e.index].isAccepted = e.isAccepted
     },
@@ -145,9 +129,6 @@ export default {
       this.$refs.showApplicantDetails.openModal()
     },
 
-    changePage (e) {
-      this.page = e
-    }
   }
 
 }

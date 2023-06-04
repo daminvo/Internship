@@ -52,7 +52,7 @@
             <div class="project-card__extra-info--container">
               <div class="project-card__extra-info">
                 <div>&bull; Posted {{ getHumanDate(offer.internship.demand_date) }}</div>
-                <div>&bull; Max. {{ offer.nmbr_postions }} Person</div>
+                <div>&bull; Max. {{ offer.nmbr_positions }} Person</div>
               </div>
               <button v-if="$matchMedia.xl && (!user || user.role === 'student' )" class="btn--clear" @click="showWishlist">
                 <span class="iconify project-card__wish" data-icon="mdi:dots-horizontal" width="22" />
@@ -101,10 +101,10 @@ export default {
 
     wishText () {
       if (this.offer.is_favorited && this.offer.is_favorited.status) {
-        return 'Remove from Wishlist'
+        return 'Remove from Favorites'
       }
 
-      return 'Add to Wishlist'
+      return 'Add to Favorites'
     }
   },
 

@@ -11,7 +11,7 @@
         Offer Thumbnail
       </h4>
       <div class="form-avatar-group__container">
-        <img class="edit-profile--img" :src="getImageUrl(form.thumbnail)" alt="">
+        <img class="edit-profile--img" :src="getImageUrl(form.photo)" alt="">
         <div class="form__file-container">
           <div>
             <label for="form2.avatar" class="btn btn--blue">Upload Photo</label>
@@ -45,7 +45,7 @@
             Max students
           </h4>
           <div class="select">
-            <select v-model="form.max_person">
+            <select v-model="form.nmbrPositions">
               <option value="1">
                 1 Student
               </option>
@@ -83,7 +83,7 @@
             Duration
           </h4>
           <div class="select">
-            <select v-model="form.max_person">
+            <select v-model="form.duration">
               <option value="1">
                 1 Month
               </option>
@@ -141,8 +141,8 @@
 
       <div class="btn--group">
         <!-- Submit Button -->
-        <div class="btn btn--large btn--blue ml-auto" @click="postProject('Publish')">
-          Post Project
+        <div class="btn btn--large btn--blue ml-auto" @click="postInternship()">
+          Post Internship
         </div>
       </div>
     </form>
@@ -164,26 +164,11 @@ export default {
   data: () => ({
     thumbnail: '',
     form: new Form({
-      title: '',
-      location: 'Malang, Indonesia',
-      level_applicant: 'Easy',
-      max_person: 4,
-      ui_ux_designer: false,
-      front_end_engineer: false,
-      back_end_engineer: false,
-      data_expert: false,
-      applicant_type: 'Individual & Team',
+      photo: null,
+      nmbrPositions: 1,
+      duration: 1,
       description: '',
-      interest: '',
-      min_points: '',
-      skills: [],
-      requirements: [],
-      salary: false,
-      currency: 'IDR',
-      salary_amount: '',
-      payment_type: 'person',
-      certificate: false,
-      thumbnail: null
+      managerId: '',
     }),
 
     form2: new Form({
@@ -198,6 +183,7 @@ export default {
 
   computed: {
     ...mapGetters({
+      user: 'auth/user',
       snackbar: 'notification/snackbar'
     })
   },
@@ -231,18 +217,18 @@ export default {
           }]
         })
           .then(({ data }) => {
-            this.form.thumbnail = data.thumbnail
+            this.form.photo = data.thumbnail
             this.snackbar.open(data.message)
           })
       }
     },
 
     async deleteThumbnail () {
-      this.form2.file = this.form.thumbnail
+      this.form2.file = this.form.photo
 
       this.form2.submit('delete', '/api/project/thumbnail')
         .then(({ data }) => {
-          this.form.thumbnail = null
+          this.form.photo = null
 
           this.snackbar.open(data.message)
         })
@@ -253,65 +239,22 @@ export default {
         })
     },
 
-    showAddSkill () {
-      this.$refs.addSkillModal.openModal()
-      this.skillLength = this.form.skills.length
-    },
+    async postInternship() {
+      this.form.managerId = this.user.manager.id
 
-    showAddRequirement () {
-      this.$refs.addRequirementModal.openModal()
-    },
-
-    addSkill () {
-      let oldSkills = this.form.skills.map(skill => skill.name)
-      oldSkills.push(...this.anotherSkills.split(',').map(skill => skill.trim()).filter(skill => skill !== ''))
-
-      let skillSet = new Set(oldSkills)
-
-      if (skillSet.size > 20) {
-        this.snackbar.open('Can\'t add more than 20 skills')
-        return
-      }
-
-      let anotherSkills = [...skillSet].map(skill => {
-        return { name: skill }
-      })
-
-      this.form.skills = anotherSkills
-      this.$refs.addSkillModal.closeModal()
-      this.anotherSkills = ''
-    },
-
-    addRequirement () {
-      let requirementSet = new Set(this.anotherRequirements.split('.'))
-
-      let anotherRequirements = [...requirementSet].map(requirement => {
-        return { requirement: requirement }
-      }).filter(e => e.requirement !== '')
-
-      this.form.requirements.push(...anotherRequirements)
-      this.$refs.addRequirementModal.closeModal()
-      this.anotherRequirements = ''
-    },
-
-    async postProject (status) {
-      this.form.status = status
-
-      this.form.submit('post', '/api/project/post')
+      this.form.submit('post', '/api/createOffer')
         .then(({ data }) => {
-          this.snackbar.open(data.message)
-          this.$router.push({ name: 'projectbox' })
+          this.snackbar.open(data.msg)
+          this.$router.push({ name: 'manager.projectbox' })
+        })
+        . catch ((error) => {
+          console.log('Error:', error.response)
+          console.log('Status:', error.response.status)
+          console.log('Data:', error.response.data)
         })
     },
 
-    deleteSkill (e) {
-      let abc = this.form.skills.filter(a => a.name !== e)
-      this.form.skills = abc
-    },
 
-    deleteRequirement (index) {
-      this.form.requirements.splice(index, 1)
-    }
   }
 }
 </script>

@@ -10,9 +10,6 @@ export const state = {
   },
   offer: {
     // applicant_type: null,
-    user: {
-      tagname: 0
-    }
   }
 }
 

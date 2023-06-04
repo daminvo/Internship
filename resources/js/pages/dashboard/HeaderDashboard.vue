@@ -95,6 +95,82 @@
             </div>
         </div>
       </div>
+
+      <h2 class="table-title-h2">INTERNS</h2>
+
+      <div class="internships-list">
+        <div class="the-table">
+            <div class="table-container">
+                <table>
+                  <tr class="table-header">
+                      <th
+                        style="width: 40%; cursor:pointer;"
+                      >
+                        Student
+                      </th>
+                      <th
+                        style="width: 40%; cursor:pointer;"
+                      >
+                        Status
+                      </th>
+                      <th
+                        style="width: 40%; cursor:pointer;"
+                      >
+                        Internship
+                      </th>
+                      <th
+                        style="width: 40%; cursor:pointer;"
+                      >
+                        Company
+                      </th>
+                      <th
+                        style="width: 40%; cursor:pointer;"
+                      >
+                        <!-- Visit -->
+                      </th>
+                  </tr>
+                  <tr
+                      v-for="(intern, index) in internsList"
+                      :key="index"
+                      class="internship"
+                  >
+                      <td>
+                        <router-link :to="`/@/${intern.student.user.id}`" class="user-link" >
+                          <img :src="getImageUrl(intern.student.user.photo)" class="data-profile-img">
+                          <p>{{ intern.student.user.first_name }} {{ intern.student.user.family_name }}</p>
+                        </router-link>
+                      </td>
+
+                      <td>
+                        <div v-if="intern.student.available" class="available">
+                          <p>Available</p>
+                        </div>
+
+                        <div v-else class="not-available">
+                          <p> Not Available</p>
+                        </div>
+                      </td>
+
+                      <td>
+                          <p>{{ intern.internship.title }}</p>
+                      </td>
+
+                      <td>
+                        <p>{{ intern.internship.manager.company.name }}</p>
+                      </td>
+
+                      <td>
+                        <router-link :to="`/intern=${internship.intern.id}`">
+                          <button class="button-4" role="button" >Show</button>
+                        </router-link>
+                      </td>
+
+                  </tr>
+                </table>
+            </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -132,6 +208,7 @@ export default {
       internships: [],
       students: 0,
       interns: 0,
+      internsList: []
     }
   },
 
@@ -152,6 +229,7 @@ export default {
 
   mounted() {
     this.getRequests()
+    this.getInternsList()
   },
 
 
@@ -218,19 +296,26 @@ export default {
       axios
         .post('/api/getAllStudentsNumber', {headerId: this.user.header.id})
         .then(res => {
-          console.log(typeof(res.data))
           this.students = res.data
         })
 
       axios
         .post('/api/getOngoingInterns', {headerId: this.user.header.id})
         .then(res => {
-          console.log(typeof(res.data))
           if (typeof(res.data) === 'number') {
             this.interns = res.data
           }
         })
 
+    },
+
+    getInternsList() {
+      axios
+        .post('/api/getOngoingInterns', {headerId: this.user.header.id})
+        .then(res => {
+          console.log(res)
+          this.internsList = res.data
+        })
     },
 
     showDetails(id) {

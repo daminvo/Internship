@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="project-box__top-container">
-      <router-link :to="{ name: 'project.details', params: { id: data.project.project_url } }">
-        <img class="project-box__item--img" :src="data.project.thumbnail_url" alt="">
+      <router-link :to="{ name: 'offer.details', params: { id: data.internship.internship_offer.id } }">
+        <img class="project-box__item--img" :src="data.internship.photo" alt="">
       </router-link>
       <div class="project-box__item--container">
         <div>
-          <span class="project-box__item--title">{{ data.project.title }}</span>
+          <span class="project-box__item--title">{{ data.internship.title }}</span>
         </div>
 
         <div class="project-box__item--status" :class="color">
@@ -16,7 +16,7 @@
 
         <div v-if="$matchMedia.xl">
           <p class="project-box__item--p">
-            You have been shortlisted, the system will automatically accept you once the lecturer agree to start the project.
+            You will start this internship at {{ data.start_date }}
           </p>
         </div>
         <div v-else class="project-box__details--container" @click="showDetails">
@@ -104,6 +104,7 @@ export default {
   },
 
   mounted () {
+    console.log(this.data);
     if (this.data.status === 'Confirmation') {
       this.candidates.waitings = this.data.project.individual_applicants.filter(e => e.status === 'Waiting')
       this.candidates.bailouts = this.data.project.individual_applicants.filter(e => e.status === 'Bail Out')

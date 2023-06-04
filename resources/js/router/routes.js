@@ -30,6 +30,7 @@ export default [
 
   { path: '/inbox', name: 'inbox', meta: { title: 'Inbox' }, component: page('Inbox.vue') },
   { path: '/internshipBox', name: 'internshipBox', meta: { title: 'Internship Box' }, component: page('InternshipBox.vue') },
+  { path: '/ManagerInternshipBox', name: 'manager.internshipBox', meta: { title: 'Internships Box' }, component: page('InternshipsBoxManager.vue') },
 
   {
     path: '/profile/edit',
@@ -57,22 +58,16 @@ export default [
 
   { path: '/explore', name: 'explore', meta: { title: 'Explore' }, component: page('Explore.vue') },
 
-  // { path: '/dashboard', name: 'dashboard', component: page('Dashboard.vue') },
 
   { path: '/offer/post', name: 'offer.post', meta: { title: 'Post Offer' }, component: page('internship/OfferPost.vue') },
-  { path: '/project/:id/edit-post', name: 'project.editpost', meta: { title: 'Edit Project' }, component: page('internship/ProjectEdit.vue') },
+  { path: '/offer/:id/edit-post', name: 'project.editpost', meta: { title: 'Edit Project' }, component: page('internship/ProjectEdit.vue') },
   { path: '/offer/:id', name: 'offer.details', meta: { title: 'Offer' }, component: page('internship/OfferDetails.vue') },
-  { path: '/project/:id/review', name: 'project.review', meta: { title: 'Review Project' }, component: page('internship/ProjectReview.vue') },
-  // { path: '/project/:id/dashboard', name: 'project.dashboard', meta: { title: 'Project' }, component: page('internship/dashboard') },
+  // { path: '/project/:id/review', name: 'project.review', meta: { title: 'Review Project' }, component: page('internship/ProjectReview.vue') },
 
   {
-    path: '/project/:id/shorlisted',
-    component: page('project/shortlist'),
-    children: [
-      { path: '', redirect: { name: 'shortlist.individual' } },
-      { path: '/project/:id/shorlisted/individual', name: 'shortlist.individual', meta: { title: 'Apply Project' }, component: page('internship/shortlist/ShortlistIndividual.vue') },
-      { path: '/project/:id/shorlisted/team', name: 'shortlist.team', meta: { title: 'Apply Project' }, component: page('internship/shortlist/ShortlistTeam.vue') }
-    ]
+    path: '/offer/:id/shorlisted',
+    component: page('internship/shortlist'),
+    name: 'shortlist'
   },
 
   {

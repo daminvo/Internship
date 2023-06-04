@@ -1,7 +1,7 @@
 <template>
   <div class="profile--container">
     <div>
-      <h2 class="project-details--h2">Pending List</h2>
+      <h2 class="table-title-h2">Pending List</h2>
 
       <div class="internships-list" v-if="data.pending">
         <div class="the-table">
@@ -83,7 +83,7 @@
         no pending internships
       </div>
 
-      <h2 class="project-details--h2">Accepted List</h2>
+      <h2 class="table-title-h2">Accepted List</h2>
 
       <div class="internships-list" v-if="data.accepted">
         <div class="the-table">
@@ -421,4 +421,15 @@ tr:nth-child(even) {
     border-radius: 5px;
 }
 
+.table-title-h2 {
+  font-size: 2.8rem;
+  font-weight: 300;
+  text-align: center;
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--dark-green);
+  align-items: center;
+}
 </style>

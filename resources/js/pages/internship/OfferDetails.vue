@@ -1,6 +1,6 @@
 <template>
   <div>
-    <InternshipDetailsAvailable  v-if="offer.internship.state === 'pending'"/>
+    <InternshipDetailsAvailable  v-if="offer.internship.state === 'available'"/>
     <!-- <InternshipDetailsOngoing v-else-if="offer.internship.state === 'Ongoing'" /> -->
     <!-- <InternshipDetailsFinished v-else-if="offer.internship.state === 'Finished'" /> -->
   </div>
