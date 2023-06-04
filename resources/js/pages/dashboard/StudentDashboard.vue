@@ -79,13 +79,13 @@
         </div>
       </div>
 
-      <div v-else>
+      <div class="apply__top--p" v-else>
         no pending internships
       </div>
 
       <h2 class="table-title-h2">Accepted List</h2>
 
-      <div class="internships-list" v-if="data.accepted">
+      <div class="internships-list" v-if="data.accepted.length != 0 ">
         <div class="the-table">
           <div class="table-container">
             <table>
@@ -158,9 +158,86 @@
         </div>
       </div>
 
-      <div v-else>
-        no pending internships
+      <div class="apply__top--p" v-else>
+        no accepted internships
       </div>
+
+      <h2 class="table-title-h2">Finished List</h2>
+      <div class="internships-list" v-if="data.finished">
+        <div class="the-table">
+          <div class="table-container">
+            <table>
+              <tr class="table-header">
+                  <th
+                    style="width: 40%; cursor:pointer;"
+                  >
+                    Title
+                  </th>
+                  <th
+                    style="width: 40%; cursor:pointer;"
+                  >
+                    Company
+                  </th>
+                  <th
+                    style="width: 40%; cursor:pointer;"
+                  >
+                    Duration
+                  </th>
+                  <th
+                    style="width: 40%; cursor:pointer;"
+                  >
+                    Start Date
+                  </th>
+                  <th
+                    style="width: 40%; cursor:pointer;"
+                  >
+                    End Date
+                  </th>
+                  <th
+                    style="width: 40%; cursor:pointer;"
+                  >
+                    Attestation
+                  </th>
+              </tr>
+              <tr
+                  v-for="(internship, index) in data.finished"
+                  :key="index"
+                  class="internship"
+              >
+                  <td>
+                      <p>{{ internship.internship.title }}</p>
+                  </td>
+
+                  <td>
+                      <p>{{ internship.internship.manager.company.name }}</p>
+                  </td>
+
+                  <td>
+                      <p>{{ internship.internship.duration }} months</p>
+                  </td>
+
+                  <td>
+                    <p>{{ internship.start_date }}</p>
+                  </td>
+
+                  <td>
+                    <p>{{ internship.end_date }}</p>
+                  </td>
+
+                  <td>
+                    <button class="button-4" role="button" @click="showPDF(internship.id)">Attestation PDF</button>
+                  </td>
+
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div v-else>
+        no finished internships
+      </div>
+
 
     </div>
   </div>
@@ -209,9 +286,6 @@ export default {
 
   created() {
     this.$store.dispatch('auth/getInternships', {studentId: this.user.student.id})
-    setTimeout(() => {
-      console.log(this.data.pending);
-    }, 1000);
   },
 
   // watch: {
@@ -222,8 +296,17 @@ export default {
   // },
 
   methods: {
+    showPDF(internId){
+      console.log(internId);
+      axios.post('/api/generatePDF', {id: internId})
+      .catch(error => {
+          console.log('Error:', error.response)
+          console.log('Status:', error.response.status)
+          console.log('Data:', error.response.data)
+        })
+    },
+
     deleteIntern (id, type){
-      console.log(type);
       // axios
       //   .post('/api/deleteRequest', {id: id, type: type})
       //   .then( res => console.log(res.data))
@@ -296,6 +379,64 @@ export default {
 .iconify{
   cursor: pointer
 }
+
+.button-4 {
+  appearance: none;
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292E;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.button-4:hover {
+  background-color: #F3F4F6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+
+.button-4:disabled {
+  background-color: #FAFBFC;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959DA5;
+  cursor: default;
+}
+
+.button-4:active {
+  background-color: #EDEFF2;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+.button-4:focus {
+  outline: 1px transparent;
+}
+
+.button-4:before {
+  display: none;
+}
+
+.button-4:-webkit-details-marker {
+  display: none;
+}
+
 
 .internships-list{
   padding: 0 2vw;
