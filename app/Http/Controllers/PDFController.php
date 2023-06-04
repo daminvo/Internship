@@ -38,13 +38,9 @@ class PDFController extends Controller
             'date' => date('m/d/Y'),
         ];
 
-        return response()->json([
-            'id' => $id,
-        ]);
+        $pdf = PDF::loadView('myPDF', $data);
 
-        // $pdf = PDF::loadView('myPDF', $data);
-
-        // return $pdf->download('laraveltuts.pdf');
+        return $pdf->download('laraveltuts.pdf');
 
     }
 }

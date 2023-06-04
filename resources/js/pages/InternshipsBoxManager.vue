@@ -30,7 +30,7 @@
         <div class="inbox__right--container">
 
           <div class="inbox--container">
-            <!-- <ProjectBoxItem v-for="project in projectbox" :key="`project-box-${project.id}`" :data="project" :role="user.role" /> -->
+            <ProjectBoxItem v-for="project in projectbox" :key="`project-box-${project.id}`" :data="project" :role="user.role" />
             <p v-if="isNoProject" class="info__p">
               {{ isNoProject }}
             </p>
@@ -191,11 +191,12 @@ export default {
 
   methods: {
     async getPrivateInternships () {
-      // axios
-      //   .post('/api/showManagerRequests')
-      //   .then(response => {
-      //     this.projectbox = response.data
-      //   })
+      axios
+        .post('/api/showManagerRequests')
+        .then(response => {
+          this.projectbox = response.data
+          console.log(response.data);
+        })
 
       axios
         .post('/api/showManagerRequests', {id: this.user.manager.id})

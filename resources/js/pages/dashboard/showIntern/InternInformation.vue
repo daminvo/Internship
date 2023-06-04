@@ -136,10 +136,10 @@
             </h6>
             <input class="form-group__input-text" type="text" placeholder="Refuse motif" v-model="motif">
           </div>
-          <button class="btn btn--decline mt-3" :disabled="!motif">Refuse</button>
+          <button class="btn btn--decline mt-3" :disabled="!motif" @click="refuse()">Refuse</button>
         </div>
         <div v-else>
-          <button class="btn btn--decline mt-3" :disabled="!motif">Refuse</button>
+          <button class="btn btn--decline mt-3" :disabled="!motif" @click="refuse()">Refuse</button>
         </div>
 
         <button class="btn btn--blue mt-3" @click="submit()" >
@@ -206,7 +206,7 @@ export default {
             console.log(data);
           })
           .then(e => {
-            // this.$router.push({ path: '/' })
+            this.$router.push({ path: '/dashboard' })
           })
           .catch(error => {
             console.log('Error:', error)

@@ -96,7 +96,7 @@
         </div>
       </div>
 
-      <h2 class="table-title-h2">INTERNS</h2>
+      <!-- <h2 class="table-title-h2">INTERNS</h2>
 
       <div class="internships-list">
         <div class="the-table">
@@ -126,7 +126,6 @@
                       <th
                         style="width: 40%; cursor:pointer;"
                       >
-                        <!-- Visit -->
                       </th>
                   </tr>
                   <tr
@@ -135,9 +134,9 @@
                       class="internship"
                   >
                       <td>
-                        <router-link :to="`/@/${intern.student.user.id}`" class="user-link" >
-                          <img :src="getImageUrl(intern.student.user.photo)" class="data-profile-img">
-                          <p>{{ intern.student.user.first_name }} {{ intern.student.user.family_name }}</p>
+                        <router-link :to="`/@/${internship.student.user.id}`" class="user-link" >
+                          <img :src="getImageUrl(internship.student.user.photo)" class="data-profile-img">
+                          <p>{{ internship.student.user.first_name }} {{ internship.student.user.family_name }}</p>
                         </router-link>
                       </td>
 
@@ -169,7 +168,7 @@
                 </table>
             </div>
         </div>
-      </div>
+      </div> -->
 
     </div>
   </div>
@@ -287,6 +286,7 @@ export default {
         .post('/api/showRequests', {headerId: this.user.header.id})
         .then(res => {
           this.internships = res.data
+          console.log(res.data);
         })
         .catch( error => {
           console.log(error.response);

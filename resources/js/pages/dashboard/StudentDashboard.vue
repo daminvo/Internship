@@ -247,8 +247,6 @@
 import ProjectCard from '~/components/ProjectCard'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
-// import FileComponent from './components/FileComponent';
-
 
 export default {
   name: 'UserProfileProjectsPage',
@@ -289,49 +287,20 @@ export default {
     this.$store.dispatch('auth/getInternships', {studentId: this.user.student.id})
   },
 
-  // watch: {
-  //   data(newVal) {
-  //     console.log(newVal);
-  //     this.internships = newVal.pending
-  //   }
-  // },
-
   methods: {
     showPDF(internId){
       console.log(internId);
-      // axios.post('/api/generatePDF', {id: internId}, {
-      //   headers:{
-      //     responseType: 'blob', // had to add this one here
-      //   }
-      //   })
       axios({
-                    url: '/api/generatePDF/' +  internId, // File URL Goes Here
-                    method: 'GET',
-                    // responseType: 'blob',
-                })
-        // .then((res) => {
-        //              var FILE = window.URL.createObjectURL(new Blob([res.data]));
-
-        //              var docUrl = document.createElement('x');
-        //              docUrl.href = FILE;
-        //              docUrl.setAttribute('download', 'file.pdf');
-        //              document.body.appendChild(docUrl);
-        //              docUrl.click();
-        //         })
+          url: '/api/generatePDF/' +  internId, // File URL Goes Here
+          method: 'GET',
+          responseType: 'blob',
+        })
         .then((response) => {
-          // window.open(URL.createObjectURL(response.data));
-          console.log(response.data);
-})
+          window.open(URL.createObjectURL(response.data));
+        })
 
-        // .then(response => {
-        //    const content = response.headers['content-type'];
-        //    download(response.data, file.file_name, content)
-        // })
-      // .then(res => console.log(res))
-      .catch(error => {
-          console.log('Data:', error.response.data)
-          // window.open(URL.createObjectURL(error.response.data));
-
+        .catch(error => {
+            console.log('Data:', error.response.data)
         })
     },
 

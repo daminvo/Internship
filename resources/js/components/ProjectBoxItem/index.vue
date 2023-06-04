@@ -54,9 +54,6 @@ export default {
     role: { type: String, default: null }
   },
 
-  mounted() {
-    console.log(this.data.internship.state);
-  },
 }
 </script>
 

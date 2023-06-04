@@ -68,7 +68,7 @@
                         Exit time
                       </th>
                   </tr>
-                  <tr class="internship" v-for="(index, abs) in internshipBox.presence" :key="index" >
+                  <tr class="internship" v-for=" abs in internshipBox.presence" :key="abs.id" >
                     <td>{{ abs.date }}</td>
                     <td>
                       <p :class="abs.state ? 'present' : 'absent'" >Present</p>
@@ -76,75 +76,6 @@
                     <td>{{ abs.entry_time }}</td>
                     <td>{{abs.exit_time }}</td>
                   </tr>
-                  <tr class="internship">
-                    <td>2023-05-22</td>
-                    <td>
-                      <p class="absent" >Absent</p>
-                    </td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr class="internship">
-                    <td>2023-05-23</td>
-                    <td>
-                      <p class="present" >Present</p>
-                    </td>
-                    <td>9:00</td>
-                    <td>12:00</td>
-                  </tr>
-                  <tr class="internship">
-                    <td>2023-05-24</td>
-                    <td>
-                      <p class="present" >Present</p>
-                    </td>
-                    <td>8:30</td>
-                    <td>14:00</td>
-                  </tr>
-                  <tr class="internship">
-                    <td>2023-05-25</td>
-                    <td>
-                      <p class="present" >Present</p>
-                    </td>
-                    <td>8:00</td>
-                    <td>12:00</td>
-                  </tr>
-                  <!-- <tr
-                      v-for="(internship, index) in internships"
-                      :key="index"
-                      class="internship"
-                  >
-                      <td>
-                        <router-link :to="`/@/${internship.user.id}`" class="user-link" >
-                          <img :src="getImageUrl(internship.user.photo)" class="data-profile-img">
-                          <p>{{ internship.user.first_name }} {{ internship.user.family_name }}</p>
-                        </router-link>
-                      </td>
-
-                      <td>
-                        <div v-if="internship.available" class="available">
-                          <p>Available</p>
-                        </div>
-
-                        <div v-else class="not-available">
-                          <p> Not Available</p>
-                        </div>
-                      </td>
-
-                      <td>
-                          <p>{{ internship.intern.internship.title }}</p>
-                      </td>
-
-                      <td>
-                        <p>{{ internship.intern.internship.manager.company.name }}</p>
-                      </td>
-
-                      <td>
-                        <router-link :to="`/intern=${internship.intern.id}`">
-                          <button class="button-4" role="button" >Show</button>
-                        </router-link>
-                      </td>
-
-                  </tr> -->
                 </table>
               </div>
             </div>

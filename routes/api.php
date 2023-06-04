@@ -133,7 +133,7 @@ Route::post('getOngoingInterns', 'DepartmentHeaderController@getOngoingInterns')
 Route::post('getIntern', 'DepartmentHeaderController@getIntern');
 
 // manager fct
-Route::get('generatePDF/intern:id', 'PDFController@generatePDF');
+Route::get('generatePDF/{intern:id}', 'PDFController@generatePDF');
 Route::post('refuseHeaderRequest', 'ManagerController@refuseRequest');
 Route::post('acceptHeaderRequest', 'ManagerController@acceptRequest');
 Route::post('getInternshipIterns', 'ManagerController@getInternshipIterns');
