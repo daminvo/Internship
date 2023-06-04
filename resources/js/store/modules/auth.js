@@ -12,7 +12,6 @@ export const state = {
 // getters
 export const getters = {
   user: state => {
-    console.log('entered');
     return state.user
 
   } ,
@@ -91,8 +90,6 @@ export const actions = {
     try {
       const { data } = await axios.get('/api/user')
 
-      console.log(data);
-
 
       commit(types.FETCH_USER_SUCCESS, {
         user: data.user,
@@ -162,7 +159,6 @@ export const actions = {
     await axios.get(`/api/getAcceptedinternships/${payload.studentId}`)
       .then(({ data }) => accepted = data)
 
-      // console.log(pending);
     commit(types.GET_INTERNSHIPS, { pending, finished, accepted })
   },
 }

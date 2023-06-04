@@ -114,12 +114,18 @@ class StudentController extends Controller
 
         $user = $request->user();
 
-        $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user", "is_favorited" =>
-            function ($q) use ($user) {
-                $q->where('favorites.student_id', $user->student()->pluck('id'));
-            }
-        ])
+        if ($user->role === 'student') {
+            $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user", "is_favorited" =>
+                function ($q) use ($user) {
+                    $q->where('favorites.student_id', $user->student()->pluck('id'));
+                }
+            ])
+            ->get();
+        }
+
+        $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user"])
         ->get();
+
 
         return $InternshipOffer;
     }

@@ -1,18 +1,18 @@
 <template>
   <div>
     <div class="project-box__top-container">
-      <router-link :to="{ name: 'project.details', params: { id: data.project.project_url } }">
-        <img class="project-box__item--img" :src="data.project.thumbnail_url" alt="">
+      <router-link :to="{ name: 'offer.details', params: { id: data.id } }">
+        <img class="project-box__item--img" :src="getImageUrl(data.photo)" alt="">
       </router-link>
       <div class="project-box__item--container">
         <div>
-          <span class="project-box__item--title">{{ data.project.title }}</span>
+          <span class="project-box__item--title">{{ data.internship.title }}</span>
         </div>
 
         <div class="project-box__item--lecture-statuses">
           <div class="project-box__item--status-lecturer">
             <span class="iconify" data-icon="ic:round-access-time" width="12" height="12" />
-            <span v-if="$matchMedia.sm" class="pre">Posted on</span> {{ date }}
+            <span v-if="$matchMedia.sm" class="pre">Posted on </span> {{ date }}
           </div>
           <div class="project-box__item--status-lecturer">
             <span class="project-box__item--lecturer-icon"><b>H</b></span>
@@ -22,26 +22,14 @@
 
         <div v-if="$matchMedia.xl">
           <p class="mb-1_5">
-            {{ data.project.description }}
+            {{ data.internship.description }}
           </p>
           <div class="project-box__item--summaries mb-1_5">
             <div class="summary--item">
               <div class="project-box__item--icon">
-                <span class="iconify project-box__item--icon" data-icon="fa-solid:dollar-sign" />
-              </div>
-              <span class="project-box__item--text">{{ rewards }}</span>
-            </div>
-            <div class="summary--item">
-              <div class="project-box__item--icon">
-                <span class="iconify project-box__item--icon " data-icon="ic:baseline-work" />
-              </div>
-              <span class="project-box__item--text">{{ applicantsCount }} Applicants</span>
-            </div>
-            <div class="summary--item">
-              <div class="project-box__item--icon">
                 <span class="iconify project-box__item--icon" data-icon="ri:team-fill" />
               </div>
-              <span class="project-box__item--text">Max. {{ data.project.max_person }} Person</span>
+              <span class="project-box__item--text">Max. {{ data.nmbr_positions }} Person</span>
             </div>
           </div>
         </div>
@@ -54,7 +42,7 @@
       </div>
       <div v-if="$matchMedia.xl" class="project-box__bottom-container">
         <div class="project-box__item--button-group">
-          <router-link :to="{ name: 'project.editpost', params: { id: data.project.project_url } }" class="btn btn--blue btn--small" tag="button">
+          <router-link :to="{ name: 'offer.editpost', params: { id: data.id } }" class="btn btn--blue btn--small" tag="button">
             Edit Project
           </router-link>
           <button class="btn btn--decline btn--small" @click="endApplication">
@@ -62,7 +50,7 @@
           </button>
         </div>
         <div class="nav-separator mt-1 mb-1" />
-        <router-link :to="{ name: 'shortlist.individual', params: { id: data.project.project_url } }" class="btn btn--grey-2 btn--small" tag="button">
+        <router-link :to="{ name: 'shortlist', params: { id: data.id } }" class="btn btn--grey-2 btn--small" tag="button">
           Shortlist Students
         </router-link>
       </div>
@@ -72,25 +60,25 @@
     <div v-if="!$matchMedia.xl">
       <div v-show="show" class="mt-2">
         <p class="mb-1_5">
-          {{ data.project.description }}
+          {{ data.internship.description }}
         </p>
         <div class="project-box__item--summaries mb-1_5">
-          <div class="summary--item">
+          <!-- <div class="summary--item">
             <div class="project-box__item--icon">
               <span class="iconify project-box__item--icon " data-icon="ic:baseline-work" />
             </div>
             <span class="project-box__item--text">{{ applicantsCount }} Applicants</span>
-          </div>
+          </div> -->
           <div class="summary--item">
             <div class="project-box__item--icon">
               <span class="iconify project-box__item--icon" data-icon="ri:team-fill" />
             </div>
-            <span class="project-box__item--text">Max. {{ data.project.max_person }} Person</span>
+            <span class="project-box__item--text">Max. {{ data.nmbr_positions }} Person</span>
           </div>
         </div>
 
         <div class="project-box__item--button-group">
-          <router-link :to="{ name: 'project.editpost', params: { id: data.project.project_url } }" class="btn btn--blue btn--small" tag="button">
+          <router-link :to="{ name: 'offer.editpost', params: { id: data.id} }" class="btn btn--blue btn--small" tag="button">
             Edit Project
           </router-link>
           <button class="btn btn--decline btn--small" @click="endApplication">
@@ -98,7 +86,7 @@
           </button>
         </div>
         <div class="nav-separator mt-1 mb-1" />
-        <router-link :to="{ name: 'shortlist.individual', params: { id: data.project.project_url } }" class="btn btn--grey-2 btn--small" tag="button">
+        <router-link :to="{ name: 'shortlist', params: { id: data.id } }" class="btn btn--grey-2 btn--small" tag="button">
           Shortlist Students
         </router-link>
       </div>
@@ -142,8 +130,17 @@ export default {
     }
   },
 
+  setup() {
+    const getImageUrl = (name) => {
+      return window.location.origin + '/storage/images/thumbnail/' + name;
+    }
+
+    return { getImageUrl }
+  },
+
   mounted () {
-    const date = new Date(this.data.created_at)
+    console.log(this.data);
+    const date = new Date(this.data.internship.demand_date)
     let options = { day: 'numeric', year: 'numeric', month: 'long' }
     this.date = date.toLocaleString('en-US', options)
   },
@@ -154,7 +151,7 @@ export default {
     },
 
     async endApplication () {
-      await axios.post('/api/projectbox/' + this.data.project.project_url + '/endapplication').then(({ data }) => {
+      await axios.post('/api/projectbox/' + this.id + '/endapplication').then(({ data }) => {
         this.data.project.is_open_hiring = false
         this.$store.dispatch('notification/updateProjectBox', {
           projectBoxes: data.project_boxes

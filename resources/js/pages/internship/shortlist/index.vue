@@ -28,45 +28,30 @@
 
     <div v-if="$matchMedia.xl" class="separator-short" />
 
-    <div class="mt-1_5 mb-1_5">
-      <div class="select select--small ml-auto">
-        <select v-model="shortlistType" @change="changeShortlist">
-          <option value="Individual">
-            Individual
-          </option>
-          <option value="Team">
-            Team
-          </option>
-        </select>
-        <span class="focus" />
-      </div>
-    </div>
-
     <div v-if="$matchMedia.xl" class="separator-short mb-1" />
 
     <div>
       <transition name="fade" mode="out-in">
-        <router-view />
+        <Shortlist />
       </transition>
     </div>
 
-    <!-- <router-link :to=" { path: '/' }" class="btn btn--blue btn--large" tag="button"> -->
     <button class="btn btn--blue btn--large btn__small--xl mx-auto" @click="acceptStudents">
       Proceed
     </button>
-    <!-- </router-link> -->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import { mapGetters } from 'vuex'
+import Shortlist from './Shortlist.vue'
 
 export default {
   name: 'ShortlistIndex',
   layout: 'back',
-  middleware: ['auth', 'lecturer'],
-  // components: { ShortlistIndividual },
+  middleware: ['auth', 'manager'],
+  components: { Shortlist },
 
   metaInfo () { return { title: 'Applicant Shortlist' } },
 
@@ -75,7 +60,6 @@ export default {
       isAccepted: false
     },
 
-    shortlistType: 'Individual'
   }),
 
   computed: {
@@ -91,8 +75,6 @@ export default {
   mounted () {
     this.getShortlist()
 
-    // if (this.$route)
-    if (this.$route.name === 'shortlist.team') this.shortlistType = 'Team'
   },
 
   methods: {
@@ -126,11 +108,6 @@ export default {
           this.$router.push({ name: 'projectbox' })
         })
     },
-
-    changeShortlist () {
-      if (this.shortlistType === 'Individual') this.$router.push({ name: 'shortlist.individual' })
-      else if (this.shortlistType === 'Team') this.$router.push({ name: 'shortlist.team' })
-    }
   }
 
 }

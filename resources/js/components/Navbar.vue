@@ -229,7 +229,7 @@ export default {
         else if (this.user.role === 'manager') {
           return [
             { route: { name: 'explore' }, text: 'Explore', icon: 'eva:globe-2-fill' },
-            { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
+            { route: { name: 'manager.internshipBox' }, text: 'Internships Box', icon: 'simple-icons:polymerproject' }
           ]
         }
         else {
@@ -252,8 +252,6 @@ export default {
         if (this.user.role === 'student') {
           return [
             { route: { name: 'internship.request' }, text: 'apply to new internship', icon: 'ic:baseline-post-add' },
-            // { route: { name: 'inbox' }, text: 'Notifications', icon: 'ri:notification-4-fill' },
-            // { route: { name: 'internshipBox' }, text: 'Internship Box', icon: 'simple-icons:polymerproject' }
           ]
         }
         else if (this.user.role === 'header') {

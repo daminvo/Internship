@@ -37,7 +37,7 @@
             </p>
           </div> -->
           <div class="inbox--top-left">
-            <h2 class="inbox--heading">
+            <h2 class="table-title-h2">
               Absences
             </h2>
           </div>
@@ -163,8 +163,9 @@
       <p class="slide-1__paragraph">Try applying to more internship offers here </p>
     </div>
 
-    <div>
-      <ProjectBoxItem v-for="accepted in projectBoxes" :key="`project-box-${accepted.id}`" :data="project" :role="user.role" />
+    <h2 class="table-title-h2">Next Internships</h2>
+    <div class="internship-container">
+      <ProjectBoxItem v-for="accepted in data.accepted" :key="`project-box-${accepted.id}`"  :data="accepted" :role="user.role" status="Accepted"/>
     </div>
   </div>
 </template>
@@ -194,6 +195,7 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
+      data: 'auth/data',
     }),
 
     isNoProject () {
@@ -214,7 +216,12 @@ export default {
     return { getImageUrl }
   },
 
+  created() {
+    this.$store.dispatch('auth/getInternships', {studentId: this.user.student.id})
+  },
+
   mounted () {
+    console.log(this.data);
     this.getInternshipBox()
   },
 
@@ -231,10 +238,6 @@ export default {
         })
         .catch( e => console.log(e.response))
     },
-
-    getAccepted () {
-
-    }
   }
 }
 </script>
@@ -290,7 +293,7 @@ export default {
 
 .the-table{
   width: 100%;
-  height: 340px;
+  height: 295px;
   overflow: hidden;
 }
 
@@ -311,7 +314,7 @@ table {
     border-spacing: 0 10px;
     display: inline-block;
     overflow-y: auto;
-    height: 340px;
+    height: 295px;
     border-bottom: 1px solid var(--dark-green);
 }
 
@@ -355,10 +358,29 @@ tr:nth-child(even) {
   font-weight: 500;
 }
 
+.internship-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr ;
+  grid-gap: 20px;
+  margin-top: 10px;
+}
+
 @media (max-width: 1425px) {
     table{
         width: 1200px
     }
+}
+
+.table-title-h2 {
+  font-size: 2.8rem;
+  font-weight: 300;
+  text-align: center;
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--dark-green);
+  align-items: center;
 }
 
 

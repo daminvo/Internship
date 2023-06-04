@@ -123,12 +123,7 @@
             <legend>
               Cover letter
             </legend>
-            <!-- <p class="apply__top--p">{{ intern }}</p> -->
-            <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis nisi vel mollitia eius, sequi necessitatibus! Temporibus commodi nobis iste dolorem culpa dolores, perferendis corporis maxime nemo doloribus, eligendi error quo?
-              . <br>
-              . <br>
-              . <br>
-            </p>
+            <p class="">{{ intern.motivation }}</p>
           </fieldset>
         </section>
 
@@ -206,12 +201,12 @@ export default {
     submit () {
       if (this.user.role == 'header'){
         axios
-          .post('/api/newRequest', {internId: this.intern.id})
+          .post('/api/acceptRequest', {internId: this.intern.id})
           .then(({ data }) => {
             console.log(data);
           })
           .then(e => {
-            this.$router.push({ path: '/' })
+            // this.$router.push({ path: '/' })
           })
           .catch(error => {
             console.log('Error:', error)
@@ -221,7 +216,7 @@ export default {
       }
       else {
         axios
-          .post('/api/newRequest', {internId: this.intern.id})
+          .post('/api/acceptHeaderRequest', {internId: this.intern.id})
           .then(({ data }) => {
             console.log(data);
           })
@@ -250,7 +245,7 @@ export default {
       }
       else {
         axios
-          .post('/api/refuseRequest', dataSent)
+          .post('/api/refuseHeaderRequest', dataSent)
           .then(({ data }) => {
             console.log(data);
           })
