@@ -25,7 +25,7 @@ class DepartmentHeaderController extends Controller
     {
         $department = departmentHeader::find($request->headerId);
         $intern = intern:: where('header_validation', null)
-            ->whereHas('student.user', function ($query) use ($department) {
+            ->whereHas('student', function ($query) use ($department) {
                 $query->where('department_id', $department->department_id);
             })
             ->with([

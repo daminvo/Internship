@@ -141,6 +141,8 @@ Route::post('createOffer', 'ManagerController@createOffer');
 Route::post('evaluateIntern', 'ManagerController@evaluateIntern');
 Route::post('internPresence', 'ManagerController@internPresence');
 Route::post('showManagerRequests', 'ManagerController@showManagerRequests');
+Route::post('showManagerRequests', 'ManagerController@showManagerRequests');
+
 
 
 
