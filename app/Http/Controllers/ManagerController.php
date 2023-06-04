@@ -36,11 +36,19 @@ class ManagerController extends Controller
 
     }
 
-    public function getInternshipIterns(Request $request){
-       $internship = internship::find($request ->id);
-       $intern = $internship->intern;
-       return $intern;
+    public function getInternshipIterns(Request $request) {
+        $internship = Internship::find($request->id);
+        $interns = $internship->intern()
+            ->where([
+                ['manager_validation', null],
+                ['header_validation', 1],
+                ['student_validation', null],
+            ])
+            ->get();
+
+        return $interns;
     }
+
 
     public function createOffer(Request $request){
         $internship = internship::create(['duration'=>$request->duration,'description'=>$request->description,'demand_date'=>Carbon::today()->toDateString(),'manager_id'=>$request->managerId,'title'=>$request->title, 'state' => 'available']);
@@ -64,16 +72,24 @@ class ManagerController extends Controller
         ]);
         }
 
+        private function getRequestType($id)
+        {
+            $offre = internshipOffer::where('internship_id', $id)->first();
+            return $offre ? 'public' : 'private';
+        }
+
         public function showManagerRequests(Request $request)
         {
-            $interns = intern::where([
+            $interns = Intern::where([
                 ['manager_validation', null],
                 ['header_validation', 1],
                 ['student_validation', null],
             ])
             ->whereHas('internship', function ($query) use ($request) {
-                $query->where('manager_id', $request->managerId);
-            })->with([
+                $query->where('manager_id', $request->managerId)
+                      ->whereDoesntHave('internshipOffer');
+            })
+            ->with([
                 "student.user",
                 "student.intern.internship",
                 "student.department.faculty.university"
@@ -82,6 +98,7 @@ class ManagerController extends Controller
 
             return $interns;
         }
+
 
 
 }
