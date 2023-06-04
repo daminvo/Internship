@@ -29,7 +29,7 @@ class Intern extends Model
 
     public function presence()
     {
-        return $this->hasOne("App\presence");
+        return $this->hasMany("App\presence");
     }
 
     // public function internship()
