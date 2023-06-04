@@ -84,18 +84,43 @@ public function getAllStudentsNumber(Request $request){
     return $students;
 }
 
+public function getstateType($id){
+    $today = Carbon::today()->toDateString();
+    $state = intern::find($id);
+    if($state->start_date < $today && $state->end_date > $today ){
+        return "ongoing";
+    }
+    else if($state->start_date < $today && $state->end_date < $today ){
+        return "finished";
+    }
+    else if ($state->start_date > $today ){
+        return "accepted";
+    }
+}
+
 
 public function getOngoingInterns(Request $request)
 {
     $today = Carbon::today()->toDateString();
     $department = departmentHeader::find($request->headerId);
-    $students = Student::where("department_id", $department->department_id)
-        ->whereHas('intern', function ($query) use ($today) {
-            $query->where([['header_validation', 1],['manager_validation', 1],['start_date','<', $today],['end_date', '>', $today]]);
-        })
-        ->with(['user', 'intern.internship'])
+    $intern = intern::where([['header_validation', 1],['manager_validation', 1],['student_validation', 1]])
+    ->whereHas('student', function ($query) use ($department) {
+        $query->where("department_id", $department->department_id);
+    })
+        ->with(['student.user', 'internship'])
         ->get();
-    return $students;
+
+        try{
+            $intern->each(function ($intern) {
+                $intern->state = $this->getstateType($intern->id);
+            });
+             }
+             catch (Throwable $e) {
+             $errorMessage = $e->getMessage();
+             return response()->json(['error' => $errorMessage], 500);
+             }
+
+    return $intern;
 }
 
 
