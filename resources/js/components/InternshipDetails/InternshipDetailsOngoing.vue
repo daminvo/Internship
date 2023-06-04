@@ -5,7 +5,7 @@
         <div class="project-details--image-container">
           <div class="project-details--image">
             <expandable-image
-              :src="project.thumbnail_url"
+              :src="offer.photo"
               :close-on-background-click="true"
               class="details__image"
             />
@@ -15,22 +15,17 @@
       <div v-if="$matchMedia.xl" class="details__top--left">
         <div class="z-1">
           <h1 class="project-details--h1 text-outline--thin">
-            {{ project.title }}
+            {{ offer.internship.title }}
           </h1>
-          <p class="details__ongoing--p">
+          <!-- <p class="details__ongoing--p">
             On Going Project Since {{ startSince }}
-          </p>
-        </div>
-        <div>
-          <h2 class="details___ongoing--h2">
-            Overall Score: -
-          </h2>
+          </p> -->
         </div>
       </div>
 
       <div v-else class="mb-2_5">
         <h1 class="project-details--h1">
-          {{ project.title }}
+          {{ offer.internship.title }}
         </h1>
         <p class="details__ongoing--p">
           On Going Project Since {{ startSince }}
@@ -44,16 +39,13 @@
           </h3>
           <div class="project-dashboard__list-team">
             <div v-for="(e, index) in members" :key="`ProjectParticipant-${index}`" class="project-dashboard__list-team--item">
-              <router-link :to="{ path: '/@/' + e.member.tagname }">
-                <img :src="e.member.avatar" alt="" class="project-dashboard__list-team--img">
+              <router-link :to="{ path: '/@/' + e.id }">
+                <img :src="e.photo" alt="" class="project-dashboard__list-team--img">
               </router-link>
 
               <div class="">
                 <p class="project-dashboard__list-team--name">
-                  {{ e.member.full_name }}
-                </p>
-                <p class="project-dashboard__list-team--expertise">
-                  {{ e.expertise }}
+                  {{ e.first_name }} {{ e.family_name }}
                 </p>
               </div>
             </div>
@@ -63,7 +55,7 @@
       <h2 v-if="!$matchMedia.xl" id="project-details" v-scroll-to="'#project-details'" class="project-details--h2">
         <a href="#project-details" class="button__project--more">
           <span class="iconify" data-icon="zmdi:more" />
-          <span>Project Details</span>
+          <span>Internship Details</span>
         </a>
       </h2>
     </div>
@@ -75,16 +67,14 @@
         <div v-if="!$matchMedia.xl" class="project-details__lecturer-info">
           <div class="lecturer-info--left">
             <div class="lecturer-info--image-container mr-1">
-              <router-link :to="{ path: '/@/' + project.user.tagname }" class="lencturer-text-link">
-                <img :src="project.user.avatar" :alt="`${project.user.full_name} Photo Profile`">
+              <router-link :to="{ path: '/@/' + offer.internship.manager.user.id}" class="lencturer-text-link">
+                <img :src="offer.internship.manager.user.photo">
               </router-link>
             </div>
 
             <div>
               <div><strong>Posted By</strong></div>
-              <div>{{ project.user.full_name }}</div>
-              <div>{{ project.user.identity_number }}</div>
-              <div>{{ project.user.expertise }}</div>
+              <div>{{ offer.internship.manager.user.first_name }} {{ offer.internship.manager.user.first_name }}</div>
             </div>
           </div>
           <div class="lecturer-info--right">
@@ -95,25 +85,9 @@
         <div>
           <div class="project-description">
             <h3>Description</h3>
-            <p>{{ project.description }}</p>
+            <p>{{ offer.internship.description }}</p>
           </div>
 
-          <div>
-            <div class="project-requirements">
-              <h3>Requirements</h3>
-              <ul class="requirements--container">
-                <li v-for="req in project.requirements" :key="req.id">
-                  {{ req.requirement }}
-                </li>
-              </ul>
-            </div>
-            <div class="project-skills">
-              <h3>Skills</h3>
-              <div class="skills--container">
-                <BubbleSkill v-for="skill in project.skills" :key="skill.id" :color="bgBubble" :name="skill.name" />
-              </div>
-            </div>
-          </div>
         </div>
         <div v-if="!$matchMedia.xl" class="project-summary">
           <h2 class="summary--h2">
@@ -138,21 +112,16 @@
       <div class="desktop__body--right">
         <div v-if="$matchMedia.xl" class="lecturer-info--left">
           <div class="lecturer-info--image-container mr-1">
-            <router-link :to="{ path: '/@/' + project.user.tagname }" class="lencturer-text-link">
-              <img :src="project.user.avatar" :alt="`${project.user.full_name} Photo Profile`">
+            <router-link :to="{ path: '/@/' + offer.internship.manager.user.id}" class="lencturer-text-link">
+              <img :src="offer.internship.manager.user.photo">
             </router-link>
           </div>
 
           <div class="details__poster--info">
             <p><strong>Posted By</strong></p>
-            <p>{{ project.user.full_name }}</p>
-            <p>NIP. {{ project.user.identity_number }}</p>
-            <p>{{ project.user.expertise }}</p>
+            <div>{{ offer.internship.manager.user.first_name }} {{ offer.internship.manager.user.family_name }}</div>
           </div>
         </div>
-        <router-link :to="{ name: 'message', params: { tagname: project.user.tagname } }" class="btn btn--blue btn--large" tag="button" :disabled="isSelf">
-          Contact Lecturer
-        </router-link>
         <div v-if="$matchMedia.xl" class="project-summary">
           <div class="details__share--container">
             <h2 class="">
@@ -207,18 +176,17 @@
         </h3>
         <div class="project-dashboard__list-team">
           <div v-for="(e, index) in members" :key="`ProjectParticipant-${index}`" class="project-dashboard__list-team--item">
-            <router-link :to="{ path: '/@/' + e.member.tagname }">
-              <img :src="e.member.avatar" alt="" class="project-dashboard__list-team--img">
+            <router-link :to="{ path: '/@/' + e.id }">
+              <img :src="e.photo" alt="" class="project-dashboard__list-team--img">
             </router-link>
 
             <div class="">
               <p class="project-dashboard__list-team--name">
-                {{ e.member.full_name }}
-              </p>
-              <p class="project-dashboard__list-team--expertise">
-                {{ e.expertise }}
+                {{ e.first_name }} {{ e.family_name }}
               </p>
             </div>
+            <button v-if="isSelf" class="btn btn--border">Add Presence</button>
+            <button v-if="isSelf" class="btn btn--border">Note</button>
           </div>
         </div>
       </div>
@@ -259,7 +227,7 @@ export default {
   components: { ProjectCard },
 
   metaInfo () {
-    return { title: this.project ? this.project.title : '' }
+    return { title: this.offer ? this.offer.internship.title : '' }
   },
 
   data: () => ({
@@ -273,7 +241,6 @@ export default {
       { network: 'facebook', name: 'Facebook', icon: 'fa-brands:facebook-f' },
       { network: 'telegram', name: 'Telegram', icon: 'fa-brands:telegram-plane' },
       { network: 'twitter', name: 'Twitter', icon: 'fa-brands:twitter' },
-      { network: 'line', name: 'Line', icon: 'fa-brands:line' },
       { network: 'whatsapp', name: 'Whatsapp', icon: 'fa-brands:whatsapp' }
       // { network: 'pinterest', name: 'Pinterest', icon: 'fa-brands:pinterest' },
     ]
@@ -283,45 +250,39 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
-      project: 'visit/project',
+      offer: 'visit/offer',
       snackbar: 'notification/snackbar'
     }),
 
     members () {
-      if (this.project.project_team) return this.project.project_team.members
-      return []
+      // if (this.offer.project_team) return this.project.project_team.members
+      return [this.user]
     },
 
     sharing () {
       return {
         url: window.location.href,
-        title: this.project.title ? this.project.title : 'undefined',
-        description: this.project.description
+        title: this.offer.internship.title ? this.offer.internship.title : 'undefined',
+        description: this.offer.internship.description
       }
     },
 
     isSelf () {
-      if (this.user) return this.user.tagname === this.project.user.tagname
+      console.log(this.offer.internship.manager.user.id)
+      if (this.user) return this.user.id === this.offer.internship.manager.user.id
 
       return false
     },
 
-    startSince () {
-      const date = new Date(this.project.start_time)
-      let options = { year: 'numeric', month: 'long', 'day': 'numeric' }
-      return date.toLocaleString('en-US', options)
-    },
-
     summaries () {
       return [
-        { type: 'icon', icon: 'bi:brush', text: `Expertise in ${this.expertiseIn}` },
-        { type: 'icon', icon: 'fa-solid:dollar-sign', text: this.rewards },
-        { type: 'icon', icon: 'ic:round-access-time', text: `Posted ${this.getHumanDate(this.project.created_at)}` },
-        { type: 'icon', icon: 'ic:baseline-work', text: `${this.totalApplicants} Total Applicants` },
-        { type: 'icon', icon: 'ant-design:star-filled', text: `Joining Project Grant up to ${this.grantMaximumPoints} Points` },
-        { type: 'icon', icon: 'ic:round-supervisor-account', text: this.maxPerson },
-        { type: 'text', icon: 'LVL', text: this.project.level_applicant },
-        { type: 'text', icon: 'Pts', text: `Require Minimal ${this.minimumPoints} Points for each Person` }
+        // { type: 'icon', icon: 'fa-solid:dollar-sign', text: this.rewards },
+        { type: 'icon', icon: 'ic:round-access-time', text: `Posted ${this.getHumanDate(this.offer.internship.demand_date)}` },
+        // { type: 'icon', icon: 'ic:baseline-work', text: `${this.totalApplicants} Total Applicants` },
+        { type: 'icon', icon: 'ic:round-supervisor-account', text: `Max ${this.offer.nmbr_positions}` },
+        { type: 'icon', icon: 'ant-design:star-filled', text: `${this.offer.internship.duration} months` },
+        // { type: 'text', icon: 'LVL', text: this.project.level_applicant },
+        // { type: 'text', icon: 'Pts', text: `Require Minimal ${this.minimumPoints} Points for each Person` }
       ]
     },
 
@@ -343,19 +304,6 @@ export default {
 
     applyRoute () {
       return 'project.apply.individual'
-    },
-
-    expertiseIn () {
-      let expertises = [
-        { name: 'UI/UX Designer', isRequired: this.project.ui_ux_designer },
-        { name: 'Frontend Engineer', isRequired: this.project.front_end_engineer },
-        { name: 'Backend Engineer', isRequired: this.project.back_end_engineer },
-        { name: 'Data Expert', isRequired: this.project.data_expert }
-      ].filter(expertise => expertise.isRequired === true)
-        .map(expertise => expertise.name)
-        .join(', ')
-
-      return expertises
     },
 
     rewards () {

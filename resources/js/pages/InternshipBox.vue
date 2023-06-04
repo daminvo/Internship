@@ -68,13 +68,13 @@
                         Exit time
                       </th>
                   </tr>
-                  <tr class="internship">
-                    <td>2023-05-21</td>
+                  <tr class="internship" v-for="(index, abs) in internshipBox.presence" :key="index" >
+                    <td>{{ abs.date }}</td>
                     <td>
-                      <p class="present" >Present</p>
+                      <p :class="abs.state ? 'present' : 'absent'" >Present</p>
                     </td>
-                    <td>8:00</td>
-                    <td>14:00</td>
+                    <td>{{ abs.entry_time }}</td>
+                    <td>{{abs.exit_time }}</td>
                   </tr>
                   <tr class="internship">
                     <td>2023-05-22</td>
@@ -218,10 +218,13 @@ export default {
 
   created() {
     this.$store.dispatch('auth/getInternships', {studentId: this.user.student.id})
+    setTimeout(() => {
+      console.log(this.internshipBox.presence);
+
+    }, 1000);
   },
 
   mounted () {
-    console.log(this.data);
     this.getInternshipBox()
   },
 
@@ -231,10 +234,8 @@ export default {
         .post('/api/getOngoinginternships', { studentId:this.user.student.id })
         .then(res => {
           this.internshipBox = res.data[0]
-          console.log(this.internshipBox)
 
           this.manager = this.internshipBox.internship.manager
-          console.log(this.manager)
         })
         .catch( e => console.log(e.response))
     },

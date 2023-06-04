@@ -287,23 +287,10 @@ export default {
         { type: 'icon', icon: 'ic:round-access-time', text: `Posted ${this.getHumanDate(this.offer.internship.demand_date)}` },
         // { type: 'icon', icon: 'ic:baseline-work', text: `${this.totalApplicants} Total Applicants` },
         // { type: 'icon', icon: 'ant-design:star-filled', text: `Joining Project Grant up to ${this.grantMaximumPoints} Points` },
-        { type: 'icon', icon: 'ic:round-supervisor-account', text: this.offer.nmbr_postions },
-        { type: 'icon', icon: 'ant-design:star-filled', text: this.offer.internship.duration },
+        { type: 'icon', icon: 'ic:round-supervisor-account', text: `Max ${this.offer.nmbr_positions}` },
+        { type: 'icon', icon: 'ant-design:star-filled', text: `${this.offer.internship.duration} months` },
         // { type: 'text', icon: 'Pts', text: `Require Minimal ${this.minimumPoints} Points for each Person` }
       ]
-    },
-
-    expertiseIn () {
-      let expertises = [
-        { name: 'UI/UX Designer', isRequired: this.project.ui_ux_designer },
-        { name: 'Frontend Engineer', isRequired: this.project.front_end_engineer },
-        { name: 'Backend Engineer', isRequired: this.project.back_end_engineer },
-        { name: 'Data Expert', isRequired: this.project.data_expert }
-      ].filter(expertise => expertise.isRequired === true)
-        .map(expertise => expertise.name)
-        .join(', ')
-
-      return expertises
     },
 
   },

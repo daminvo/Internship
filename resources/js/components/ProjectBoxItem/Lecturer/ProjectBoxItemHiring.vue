@@ -139,7 +139,6 @@ export default {
   },
 
   mounted () {
-    console.log(this.data);
     const date = new Date(this.data.internship.demand_date)
     let options = { day: 'numeric', year: 'numeric', month: 'long' }
     this.date = date.toLocaleString('en-US', options)

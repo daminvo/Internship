@@ -1,7 +1,7 @@
 <template>
   <div>
     <InternshipDetailsAvailable  v-if="offer.internship.state === 'available'"/>
-    <!-- <InternshipDetailsOngoing v-else-if="offer.internship.state === 'Ongoing'" /> -->
+    <InternshipDetailsOngoing v-else-if="offer.internship.state === 'ongoing'" />
     <!-- <InternshipDetailsFinished v-else-if="offer.internship.state === 'Finished'" /> -->
   </div>
 </template>
@@ -9,7 +9,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import InternshipDetailsAvailable from '~/components/InternshipDetails/InternshipDetailsAvailable.vue'
-// import InternshipDetailsOngoing from '~/components/InternshipDetails/InternshipDetailsOngoing.vue'
+import InternshipDetailsOngoing from '~/components/InternshipDetails/InternshipDetailsOngoing.vue'
 // import InternshipDetailsFinished from '~/components/InternshipDetails/InternshipDetailsFinished.vue'
 
 export default {
@@ -17,7 +17,7 @@ export default {
 
   components: {
     InternshipDetailsAvailable,
-    // InternshipDetailsOngoing,
+    InternshipDetailsOngoing,
     // InternshipDetailsFinished
   },
 
@@ -44,7 +44,6 @@ export default {
       await this.$store.dispatch('visit/fetchVisitedOffer', {
         id: this.$route.params.id
       })
-      .then(() => console.log(this.offer))
     }
   }
 
