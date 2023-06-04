@@ -21,15 +21,24 @@ use Carbon\Carbon;
 class DepartmentHeaderController extends Controller
 {
 
-public function showRequests(Request $request)
-{
-    $department = departmentHeader::find($request->headerId);
-    $students = student::where("department_id", $department->department_id);
-    $intern = intern::where('header_validation',null)
-    ->with(["student.user","internship.manager.company","student.department.faculty.university"])
-    ->get();
-    return $intern;
-}
+    public function showRequests(Request $request)
+    {
+        $department = departmentHeader::find($request->headerId);
+
+        $interns = intern::where('header_validation', null)
+            ->whereHas('student', function ($query) use ($department) {
+                $query->where('department_id', $department->department_id);
+            })
+            ->with([
+                "student.user",
+                "student.intern.internship.manager.company",
+                "student.department.faculty.university"
+            ])
+            ->get();
+
+        return $interns;
+    }
+
 
 public function acceptRequest(Request $request){
     $intern = intern::where([

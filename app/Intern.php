@@ -22,6 +22,16 @@ class Intern extends Model
         return $this->belongsTo('App\internship');
     }
 
+    public function rating()
+    {
+        return $this->hasOne("App\Rating");
+    }
+
+    public function presence()
+    {
+        return $this->hasOne("App\presence");
+    }
+
     // public function internship()
     // {
     //     return $this->belongsTo(Internship::class);

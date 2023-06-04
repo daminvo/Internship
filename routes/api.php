@@ -138,6 +138,9 @@ Route::post('refuseHeaderRequest', 'ManagerController@refuseRequest');
 Route::post('acceptHeaderRequest', 'ManagerController@acceptRequest');
 Route::post('getInternshipIterns', 'ManagerController@getInternshipIterns');
 Route::post('createOffer', 'ManagerController@createOffer');
+Route::post('evaluateIntern', 'ManagerController@evaluateIntern');
+Route::post('internPresence', 'ManagerController@internPresence');
+Route::post('showManagerRequests', 'ManagerController@showManagerRequests');
 
 
 
