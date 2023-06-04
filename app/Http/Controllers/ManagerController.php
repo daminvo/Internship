@@ -38,11 +38,16 @@ class ManagerController extends Controller
 
     public function getInternshipIterns(Request $request) {
         $internship = Internship::find($request->id);
-        $interns = $internship->intern
+        $interns = $internship->intern()
             ->where([
                 ['manager_validation', null],
                 ['header_validation', 1],
                 ['student_validation', null],
+            ])
+            ->with([
+                "student.user",
+                "internship.manager.company",
+                "student.department.faculty.university"
             ])
             ->get();
 
@@ -99,12 +104,17 @@ class ManagerController extends Controller
             return $interns;
         }
 
-        public function managerOffers(Request $request){
-            $internship =find($request->manager_id){
-            $internshipOffer =  internshipOffer::where("internship_id",$internship->internship_id)
-            };
-            return $internshipOffer;
-        }
+        public function getManagerOffers(Request $request)
+{
+    $internshipOffers = InternshipOffer::whereHas('internship', function ($query) use ($request) {
+        $query->where('manager_id', $request->manager_id);
+    })->with('internship')->get();
+
+    return $internshipOffers;
+}
+
+
+
 
 
 }
