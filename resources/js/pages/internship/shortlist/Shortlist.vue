@@ -41,7 +41,7 @@
         <div class="shortlist-item__container">
           <div class="shortlist-item__left-container mb-1_5">
             <router-link :to="{ name: '@.info', params: { tagname: applicantDetails.id } }">
-              <img class="shortlist-avatar" :src="applicantDetails.photo" alt="">
+              <img class="shortlist-avatar" :src="getImageUrl(applicantDetails.photo)" alt="">
             </router-link>
             <div class="shortlist-item__body justify-center">
               <div class="">
@@ -54,6 +54,20 @@
         </div>
 
 
+        <div class="form__input--group">
+          <div class="info-title">
+            <h2 class="form-group__input-name form__input-name mb-1">
+              Start date:
+            </h2>
+            <p class="apply__top--p">{{ applicantDetails.start_date }}</p>
+          </div>
+          <div class="info-title">
+            <h2 class="form-group__input-name form__input-name mb-1">
+              End date:
+            </h2>
+            <p class="apply__top--p">{{ applicantDetails.end_date }}</p>
+          </div>
+        </div>
         <!-- Why you ? -->
         <div class="form-group__container">
           <h4 class="form-group__input-name form__input-name mb-1">
@@ -66,10 +80,10 @@
       </template>
 
       <template v-slot:footer>
-        <button v-show="!applicantDetails.isAccepted" class="btn btn--blue btn--large ml-auto" @click="acceptIndividualModal()">
+        <button v-show="!applicantDetails.manager_validation" class="btn btn--blue btn--large ml-auto" @click="acceptIndividualModal()">
           Accept
         </button>
-        <button v-show="applicantDetails.isAccepted" class="btn btn--decline btn--large ml-auto" @click="acceptIndividualModal()">
+        <button v-show="applicantDetails.manager_validation" class="btn btn--decline btn--large ml-auto" @click="acceptIndividualModal()">
           Cancel
         </button>
       </template>
@@ -87,40 +101,57 @@ export default {
 
   components: { ShortlistItemIndividual },
 
-  metaInfo () { return { title: 'Shortlist Individual' } },
+  metaInfo () { return { title: 'Shortlist' } },
 
   data: () => ({
     // page: 1,
-    individuals: [],
+    // individuals: [],
     applicantDetails: {
-      isAccepted: false
+      manager_validation: false
     }
   }),
 
   computed: {
     ...mapGetters({
       user: 'auth/user',
+      offer: 'visit/offer',
+      individuals: 'page/individuals',
       snackbar: 'notification/snackbar',
-      // data: 'page/shortlistIndividuals'
     }),
 
   },
 
-  mounted () {
-    this.getIndividuals()
+  setup() {
+    const getImageUrl = (name) => {
+      if (name === null) return '/images/missing-avatar.svg'
+      else return window.location.origin + '/storage/images/avatar/' + name;
+    }
+
+    return { getImageUrl }
   },
 
+
   methods: {
-    getIndividuals() {
-      axios.post('')
-    },
+    // async getIndividuals() {
+
+    //   axios.post('/api/getInternshipIterns', {id: this.offer.internship.id})
+    //     .then(res => {
+    //       console.log(res.data);
+    //       this.individuals = res.data
+    //     })
+    //     .catch( error => {
+    //     console.log('Error:', error.response)
+    //   console.log('Status:', error.response.status)
+    //   console.log('Data:', error.response.data)
+    //   })
+    // },
 
     async acceptIndividual (e) {
-      this.individuals[e.index].isAccepted = e.isAccepted
+      this.individuals[e.index].manager_validation = e.manager_validation
     },
 
     async acceptIndividualModal () {
-      this.individuals[this.applicantDetails.index].isAccepted = !this.individuals[this.applicantDetails.index].isAccepted
+      this.individuals[this.applicantDetails.index].manager_validation = !this.individuals[this.applicantDetails.index].manager_validation
       this.$refs.showApplicantDetails.closeModal()
     },
 
@@ -134,5 +165,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+.info-title {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-evenly;
+}
+
+.form__input--group {
+  margin-bottom: 20px;
+}
 </style>

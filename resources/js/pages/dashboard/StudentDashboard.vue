@@ -59,7 +59,7 @@
                       <div class="accepted" v-if="internship.manager_validation ">
                           <p>ACCEPTED</p>
                       </div>
-                      <div @click="submit(internship.id)">
+                      <div @click="submit(internship.id, internship.internship.type)">
                         <span v-if="internship.manager_validation" class="iconify" data-icon="heroicons:check-circle-solid" width="25" height="25" color="#366A66" />
                       </div>
 
@@ -147,9 +147,9 @@
                   </td>
 
                   <td>
-                    <div @click="deleteIntern(internship.id, internship.internship.type)">
-                      <span class="iconify" data-icon="heroicons:trash-solid" width="25" height="25" color="#c50000" />
-                    </div>
+                    <router-link :to="{ name: 'offer.details', params: { id: 3 } }">
+                      <span v-if="internship.internship.type === 'public'"  class="iconify" data-icon="heroicons:information-circle-solid" width="25" height="25" color="#3A455B" />
+                    </router-link>
                   </td>
 
               </tr>
@@ -209,6 +209,9 @@ export default {
 
   created() {
     this.$store.dispatch('auth/getInternships', {studentId: this.user.student.id})
+    setTimeout(() => {
+      console.log(this.data.pending);
+    }, 1000);
   },
 
   // watch: {
@@ -220,16 +223,17 @@ export default {
 
   methods: {
     deleteIntern (id, type){
-      axios
-        .post('/api/deleteRequest', {id: id, type: type})
-        .then( res => console.log(res.data))
-        .then( res => {
-          this.data.pending = res.data.pending
-          this.data.accepted = res.data.accepted
-          this.data.finished = res.data.finished
-          this.snackbar.open(res.data.msg)
-        })
-        .catch( e => console.log(e.response))
+      console.log(type);
+      // axios
+      //   .post('/api/deleteRequest', {id: id, type: type})
+      //   .then( res => console.log(res.data))
+      //   .then( res => {
+      //     this.data.pending = res.data.pending
+      //     this.data.accepted = res.data.accepted
+      //     this.data.finished = res.data.finished
+      //     this.snackbar.open(res.data.msg)
+      //   })
+      //   .catch( e => console.log(e.response))
     },
 
     refuse (id, type) {
@@ -245,7 +249,7 @@ export default {
         .catch( e => console.log(e.response))
     },
 
-    submit (id) {
+    submit (id, type) {
       axios
         .post('/api/studentSubmition', {id: id})
         .then( res => {

@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="project-box__top-container">
-      <router-link :to="{ name: 'project.details', params: { id: data.project.project_url } }">
-        <img class="project-box__item--img" :src="data.project.thumbnail_url" alt="">
+      <router-link :to="{ name: 'offer.details', params: { id: data.id } }">
+        <img class="project-box__item--img" :src="getImageUrl(data.photo)" alt="">
       </router-link>
       <div class="project-box__item--container">
         <div>
-          <span class="project-box__item--title">{{ data.project.title }}</span>
+          <span class="project-box__item--title">{{ data.internship.title }}</span>
         </div>
 
         <div class="project-box__item--lecture-statuses">
@@ -22,7 +22,7 @@
 
         <div v-if="$matchMedia.xl">
           <p class="mb-1_5">
-            {{ data.project.description }}
+            {{ data.internship.description }}
           </p>
         </div>
         <div v-else class="project-box__details--container" @click="showDetails">
@@ -32,23 +32,13 @@
           </div>
         </div>
       </div>
-      <div v-if="$matchMedia.xl" class="project-box__bottom-container">
-        <router-link :to="{ name: 'project.review', params: { id: data.project.project_url } }" class="btn btn--blue btn--small mb-1" tag="button">
-          Review Project
-        </router-link>
-      </div>
     </div>
 
     <!-- Mobile User -->
     <div v-show="show && !$matchMedia.xl" class="mt-2">
       <p class="mb-1_5">
-        {{ data.project.description }}
+        {{ data.internship.description }}
       </p>
-      <div>
-        <router-link :to="{ name: 'project.review', params: { id: data.project.project_url } }" class="btn btn--blue btn--small mb-1" tag="button">
-          Review Project
-        </router-link>
-      </div>
     </div>
   </div>
 </template>
@@ -68,8 +58,17 @@ export default {
     show: false
   }),
 
+  setup() {
+    const getImageUrl = (name) => {
+      if (name === null) return '/images/missing-avatar.svg'
+      else return window.location.origin + '/storage/images/thumbnail/' + name;
+    }
+
+    return { getImageUrl }
+  },
+
   mounted () {
-    const date = new Date(this.data.created_at)
+    const date = new Date(this.data.internship.demand_date)
     let options = { day: 'numeric', year: 'numeric', month: 'long' }
     this.date = date.toLocaleString('en-US', options)
   }

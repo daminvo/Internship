@@ -2,10 +2,10 @@
   <div class="shortlisted__container">
     <div class="shorlisted-top__container">
       <div>
-        <div v-show="project" class="shortlisted-top__image-container mt-2_5">
+        <div v-show="offer" class="shortlisted-top__image-container mt-2_5">
           <div class="project-details--image shortlisted--image">
             <img
-              :src="project.thumbnail_url"
+              :src="getImageUrl(offer.photo)"
               alt="Project Photo"
               class="img"
             >
@@ -15,7 +15,7 @@
 
       <div class="shortlisted-top__left">
         <h1 class="shortlisted--h1  mb-1_5 text-outline--thin">
-          {{ project ? project.title : '' }}
+          {{ offer ? offer.internship.title : '' }}
         </h1>
 
         <div v-if="!$matchMedia.xl" class="separator-short mb-1" />
@@ -65,48 +65,59 @@ export default {
   computed: {
     ...mapGetters({
       user: 'auth/user',
+      offer: 'visit/offer',
       snackbar: 'notification/snackbar',
-      project: 'page/project',
-      individuals: 'page/shortlistIndividuals',
-      teams: 'page/shortlistTeams'
+      // individuals: 'page/shortlistIndividuals',
+      // teams: 'page/shortlistTeams'
     })
   },
 
-  mounted () {
-    this.getShortlist()
+  setup() {
+    const getImageUrl = (name) => {
+      if (name === null) return '/images/missing-avatar.svg'
+      else return window.location.origin + '/storage/images/thumbnail/' + name;
+    }
 
+    return { getImageUrl }
+  },
+
+  created () {
+    this.getDetails()
   },
 
   methods: {
-    async getShortlist () {
-      await this.$store.dispatch('page/fetchShortlist', {
-        project_url: this.$route.params.id
+    async getDetails () {
+      await this.$store.dispatch('visit/fetchVisitedOffer', {
+        id: this.$route.params.id
       })
+
+      await this.$store.dispatch('page/fetchShortlist', {id: this.offer.internship.id})
     },
 
     async acceptStudents () {
-      const acceptedStudents = {
-        individuals: this.individuals.filter(e => e.isAccepted === true),
-        teams: this.teams.filter(e => e.isAccepted === true)
+      const acceptedStudents = this.individuals
+      // .filter(e => e.manager_validation === true)
+
+      if (acceptedStudents.individuals.length === 0) {
+        return this.$router.push({ name: 'manager.projectbox' })
       }
 
-      if (acceptedStudents.individuals.length === 0 && acceptedStudents.teams.length === 0) {
-        return this.$router.push({ name: 'projectbox' })
+      for (let i = 0; i < acceptedStudents.length; i++) {
+        if (acceptedStudents[i].manager_validation === true) {
+          await axios.post('/api/project/', {internId: acceptedStudents[i].id })
+        }
+        await axios.post('/api/project/', {internId: acceptedStudents[i].id })
       }
 
-      await axios.post('/api/project/' + this.$route.params.id + '/shortlist', {
-        'individuals': acceptedStudents.individuals,
-        'teams': acceptedStudents.teams
-      })
-        .then(({ data }) => {
-          this.snackbar.open(data.message)
+        // .then(({ data }) => {
+        //   this.snackbar.open(data.message)
 
-          this.$store.dispatch('notification/updateProjectBox', {
-            projectBoxes: data.project_boxes
-          })
+        //   this.$store.dispatch('notification/updateProjectBox', {
+        //     projectBoxes: data.project_boxes
+        //   })
 
-          this.$router.push({ name: 'projectbox' })
-        })
+        //   this.$router.push({ name: 'projectbox' })
+        // })
     },
   }
 

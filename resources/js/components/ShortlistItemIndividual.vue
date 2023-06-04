@@ -2,15 +2,12 @@
   <div class="shortlist-item__container">
     <div class="shortlist-item__left-container">
       <div class="">
-        <img class="shortlist-avatar" :src="data.avatar" alt="">
+        <img class="shortlist-avatar" :src="getImageUrl(data.photo)" alt="">
       </div>
       <div class="shortlist-item__body">
         <div class="shortlist-item__body-top">
           <div class="shortlist-item__name">
-            {{ data.full_name }}
-          </div>
-          <div class="shortlist-item__expertise">
-            {{ data.expertise }}
+            {{ data.fist_name }} {{ data.fist_name }}
           </div>
         </div>
         <div class="project-box__details--container" @click="showDetails">
@@ -47,12 +44,21 @@ export default {
     }),
 
     btn () {
-      if (this.data.isAccepted) {
+      if (this.data.manager_validation) {
         return { text: 'Accepted', class: 'btn--accepted' }
       } else {
         return { text: 'Accept', class: 'btn--accept' }
       }
     }
+  },
+
+  setup() {
+    const getImageUrl = (name) => {
+      if (name === null) return '/images/missing-avatar.svg'
+      else return window.location.origin + '/storage/images/avatar/' + name;
+    }
+
+    return { getImageUrl }
   },
 
   methods: {
@@ -67,11 +73,11 @@ export default {
     },
 
     async accept () {
-      this.data.isAccepted = !this.data.isAccepted
+      this.data.manager_validation = !this.data.manager_validation
 
       this.$emit('accept', {
         index: this.index,
-        isAccepted: this.data.isAccepted
+        manager_validation: this.data.manager_validation
       })
     }
   }

@@ -70,7 +70,6 @@ class ManagerController extends Controller
                 ['manager_validation', null],
                 ['header_validation', 1],
                 ['student_validation', null],
-
             ])
             ->whereHas('internship', function ($query) use ($request) {
                 $query->where('manager_id', $request->managerId);

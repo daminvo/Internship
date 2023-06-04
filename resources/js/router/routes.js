@@ -52,8 +52,6 @@ export default [
     ]
   },
 
-  { path: '/@/:tagname/message', name: 'message', component: page('Message.vue') },
-
   { path: '/settings', name: 'settings', meta: { title: 'Settings' }, component: page('settings') },
 
   { path: '/explore', name: 'explore', meta: { title: 'Explore' }, component: page('Explore.vue') },
