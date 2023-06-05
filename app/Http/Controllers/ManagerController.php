@@ -71,7 +71,7 @@ class ManagerController extends Controller
     }
 
         public function internPresence(Request $request){
-         $presence = presence::create(['entry_time'=>$request->entry_time,'exit_time'=>$request->exit_time,'observation'=>$request->observation,'date'=>$request->date,'intern _id'=>$request->internId]);
+         $presence = presence::create(['entry_time'=>$request->entry_time,'exit_time'=>$request->exit_time,'observation'=>$request->observation,'date'=>$request->date,'intern_id'=>$request->internId, 'state'=>$request->state]);
          return response()->json([
             'msg' => 'information created successfully',
         ]);

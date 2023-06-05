@@ -60,14 +60,14 @@
                       class="internship"
                   >
                       <td>
-                        <router-link :to="`/@/${internship.user.id}`" class="user-link" >
-                          <img :src="getImageUrl(internship.user.photo)" class="data-profile-img">
-                          <p>{{ internship.user.first_name }} {{ internship.user.family_name }}</p>
+                        <router-link :to="`/@/${internship.student.user.id}`" class="user-link" >
+                          <img :src="getImageUrl(internship.student.user.photo)" class="data-profile-img">
+                          <p>{{ internship.student.user.first_name }} {{ internship.student.user.family_name }}</p>
                         </router-link>
                       </td>
 
                       <td>
-                        <div v-if="internship.available" class="available">
+                        <div v-if="internship.student.available" class="available">
                           <p>Available</p>
                         </div>
 
@@ -77,15 +77,15 @@
                       </td>
 
                       <td>
-                          <p>{{ internship.intern.internship.title }}</p>
+                          <p>{{ internship.internship.title }}</p>
                       </td>
 
                       <td>
-                        <p>{{ internship.intern.internship.manager.company.name }}</p>
+                        <p>{{ internship.internship.manager.company.name }}</p>
                       </td>
 
                       <td>
-                        <router-link :to="`/intern=${internship.intern.id}`">
+                        <router-link :to="`/intern=${internship.id}`">
                           <button class="button-4" role="button" >Show</button>
                         </router-link>
                       </td>
@@ -96,7 +96,7 @@
         </div>
       </div>
 
-      <!-- <h2 class="table-title-h2">INTERNS</h2>
+      <h2 class="table-title-h2">INTERNS</h2>
 
       <div class="internships-list">
         <div class="the-table">
@@ -111,11 +111,6 @@
                       <th
                         style="width: 40%; cursor:pointer;"
                       >
-                        Status
-                      </th>
-                      <th
-                        style="width: 40%; cursor:pointer;"
-                      >
                         Internship
                       </th>
                       <th
@@ -126,6 +121,7 @@
                       <th
                         style="width: 40%; cursor:pointer;"
                       >
+                        State
                       </th>
                   </tr>
                   <tr
@@ -134,20 +130,10 @@
                       class="internship"
                   >
                       <td>
-                        <router-link :to="`/@/${internship.student.user.id}`" class="user-link" >
-                          <img :src="getImageUrl(internship.student.user.photo)" class="data-profile-img">
-                          <p>{{ internship.student.user.first_name }} {{ internship.student.user.family_name }}</p>
+                        <router-link :to="`/@/${intern.student.user.id}`" class="user-link" >
+                          <img :src="getImageUrl(intern.student.user.photo)" class="data-profile-img">
+                          <p>{{ intern.student.user.first_name }} {{ intern.student.user.family_name }}</p>
                         </router-link>
-                      </td>
-
-                      <td>
-                        <div v-if="intern.student.available" class="available">
-                          <p>Available</p>
-                        </div>
-
-                        <div v-else class="not-available">
-                          <p> Not Available</p>
-                        </div>
                       </td>
 
                       <td>
@@ -159,16 +145,24 @@
                       </td>
 
                       <td>
-                        <router-link :to="`/intern=${internship.intern.id}`">
-                          <button class="button-4" role="button" >Show</button>
-                        </router-link>
+                        <div v-if="intern.state === 'accepted'" class="accepted">
+                          <p>Accepted</p>
+                        </div>
+
+                        <div v-else-if="intern.state === 'ongoing'" class="ongoing">
+                          <p>Ongoing</p>
+                        </div>
+
+                        <div v-else-if="intern.state === 'finished'" class="finished">
+                          <p>Finished</p>
+                        </div>
                       </td>
 
                   </tr>
                 </table>
             </div>
         </div>
-      </div> -->
+      </div>
 
     </div>
   </div>
@@ -236,7 +230,6 @@ export default {
     deleteIntern (id, type){
       axios
         .post('/api/deleteRequest', {id: id, type: type})
-        .then( res => console.log(res.data))
         .then( res => {
           this.data.pending = res.data.pending
           this.data.accepted = res.data.accepted
@@ -255,7 +248,6 @@ export default {
           this.data.finished = res.data.finished
           this.snackbar.open(res.data.msg)
         })
-        .then( res => console.log(res.data))
         .catch( e => console.log(e.response))
     },
 
@@ -266,7 +258,6 @@ export default {
           this.data.pending = res.data.pending
           this.data.accepted = res.data.accepted
           this.data.finished = res.data.finished
-          console.log(this.data);
           this.snackbar.open(res.data.msg)
         })
         .then( res => console.log(res.data))
@@ -286,7 +277,6 @@ export default {
         .post('/api/showRequests', {headerId: this.user.header.id})
         .then(res => {
           this.internships = res.data
-          console.log(res.data);
         })
         .catch( error => {
           console.log(error.response);
@@ -300,7 +290,7 @@ export default {
         })
 
       axios
-        .post('/api/getOngoingInterns', {headerId: this.user.header.id})
+        .post('/api/getOngoingInternsNumber', {headerId: this.user.header.id})
         .then(res => {
           if (typeof(res.data) === 'number') {
             this.interns = res.data
@@ -313,7 +303,7 @@ export default {
       axios
         .post('/api/getOngoingInterns', {headerId: this.user.header.id})
         .then(res => {
-          console.log(res)
+          console.log(res.data)
           this.internsList = res.data
         })
     },
@@ -530,7 +520,7 @@ tr:nth-child(even) {
   background-position: center left;
 }
 
-.not-available{
+.finished{
     width: 83px;
     text-align: center;
     font-size: 13px;
@@ -541,7 +531,18 @@ tr:nth-child(even) {
     border-radius: 5px;
 }
 
-.available{
+.ongoing{
+    width: 83px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #716f31;
+    padding: 5px;
+    background: #cdce94;
+    border-radius: 5px;
+}
+
+.accepted{
     width: 83px;
     text-align: center;
     font-size: 13px;

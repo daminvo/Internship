@@ -17,14 +17,14 @@
                 v-for="rating in maxRating"
                 :key="rating"
 
-                @click="selectRating($event, rating, 'remarkOne')"
+                @click="selectRating($event, rating, 'desipline')"
               >
-                <span class="iconify" data-icon="clarity:star-line" width="32" height="32" color="#2b6e91"/>
+                <span class="iconify" :data-icon="rating <= selectedRating ? 'clarity:star-solid': 'clarity:star-line'" width="32" height="32" color="#2b6e91"/>
                 &nbsp;
                 <!-- <span v-else class="iconify" data-icon="clarity:star-line" width="24" height="24" /> -->
               </span>
             </div>
-            <div class="selected-rating">{{ remarkOne }}</div>
+            <div class="selected-rating">{{ desiplineRemark }}</div>
           </div>
         </div>
 
@@ -38,13 +38,13 @@
                 v-for="rating in maxRating"
                 :key="rating"
 
-                @click="selectRating($event, rating, 'remarkTwo')"
+                @click="selectRating($event, rating, 'work')"
               >
-                <span class="iconify" data-icon="clarity:star-line" width="32" height="32" color="#2b6e91"/>
+                <span class="iconify" :data-icon="rating <= selectedRating ? 'clarity:star-solid': 'clarity:star-line'" width="32" height="32" color="#2b6e91"/>
                 &nbsp;
               </span>
             </div>
-            <div class="selected-rating">{{ remarkTwo }}</div>
+            <div class="selected-rating">{{ workRemark }}</div>
           </div>
         </div>
 
@@ -58,13 +58,13 @@
                 v-for="rating in maxRating"
                 :key="rating"
 
-                @click="selectRating($event, rating, 'remarkThree')"
+                @click="selectRating($event, rating, 'initiative')"
               >
-                <span class="iconify" data-icon="clarity:star-line" width="32" height="32" color="#2b6e91"/>
+                <span class="iconify" :data-icon="rating <= selectedRating ? 'clarity:star-solid': 'clarity:star-line'"  width="32" height="32" color="#2b6e91"/>
                 &nbsp;
               </span>
             </div>
-            <div class="selected-rating">{{ remarkThree }}</div>
+            <div class="selected-rating">{{ initiativeRemark }}</div>
           </div>
         </div>
 
@@ -78,13 +78,13 @@
                 v-for="rating in maxRating"
                 :key="rating"
 
-                @click="selectRating($event, rating, 'remarkFour')"
+                @click="selectRating($event, rating, 'capacity')"
               >
-                <span class="iconify" data-icon="clarity:star-line" width="32" height="32" color="#2b6e91"/>
+                <span class="iconify" :data-icon="rating <= selectedRating ? 'clarity:star-solid': 'clarity:star-line'"  width="32" height="32" color="#2b6e91"/>
                 &nbsp;
               </span>
             </div>
-            <div class="selected-rating">{{ remarkFour }}</div>
+            <div class="selected-rating">{{ capacityRemark }}</div>
           </div>
         </div>
 
@@ -98,93 +98,45 @@
                 v-for="rating in maxRating"
                 :key="rating"
 
-                @click="selectRating($event, rating, 'remarkFive')"
+                @click="selectRating($event, rating, 'acquired')"
               >
-                <span class="iconify" data-icon="clarity:star-line" width="32" height="32" color="#2b6e91"/>
+                <span class="iconify" :data-icon="rating <= selectedRating ? 'clarity:star-solid': 'clarity:star-line'" width="32" height="32" color="#2b6e91"/>
                 &nbsp;
               </span>
             </div>
-            <div class="selected-rating">{{ remarkFive }}</div>
+            <div class="selected-rating">{{ acquiredRemark }}</div>
           </div>
         </div>
 
       </div>
 
-
-        <!-- <section>
-          <hr class="form--hr">
-          <h4 class="form-group__input-name form__input-name h4-title">
-            Inernship Informations
-          </h4>
-
-          <div class="form-group__container">
-              <h6 class="form-group__input-name">
-                  Tell us about it
-              </h6>
-
-            </div>
-
-          <div class="form__input--group">
-            <div class="form-group__container">
-              <h6 class="form-group__input-name">
-                Start date
-              </h6>
-
-            </div>
-            <div class="form-group__container">
-              <h6 class="form-group__input-name">
-                End date
-              </h6>
-              <div class="">
-
-              </div>
-            </div>
-
-            <div class="form-group__container">
-                <h6 class="form-group__input-name">
-                  Duration
-                </h6>
-                <div class="select select--small select--border" required>
-                  <select name="" id="" >
-                    <option value="1">1 Month</option>
-                    <option value="2">2 Months</option>
-                    <option value="3">3 Months</option>
-                    <option value="4">4 Months</option>
-                    <option value="5">5 Months</option>
-                    <option value="6">6 Months</option>
-                    <option value="7">7 Months</option>
-                    <option value="8">8 Months</option>
-                    <option value="9">9 Months</option>
-                    <option value="10">10 Months</option>
-                    <option value="11">11 Months</option>
-                    <option value="12">12 Months</option>
-                  </select>
-                </div>
-              </div>
+      <div>
+        <div class="mark-container">
+          <h6 class="form-group__input-name">
+            Total Mark:
+        </h6>
+          <div>
+            <h1 class="total-mark">{{ total }}<span class="project-box__item--p"> /20</span></h1>
           </div>
-          <div class="form-group__container">
-            <h4 class="form-group__input-name form__input-name">
-              Tell us your motivations
-            </h4>
-            <div class="">
-              <textarea  class="form-group__input-textarea" placeholder="Max. 300 words" rows="5" />
-            </div>
-          </div>
-        </section> -->
+        </div>
+      </div>
 
-      <div class="">
+      <textarea v-model="appreciation" class="form-group__input-textarea" placeholder="Max. 300 words" rows="5" />
+
+      <div>
         <!-- Submit Button -->
-        <v-button class="btn btn--blue btn--large apply__btn-submit">
+        <div class="btn btn--blue btn--large apply__btn-submit" @click="submit">
           <span>
             Submit
           </span>
           <span class="iconify" data-icon="si-glyph:paper-plane" />
-        </v-button>
+        </div>
       </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -197,14 +149,21 @@ export default {
   data: () => {
     // const RatingStars = document.getElementById('stars')
     return{
-      maxRating: 4,
-      selectedRating: 2,
+      maxRating: 5,
+      selectedRating: 1,
       remarks: ['Very Weak', 'Weak', 'Good', 'Very Good', 'Excellent'],
-      remarkOne: 'Very Weak',
-      remarkTwo: 'Very Weak',
-      remarkThree: 'Very Weak',
-      remarkFour: 'Very Weak',
-      remarkFive: 'Very Weak',
+      desiplineRemark: 'Very Weak',
+      workRemark: 'Very Weak',
+      initiativeRemark: 'Very Weak',
+      capacityRemark: 'Very Weak',
+      acquiredRemark: 'Very Weak',
+      desipline: 0,
+      work: 0,
+      initiative: 0,
+      capacity: 0,
+      acquired: 0,
+      total: 0,
+      appreciation: ''
     }
   },
 
@@ -227,8 +186,7 @@ export default {
   },
 
   mounted () {
-
-
+    console.log(this.$route.params.internIdTwo);
   },
 
   methods: {
@@ -244,11 +202,26 @@ export default {
 
       }
       this.selectedRating = rate;
-      this[remarkName] = this.remarks[rate]
+      this[remarkName] = rate - 1
+      this[`${remarkName}Remark`] = this.remarks[rate - 1]
+
+      this.total = this.desipline + this.work + this.initiative + this.acquired + this.capacity
     },
 
     async submit () {
-
+      const data = {
+        work_ability: this.work,
+        discipline: this.desipline,
+        initiative: this.initiative,
+        capacity_imagination: this.capacity,
+        acquired_knowledge:this.acquired,
+        appreciation: this.appreciation,
+        internId: this.$route.params.internIdTwo
+      }
+      axios.post('/api/evaluateIntern', data)
+        .then(res => this.snackbar.open(res.data.msg))
+        .then(() => this.$router.back())
+        .catch(error => console.log(error.response.data))
     }
   }
 }
@@ -305,6 +278,18 @@ select {
   font-weight: bold;
   margin-left: 8px;
   color: #0f3755;
+}
+
+.total-mark {
+  font-size: 55px;
+    font-weight: 900;
+    margin: -7px 15px;
+}
+
+.mark-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
 }
 </style>
 

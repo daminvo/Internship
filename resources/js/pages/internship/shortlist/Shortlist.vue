@@ -40,13 +40,13 @@
 
         <div class="shortlist-item__container">
           <div class="shortlist-item__left-container mb-1_5">
-            <router-link :to="{ name: '@.info', params: { tagname: applicantDetails.id } }">
-              <img class="shortlist-avatar" :src="getImageUrl(applicantDetails.photo)" alt="">
+            <router-link :to="{ name: '@.info', params: { userId: applicantDetails.student.user.id } }">
+              <img class="shortlist-avatar" :src="getImageUrl(applicantDetails.student.user.photo)" alt="">
             </router-link>
             <div class="shortlist-item__body justify-center">
               <div class="">
                 <div class="shortlist-item__name">
-                  {{ applicantDetails.first_name }} {{ applicantDetails.family_name }}
+                  {{ applicantDetails.student.user.first_name }} {{ applicantDetails.student.user.family_name }}
                 </div>
               </div>
             </div>
@@ -105,7 +105,6 @@ export default {
 
   data: () => ({
     // page: 1,
-    // individuals: [],
     applicantDetails: {
       manager_validation: false
     }

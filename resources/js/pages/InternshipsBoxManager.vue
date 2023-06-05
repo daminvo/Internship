@@ -5,7 +5,6 @@
         <h2 v-if="$matchMedia.xl" class="desktop-inbox__heading">
           Internship Offers
         </h2>
-        <h4>view private internship requests</h4>
       </div>
 
       <div class="inbox__body--container">
@@ -29,19 +28,28 @@
 
         <div class="inbox__right--container">
 
-          <div class="inbox--container">
+          <div class="inbox--container" v-if="projectbox">
             <ProjectBoxItem v-for="project in projectbox" :key="`project-box-${project.id}`" :data="project" :role="user.role" />
             <p v-if="isNoProject" class="info__p">
               {{ isNoProject }}
             </p>
           </div>
+
+          <div class="apply__top--p" v-else>
+            no internships offers
+          </div>
+
         </div>
 
       </div>
 
     </div>
 
-    <div class="internships-list">
+    <h2 v-if="$matchMedia.xl" class="desktop-inbox__heading">
+          Internship Requests
+    </h2>
+
+    <div class="internships-list" v-if="internships">
       <div class="the-table">
         <div class="table-container">
           <table>
@@ -64,7 +72,6 @@
               <th
                 style="width: 40%; cursor:pointer;"
               >
-                <!-- Visit -->
               </th>
             </tr>
             <tr
@@ -73,14 +80,14 @@
                 class="internship"
             >
               <td>
-                <router-link :to="`/@/${internship.user.id}`" class="user-link" >
-                  <img :src="getImageUrl(internship.user.photo)" class="data-profile-img">
-                  <p>{{ internship.user.first_name }} {{ internship.user.family_name }}</p>
+                <router-link :to="`/@/${internship.student.user.id}`" class="user-link" >
+                  <img :src="getImageUrl(internship.student.user.photo)" class="data-profile-img">
+                  <p>{{ internship.student.user.first_name }} {{ internship.student.user.family_name }}</p>
                 </router-link>
               </td>
 
               <td>
-                <div v-if="internship.available" class="available">
+                <div v-if="internship.student.available" class="available">
                   <p>Available</p>
                 </div>
 
@@ -90,11 +97,11 @@
               </td>
 
               <td>
-                  <p>{{ internship.intern.internship.title }}</p>
+                  <p>{{ internship.internship.title }}</p>
               </td>
 
               <td>
-                <router-link :to="`/intern=${internship.intern.id}`">
+                <router-link :to="`/intern=${internship.id}`">
                   <button class="button-4" role="button" >Show</button>
                 </router-link>
               </td>
@@ -103,6 +110,10 @@
           </table>
         </div>
       </div>
+    </div>
+
+    <div class="apply__top--p" v-else>
+      no internships requests
     </div>
 
   </div>
@@ -192,14 +203,14 @@ export default {
   methods: {
     async getPrivateInternships () {
       axios
-        .post('/api/showManagerRequests')
+        .post('/api/getManagerOffers', {manager_id: this.user.manager.id})
         .then(response => {
           this.projectbox = response.data
           console.log(response.data);
         })
 
       axios
-        .post('/api/showManagerRequests', {id: this.user.manager.id})
+        .post('/api/showManagerRequests', {managerId: this.user.manager.id})
         .then(response => {
           console.log(response);
           this.internships = response.data

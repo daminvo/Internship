@@ -160,14 +160,14 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Internship Informations Page',
 
-  middleware: ['auth', 'header'],
+  middleware: ['auth'],
 
   metaInfo () { return { title: 'New Internship Request' } },
 
   data: () => ({
     intern: {},
     toggleMotif: false,
-    motif: ''
+    motif: null
   }),
 
   computed: {
@@ -245,7 +245,7 @@ export default {
       }
       else {
         axios
-          .post('/api/refuseHeaderRequest', dataSent)
+          .post('/api/refuseHeaderRequest', {internId: this.intern.id})
           .then(({ data }) => {
             console.log(data);
           })

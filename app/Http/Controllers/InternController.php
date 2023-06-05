@@ -9,6 +9,7 @@ use App\Student;
 use App\InternshipOffer;
 use App\internshipManager;
 use APP\presence;
+use APP\Rating;
 use Carbon\Carbon;
 
 
@@ -80,7 +81,8 @@ class InternController extends Controller
         $intern = Intern::where([['student_id', $id],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '<', $today]])
         ->with(['internship' => function ($query){
            $query->select('id','title','manager_id', 'duration',);
-       },"internship.manager.user","internship.manager.company" => function ($query) {
+       },"rating",
+       "internship.manager.user","internship.manager.company" => function ($query) {
            $query->select('id','name');
        }])
        ->get();
@@ -175,6 +177,10 @@ class InternController extends Controller
 
     public function studentSubmition(Request $request){
         $intern = intern::find($request->id);
+        // $page = $intern->internship;
+        //  $page->save();
+        $page = Internship::find($intern->internship_id);
+        $page->update(['state' => 'ongoing']);
         $studentId = $intern->student_id;
         $intern ->update(["student_validation" => 1]);
         $pending = $this->getPendingRequests($studentId);

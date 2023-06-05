@@ -67,7 +67,7 @@ export default {
       user: 'auth/user',
       offer: 'visit/offer',
       snackbar: 'notification/snackbar',
-      // individuals: 'page/shortlistIndividuals',
+      individuals: 'page/individuals',
       // teams: 'page/shortlistTeams'
     })
   },
@@ -98,26 +98,18 @@ export default {
       const acceptedStudents = this.individuals
       // .filter(e => e.manager_validation === true)
 
-      if (acceptedStudents.individuals.length === 0) {
+      if (acceptedStudents.length === 0) {
         return this.$router.push({ name: 'manager.projectbox' })
       }
 
       for (let i = 0; i < acceptedStudents.length; i++) {
         if (acceptedStudents[i].manager_validation === true) {
-          await axios.post('/api/project/', {internId: acceptedStudents[i].id })
+          await axios.post('/api/acceptHeaderRequest', {internId: acceptedStudents[i].id })
+          .then(res => console.log(res))
         }
-        await axios.post('/api/project/', {internId: acceptedStudents[i].id })
+        // await axios.post('/api/refuseRequest', {internId: acceptedStudents[i].id })
       }
 
-        // .then(({ data }) => {
-        //   this.snackbar.open(data.message)
-
-        //   this.$store.dispatch('notification/updateProjectBox', {
-        //     projectBoxes: data.project_boxes
-        //   })
-
-        //   this.$router.push({ name: 'projectbox' })
-        // })
     },
   }
 

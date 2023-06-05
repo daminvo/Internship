@@ -2,12 +2,12 @@
   <div class="shortlist-item__container">
     <div class="shortlist-item__left-container">
       <div class="">
-        <img class="shortlist-avatar" :src="getImageUrl(data.photo)" alt="">
+        <img class="shortlist-avatar" :src="getImageUrl(data.student.user.photo)" alt="">
       </div>
       <div class="shortlist-item__body">
         <div class="shortlist-item__body-top">
           <div class="shortlist-item__name">
-            {{ data.fist_name }} {{ data.fist_name }}
+            {{ data.student.user.first_name }} {{ data.student.user.family_name }}
           </div>
         </div>
         <div class="project-box__details--container" @click="showDetails">

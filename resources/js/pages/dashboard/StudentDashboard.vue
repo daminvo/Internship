@@ -3,7 +3,7 @@
     <div>
       <h2 class="table-title-h2">Pending List</h2>
 
-      <div class="internships-list" v-if="data.pending">
+      <div class="internships-list" v-if="data.pending.length != 0">
         <div class="the-table">
           <div class="table-container">
             <table>
@@ -44,8 +44,8 @@
                   <td>
                     <p>{{ internship.internship.type }}</p>
                     &nbsp;&nbsp;
-                    <router-link :to="{ name: 'offer.details', params: { id: 3 } }">
-                      <span v-if="internship.internship.type === 'public'"  class="iconify" data-icon="heroicons:information-circle-solid" width="25" height="25" color="#3A455B" />
+                    <router-link v-if="internship.internship.type === 'public'" :to="{ name: 'offer.details', params: { id: internship.internship.internship_offer.id } }">
+                      <span class="iconify" data-icon="heroicons:information-circle-solid" width="25" height="25" color="#3A455B" />
                     </router-link>
                   </td>
 
@@ -147,8 +147,8 @@
                   </td>
 
                   <td>
-                    <router-link :to="{ name: 'offer.details', params: { id: 3 } }">
-                      <span v-if="internship.internship.type === 'public'"  class="iconify" data-icon="heroicons:information-circle-solid" width="25" height="25" color="#3A455B" />
+                    <router-link v-if="internship.internship.type === 'public'" :to="{ name: 'offer.details', params: { id: internship.internship.internship_offer.id } }">
+                      <span class="iconify" data-icon="heroicons:information-circle-solid" width="25" height="25" color="#3A455B" />
                     </router-link>
                   </td>
 
@@ -163,7 +163,7 @@
       </div>
 
       <h2 class="table-title-h2">Finished List</h2>
-      <div class="internships-list" v-if="data.finished">
+      <div class="internships-list" v-if="data.finished.length != 0">
         <div class="the-table">
           <div class="table-container">
             <table>
@@ -198,6 +198,11 @@
                   >
                     Attestation
                   </th>
+                  <th
+                    style="width: 40%; cursor:pointer;"
+                  >
+                    Mark
+                  </th>
               </tr>
               <tr
                   v-for="(internship, index) in data.finished"
@@ -225,7 +230,10 @@
                   </td>
 
                   <td>
-                    <button class="button-4" role="button" @click="showPDF(internship.id)">Attestation PDF</button>
+                    <button class="button-4" role="button" @click="showPDF(internship.id)">Download PDF</button>
+                  </td>
+                  <td>
+                    <p>{{ internship.rating.total_note }} / 20</p>
                   </td>
 
               </tr>
@@ -234,7 +242,7 @@
         </div>
       </div>
 
-      <div v-else>
+      <div class="apply__top--p" v-else>
         no finished internships
       </div>
 
@@ -285,6 +293,9 @@ export default {
 
   created() {
     this.$store.dispatch('auth/getInternships', {studentId: this.user.student.id})
+    setTimeout(() => {
+      console.log(this.data.finished)
+    }, 1000);
   },
 
   methods: {
@@ -305,16 +316,16 @@ export default {
     },
 
     deleteIntern (id, type){
-      // axios
-      //   .post('/api/deleteRequest', {id: id, type: type})
-      //   .then( res => console.log(res.data))
-      //   .then( res => {
-      //     this.data.pending = res.data.pending
-      //     this.data.accepted = res.data.accepted
-      //     this.data.finished = res.data.finished
-      //     this.snackbar.open(res.data.msg)
-      //   })
-      //   .catch( e => console.log(e.response))
+      axios
+        .post('/api/deleteRequest', {id: id, type: type})
+        .then( res => console.log(res.data))
+        .then( res => {
+          this.data.pending = res.data.pending
+          this.data.accepted = res.data.accepted
+          this.data.finished = res.data.finished
+          this.snackbar.open(res.data.msg)
+        })
+        .catch( e => console.log(e.response))
     },
 
     refuse (id, type) {
@@ -344,11 +355,6 @@ export default {
         .catch( e => console.log(e.response))
     },
 
-    goToOffre (id) {
-      console.log('offer/3');
-      this.$router.go(`/offer/3`)
-    },
-
     sortBy(key) {
         this.sortKey = key;
         this.sortOrders[key] = this.sortOrders[key] * -1;
@@ -357,17 +363,17 @@ export default {
         return array.findIndex(i => i[key] == value)
     },
 
-    getInternships () {
-      axios
-        .post('http://localhost:8000/api/getPendingRequests', {studentId: this.user.student.id})
-        .then(res => {
-          this.internships = res.data
-        })
-        .catch( error => {
-          console.log(error.response);
-          console.log(error.response.data);
-        })
-    }
+    // getInternships () {
+    //   axios
+    //     .post('http://localhost:8000/api/getPendingRequests', {studentId: this.user.student.id})
+    //     .then(res => {
+    //       this.internships = res.data
+    //     })
+    //     .catch( error => {
+    //       console.log(error.response);
+    //       console.log(error.response.data);
+    //     })
+    // }
   },
 }
 </script>

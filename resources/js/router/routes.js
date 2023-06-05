@@ -16,7 +16,9 @@ export default [
 
   { path: '/dashboard', name: 'dashboard', meta: { title: 'Dashboard' }, component: page('dashboard'), },
 
-  { path: '/noteIntern=:internIdTwo', name: 'Marks', meta: { title: 'Marks' }, component: page('marks'), },
+  { path: '/noteIntern=:internIdTwo', name: 'marks', meta: { title: 'Marks' }, component: page('marks'), },
+
+  { path: '/presenceIntern=:internIdThree', name: 'presence', meta: { title: 'Presence' }, component: page('presence'), },
 
   {
     path: '/profile',

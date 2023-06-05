@@ -71,7 +71,8 @@
                   <tr class="internship" v-for=" abs in internshipBox.presence" :key="abs.id" >
                     <td>{{ abs.date }}</td>
                     <td>
-                      <p :class="abs.state ? 'present' : 'absent'" >Present</p>
+                      <p  v-if="!abs.state" class="absent" >Absent</p>
+                      <p   v-if="abs.state" class="present" >Present</p>
                     </td>
                     <td>{{ abs.entry_time }}</td>
                     <td>{{abs.exit_time }}</td>

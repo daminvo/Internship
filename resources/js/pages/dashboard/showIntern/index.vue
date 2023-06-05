@@ -23,18 +23,14 @@ import InternInformation from './InternInformation.vue'
 export default {
   name: 'ApplyIndex',
 
-  middleware: ['auth', 'header'],
+  middleware: ['auth'],
 
   components: {
     InternInformation
   },
 
   methods: {
-    async update () {
-      await this.form.post('/api/project/')
 
-      this.form.reset()
-    }
   }
 }
 </script>

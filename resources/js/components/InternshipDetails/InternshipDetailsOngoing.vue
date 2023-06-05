@@ -5,7 +5,7 @@
         <div class="project-details--image-container">
           <div class="project-details--image">
             <expandable-image
-              :src="offer.photo"
+              :src="getThumbnail(offer.photo)"
               :close-on-background-click="true"
               class="details__image"
             />
@@ -17,19 +17,43 @@
           <h1 class="project-details--h1 text-outline--thin">
             {{ offer.internship.title }}
           </h1>
-          <!-- <p class="details__ongoing--p">
-            On Going Project Since {{ startSince }}
-          </p> -->
+        </div>
+        <div class="project-details--action-button">
+          <router-link class="btn btn--blue btn--large" v-if="user.role != 'manager'" :to="{ name: 'offer.apply' , params: { title: offer.internship.title, internshipId: offer.internship.id } }" tag="button">
+            Apply To Offer
+          </router-link>
+          <button v-debounce:300ms="toggleWishlist" :debounce-events="'click'" class="btn btn--white btn--large" :disabled="user && user.role === 'Lecturer'">
+            <div v-show="offer.is_favorited && offer.is_favorited.status" class="flex">
+              <span class="iconify" data-icon="ic:round-remove-circle-outline" width="24" height="24" />
+            </div>
+            <div v-show="!offer.is_favorited || !offer.is_favorited.status" class="flex">
+              <span class="iconify" data-icon="ic:round-add-circle-outline" width="24" height="24" />
+            </div>
+            <span>Favorite</span>
+          </button>
         </div>
       </div>
-
       <div v-else class="mb-2_5">
         <h1 class="project-details--h1">
           {{ offer.internship.title }}
         </h1>
-        <p class="details__ongoing--p">
-          On Going Project Since {{ startSince }}
-        </p>
+      </div>
+
+      <div v-if="!$matchMedia.xl">
+        <div v-if="offer.internship.state === 'available'" class="project-details--action-button">
+          <router-link class="btn btn--blue btn--large" v-if="user.role == 'manager'" :to="{ name: 'offer.apply', params: { title: offer.internship.title , internshipId: offer.internship.id } }" tag="button" @click="apply">
+            Apply To Offer
+          </router-link>
+          <button v-debounce:400ms="toggleWishlist" class="btn btn--white btn--large" :disabled="user && user.role === 'Lecturer'" :debounce-events="'click'">
+            <div v-show="offer.is_favorited && offer.is_favorited.status" class="flex">
+              <span class="iconify" data-icon="ic:round-remove-circle-outline" width="24" height="24" />
+            </div>
+            <div v-show="!offer.is_favorited || !offer.is_favorited.status" class="flex">
+              <span class="iconify" data-icon="ic:round-add-circle-outline" width="24" height="24" />
+            </div>
+            <span>Favorite</span>
+          </button>
+        </div>
       </div>
 
       <div v-if="!$matchMedia.xl">
@@ -175,18 +199,26 @@
           Project Participants
         </h3>
         <div class="project-dashboard__list-team">
-          <div v-for="(e, index) in members" :key="`ProjectParticipant-${index}`" class="project-dashboard__list-team--item">
+          <div v-for="(e, index) in offer.internship.intern" :key="`ProjectParticipant-${index}`" :class="['project-dashboard__list-team--item', !isSelf ? 'list-team-small' : '']">
             <router-link :to="{ path: '/@/' + e.id }">
-              <img :src="e.photo" alt="" class="project-dashboard__list-team--img">
+              <img :src="getImageUrl(e.student.user.photo)" alt="" class="project-dashboard__list-team--img">
             </router-link>
 
             <div class="">
               <p class="project-dashboard__list-team--name">
-                {{ e.first_name }} {{ e.family_name }}
+                {{ e.student.user.first_name }} {{ e.student.user.family_name }}
               </p>
             </div>
-            <button v-if="isSelf" class="btn btn--border">Add Presence</button>
-            <button v-if="isSelf" class="btn btn--border">Note</button>
+            <button v-if="isSelf" class="custom-btn btn--border" @click="$router.push(`/presenceIntern=${e.id}`)">
+              <span class="iconify" data-icon="carbon:add-alt" width="15" height="15"/>
+              &nbsp;
+                Add Presence
+            </button>
+            <button v-if="isSelf" class="custom-btn btn--blue" @click="$router.push(`/noteIntern=${e.id}`)">
+              <span class="iconify" data-icon="carbon:add-alt" width="15" height="15" />
+              &nbsp;
+                Add Marks
+            </button>
           </div>
         </div>
       </div>
@@ -242,7 +274,6 @@ export default {
       { network: 'telegram', name: 'Telegram', icon: 'fa-brands:telegram-plane' },
       { network: 'twitter', name: 'Twitter', icon: 'fa-brands:twitter' },
       { network: 'whatsapp', name: 'Whatsapp', icon: 'fa-brands:whatsapp' }
-      // { network: 'pinterest', name: 'Pinterest', icon: 'fa-brands:pinterest' },
     ]
 
   }),
@@ -254,11 +285,6 @@ export default {
       snackbar: 'notification/snackbar'
     }),
 
-    members () {
-      // if (this.offer.project_team) return this.project.project_team.members
-      return [this.user]
-    },
-
     sharing () {
       return {
         url: window.location.href,
@@ -268,7 +294,6 @@ export default {
     },
 
     isSelf () {
-      console.log(this.offer.internship.manager.user.id)
       if (this.user) return this.user.id === this.offer.internship.manager.user.id
 
       return false
@@ -284,22 +309,6 @@ export default {
         // { type: 'text', icon: 'LVL', text: this.project.level_applicant },
         // { type: 'text', icon: 'Pts', text: `Require Minimal ${this.minimumPoints} Points for each Person` }
       ]
-    },
-
-    grantMaximumPoints () {
-      if (this.project.level_applicant === 'Easy') return 2000
-      else if (this.project.level_applicant === 'Medium') return 2500
-      else if (this.project.level_applicant === 'Hard') return 4000
-      else if (this.project.level_applicant === 'Expert') return 5000
-      else return 0
-    },
-
-    minimumPoints () {
-      if (this.project.level_applicant === 'Easy') return 0
-      else if (this.project.level_applicant === 'Medium') return 1500
-      else if (this.project.level_applicant === 'Hard') return 4500
-      else if (this.project.level_applicant === 'Expert') return 9000
-      else return 0
     },
 
     applyRoute () {
@@ -343,12 +352,29 @@ export default {
   },
 
   mounted () {
+    setTimeout(() => {
+      console.log(this.offer.internship.intern)
+    }, 1000);
     this.activateOnScroll()
   },
 
   beforeDestroy () {
     this.beenFetchSimilar = true
     window.onscroll = null
+  },
+
+  setup() {
+    const getImageUrl = (name) => {
+      if (name === null) return '/images/missing-avatar.svg'
+      else return window.location.origin + '/storage/images/avatar/' + name;
+    }
+
+    const getThumbnail = (name) => {
+      if (name === null) return '24expJWNFQ0oAnpzlCNDG0Rs0.png'
+      else return window.location.origin + '/storage/images/thumbnail/' + name;
+    }
+
+    return { getImageUrl, getThumbnail }
   },
 
   methods: {
@@ -436,3 +462,41 @@ export default {
 
 }
 </script>
+
+<style scoped>
+.list-team-small {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 10.92rem;
+  margin: 1.2rem;
+  height: 170px;
+}
+
+.custom-btn {
+  font-size: 1.5rem;
+    font-weight: 400;
+    width: 100%;
+    border: 0.1rem solid var(--dark-blue);
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+    text-decoration: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+}
+
+.custom-btn {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+</style>

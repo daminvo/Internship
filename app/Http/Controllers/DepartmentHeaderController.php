@@ -53,9 +53,11 @@ public function acceptRequest(Request $request){
         Mail::to($manager->user->email)->send(new ManagerPasswordEmail($password));
     }
     $intern->update(["header_validation" => 1]);
+
     return response()->json([
         'msg' => 'information updated successfully',
     ]);
+
 }
 public function refuseRequest(Request $request ){
     $intern = intern::where([
