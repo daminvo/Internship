@@ -113,7 +113,7 @@ public function getOngoingInterns(Request $request)
     ->whereHas('student', function ($query) use ($department) {
         $query->where("department_id", $department->department_id);
     })
-        ->with(['student.user', 'internship'])
+        ->with(['student.user', 'internship.manager.company'])
         ->get();
 
         try{
