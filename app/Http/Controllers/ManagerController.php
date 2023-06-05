@@ -95,8 +95,8 @@ class ManagerController extends Controller
                       ->whereDoesntHave('internshipOffer');
             })
             ->with([
+                "internship",
                 "student.user",
-                "student.intern.internship",
                 "student.department.faculty.university"
             ])
             ->get();
