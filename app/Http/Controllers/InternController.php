@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\intern;
 use App\internship;
 use App\Student;
+use App\Rating;
 use App\InternshipOffer;
 use App\internshipManager;
 use APP\presence;
@@ -80,7 +81,7 @@ class InternController extends Controller
         $intern = Intern::where([['student_id', $id],['student_validation',1],['manager_validation',1],['start_date','<', $today],['end_date', '<', $today]])
         ->with(['internship' => function ($query){
            $query->select('id','title','manager_id', 'duration',);
-       },"internship.manager.user","internship.manager.company" => function ($query) {
+       },"rating","internship.manager.user","internship.manager.company" => function ($query) {
            $query->select('id','name');
        }])
        ->get();
