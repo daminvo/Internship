@@ -112,18 +112,25 @@ class StudentController extends Controller
 
     public function getOffre(Request $request){
 
-        $user = $request->user();
+        $user = user();
+        $today = Carbon::today()->toDateString();
 
         if ($user->role === 'student') {
             $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user", "is_favorited" =>
                 function ($q) use ($user) {
                     $q->where('favorites.student_id', $user->student()->pluck('id'));
-                }
-            ])
+                },"internship.intern"=>
+                function ($q) use ($today) {
+                    $q->where([['start_date', '<', $today], ['end_date', '>', $today]]);
+                },"internship.intern.student.user"])
+
             ->get();
         }
 
-        $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user", "internship.intern.student.user"])
+        $InternshipOffer=InternshipOffer::where('id',$request->id)->with(["internship.manager.user", "internship.intern"=>
+        function ($q) use ($today) {
+            $q->where([['start_date', '<', $today], ['end_date', '>', $today]]);
+        },"internship.intern.student.user"])
         ->get();
 
 
