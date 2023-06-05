@@ -13,13 +13,13 @@ class ManagerPasswordEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $password;
-    public $user;
+    // public $user;
 
 
-    public function __construct($password,$user)
+    public function __construct($password)
     {
         $this->password = $password;
-        $this->user = $user;
+        // $this->user = $user;
     }
 
     public function build()

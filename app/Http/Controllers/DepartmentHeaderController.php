@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ManagerPasswordEmail;
+use App\Mail\InternMotif;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
@@ -44,12 +45,12 @@ public function acceptRequest(Request $request){
     ])->first();
     $internship = $intern->internship;
     $manager = $internship->manager;
-    if($manager->validaion == "0"){
+    if($manager->validaion == 0){
         $password = Str::random(8);
         $hashed_password =  bcrypt($password);
         $manager->update(["validation" => 1]);
         $manager->user->update(['password' => $hashed_password]);
-        Mail::to($manager->user->email)->send(new ManagerPasswordEmail($password,$user));
+        Mail::to($manager->user->email)->send(new ManagerPasswordEmail($password));
     }
     $intern->update(["header_validation" => 1]);
     return response()->json([
@@ -61,6 +62,11 @@ public function refuseRequest(Request $request ){
         ["id", $request->internId]
     ])->first();
     $intern->update(["header_validation" => 0]);
+    if($request->motif !== null){
+        $motif = $request->motif;
+        $user = $intern->student->user->name;
+        Mail::to($intern->student->user->email)->send(new InternMotif($motif,$user));
+    }
     return response()->json([
         'msg' => 'information updated successfully',
     ]);

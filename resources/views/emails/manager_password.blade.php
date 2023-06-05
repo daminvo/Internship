@@ -1,5 +1,5 @@
 @component('mail::message')
-hi {{$user}}
+{{-- hi {{$user}} --}}
 here is your account password
 @component('mail::button', ['url' => ''])
 phive
