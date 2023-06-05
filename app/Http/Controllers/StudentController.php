@@ -112,7 +112,7 @@ class StudentController extends Controller
 
     public function getOffre(Request $request){
 
-        $user = user();
+        $user = $request->user();
         $today = Carbon::today()->toDateString();
 
         if ($user->role === 'student') {
